@@ -28,6 +28,8 @@ class Config:
 
     # The following should be adjustable later on
 
+    CLAMP_INTENSITY = 5000
+
     LOG_LEVEL       = logging.DEBUG
 
     FREQUENCIES     = [2786, 9615]

@@ -53,6 +53,7 @@ def load_spot_file(spot_file):
     header['Time'] = datetime.strptime(header['Time'], '%H:%M:%S')
     header['PixelCount'] = header['LastPixel'] - header['FirstPixel'] + 1
     header['LineCount'] = header['NrReadOuts']
+    header['PixelSize'] = 0.00875 #milimeter
 
     z = np.reshape(np.fromfile(spot_file, dtype=np.ushort)[:-8 * header['PixelCount']],
                    (header['LineCount'], header['PixelCount']))
@@ -61,9 +62,53 @@ def load_spot_file(spot_file):
 
 def load_gathering_file(gathering_file):
     if not os.path.exists(gathering_file):
-        raise ValueError("File %s does not exist!")
+        raise ValueError("File %s does not exist!", gathering_file)
 
     return np.loadtxt(gathering_file, skiprows=2)
 
-def align_data(spot_data, gathering_data):
-    pass
+def align_data(header, spot_data, gathering_data):
+    position = gathering_data[:, 0]
+    speed    = gathering_data[:, 1]
+    pixel    = int(round(header['PixelCount'] / 2))
+    clock    = (10000 / header['LineFreq'])
+    lines    = []
+    j        = 0
+
+    for i in range(0, header['LineCount']):
+        position_index = int(round(i * clock))
+
+        # position doesn't exist
+        try :
+            current_position = get_data(i, clock, position)
+            current_speed    = get_data(i, clock, speed)
+        except IndexError:
+            break
+
+        # only store data in radius of pixelCount pixels
+        # remove outlier and backwards travel
+        if abs(current_position) < 1 and spot_data[i, pixel] < Config.CLAMP_INTENSITY and current_speed > 0:
+            lines.append([j, i, current_position])
+            j +=1
+
+    x = np.empty(len(lines))
+    y = np.empty([len(lines), header['PixelCount']])
+
+    for j, i, current_position in lines:
+        x[j] = current_position
+        y[j, :] = spot_data[i, :]
+
+    return x, y
+
+# fix errors due to different recording frequencies of 9kdemo and xps
+def get_data(index, clock, data):
+    position_index = index * clock
+
+    position_index_rounded = int(round(index * clock))
+    next_position_rounded = int(round((index + 1) * clock))
+
+    position = data[position_index_rounded]
+    next_position = data[next_position_rounded]
+
+    position += ((position_index - position_index_rounded) * (next_position - position))
+
+    return position
