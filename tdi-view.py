@@ -17,6 +17,7 @@ import getopt, sys, os
 
 from view import gather, spot, psf
 from common import helper
+from common.config import Config
 
 def usage():
     print(__doc__)
@@ -24,10 +25,10 @@ def usage():
 def show(task):
 
     #file = "D:\\Daten\\1707\\weiss-15um-1"
-    file = os.getcwd() + '\\data\\021117\\160128_2786hz'
+    file = os.getcwd() + '\\data\\061117\\123608_2786hz'
     h, s = helper.load_spot_file(file + '.spot')
     g    = helper.load_gathering_file(file + '.gather')
-    
+
     if task == 'spot':
         spot.plot(h, s, g)
     if task == 'gather':

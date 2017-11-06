@@ -1,5 +1,5 @@
 import logging, os, sys
-from datetime import date
+from datetime import datetime
 from pywinauto.application import Application
 from pywinauto.timings import TimeoutError
 
@@ -68,23 +68,27 @@ class Neunkdemo:
         return True
 
 
-    def __profile_stop(self, prefix=None):
+    def __profile_stop(self, run_id=None):
 
         stop      = self.dlg["Profile S&top"]
         store     = self.dlg["Stop Store Sector"]
         save      = self.app["Spot-File"]
 
-        filename = prefix + "_" + self.frequency + "hz" + ".spot"
+        filename = run_id + ".spot"
         directory = self.base_path + "\\" + datetime.now().strftime("%d%m%y")
 
-        if not store.is_enabled() or not store.is_visible():
+        if not store.is_visible() or not store.is_enabled():
             logger.error("9kdemo: store button not available")
+            return False
+
+        store.click()
+
+        if not save.is_visible():
+            logger.error("9kdemo: save dialog not visible")
             return False
 
         if not os.path.exists(directory):
             os.makedirs(directory)
-
-        store.click()
 
         save.Edit.set_text(directory + "\\" + filename)
         save.Speichern.click()
@@ -92,7 +96,6 @@ class Neunkdemo:
         if save.is_visible():
             save = self.app["Spot-File"]
             save.Ja.click()
-
             logger.warning("9kdemo: file already existed")
 
         if (stop.is_enabled):

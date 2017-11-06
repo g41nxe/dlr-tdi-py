@@ -18,7 +18,7 @@ logger.addHandler(ch)
 
 class XPSClient:
 
-    frequency = None
+    run_id    = None
 
     def __init__(self):
         self.xps = XPS()
@@ -42,8 +42,6 @@ class XPSClient:
 
     def __init(self):
         try:
-            # @todo set fp speed + acc
-
             # homing
             logger.debug('client: xps homing')
 
@@ -53,11 +51,16 @@ class XPSClient:
                 logger.debug('client: home-search %s', group)
                 self.xps.GroupHomeSearch(self.socket_id, group)
 
-            # setup event for data recording
 
+            # speed + velocity
             self.xps.PositionerSGammaParametersSet(self.socket_id, Config.FP_GROUP + '.' + Config.FP_GROUP_NAME,
-                                                   Config.FP_VELOCITY, Config.FP_ACCELERATION, Config.FP_JERKTIME[0], Config.FP_JERKTIME[1])
+                                                   Config.FP_VELOCITY, Config.FP_ACCELERATION,
+                                                   Config.FP_JERKTIME[0], Config.FP_JERKTIME[1])
 
+            logger.debug('client: xps %s speed: %s acc: %s', Config.FP_GROUP + '.' + Config.FP_GROUP_NAME,
+                         Config.FP_VELOCITY, Config.FP_ACCELERATION)
+
+            # setup event for data recording
             self.init_event()
 
         except Exception as e:
@@ -120,13 +123,16 @@ class XPSClient:
         self.xps.EventExtendedStart(self.socket_id)
         logger.debug("client: set xps event start")
 
-    def save_gathering_data(self):
+    def save_gathering_data(self, subdirectory=None):
         try:
             directory = Config.XPS_RESULT_PATH + "\\" + datetime.now().strftime("%d%m%y")
 
-            timestamp = datetime.now().strftime('%H%M%S')
-            filename  = timestamp + "_" + self.frequency + "hz" + ".view"
-            file      = directory + "\\" + filename
+            if not subdirectory is None:
+                directory += "\\" + subdirectory
+
+            filename = self.run_id + ".gather"
+
+            file = directory + "\\" + filename
 
             if not os.path.exists(directory):
                 os.makedirs(directory)
@@ -144,8 +150,6 @@ class XPSClient:
             raise RuntimeError(e)
 
         logger.info("client: gathering data saved to %s", file)
-
-        return timestamp
 
 class CameraClient:
 

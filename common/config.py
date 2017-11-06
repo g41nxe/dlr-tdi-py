@@ -22,31 +22,46 @@ class Config:
 
     FP_GROUP        = 'GROUP3'
     FP_GROUP_NAME   = 'POSITIONER'
-    FP_START        = -10 #mm
-    FP_END          = 10 #mm
-    FP_VELOCITY     = 81 # mm/s
-    FP_ACCELERATION = 1500 # mm/s^2
+    FP_START        = -10   # mm
+    FP_END          = 10    # mm
+    FP_VELOCITY     = 81    # mm/s
+    FP_ACCELERATION = 1500  # mm/s^2
     FP_JERKTIME     = [0.02, 0.02] # min, max
 
     # The following should be adjustable later on
 
     LOG_LEVEL       = logging.DEBUG
 
-    CLAMP_INTENSITY = 5000              # intensities > value are outliers
     ITERATIONS      = 30                # number of iterations
     FREQUENCIES     = [2786, 9615]      # for each frequency
     POSITIONS       = (                 # for all this positions
-        (
+        [(
             (CAM_X_GROUP, [259.849]),
             (CAM_Y_GROUP, [5]),
             (CAM_Z_GROUP, [101.615])
-        ),
-        (
-            (CAM_Y_GROUP, [7]),
-        ),
-        (
-            (CAM_Y_GROUP, [9]),
-        ),
+        )]
     )
 
-#@todo save info file with every run
+    CLAMP_INTENSITY = 500  # intensities > value are outliers
+
+    @staticmethod
+    def save_to_file(folder, id):
+
+        file = folder + "\\" + id + "_versuchsdaten.txt"
+
+        f = open(file, 'w')
+
+        for name in dir(Config):
+            if callable(getattr(Config, name)) or name.startswith("__"):
+                break
+
+            value = getattr(Config, name)
+
+            f.write( str(name) + ": " + str(value) + "\n")
+
+        f.close()
+
+
+
+
+
