@@ -22,6 +22,8 @@ def usage():
     print(__doc__)
 
 def show(task):
+
+    #file = "D:\\Daten\\1707\\weiss-15um-1"
     file = os.getcwd() + '\\data\\021117\\160128_2786hz'
     h, s = helper.load_spot_file(file + '.spot')
     g    = helper.load_gathering_file(file + '.gather')
