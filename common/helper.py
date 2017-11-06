@@ -1,16 +1,8 @@
 from datetime import datetime
 from .config import Config
 
-import logging, sys, re, os
+import re, os
 import numpy as np
-
-logger = logging.getLogger(__name__)
-logger.setLevel(Config.LOG_LEVEL)
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(Config.LOG_LEVEL)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-ch.setFormatter(formatter)
-logger.addHandler(ch)
 
 # i in [0, 255]
 def get_freq(i):
@@ -23,8 +15,7 @@ def get_freq(i):
     freq  = int(round(steps / (delta + i)))
 
     if freq not in range(2786, 9615+1):
-        logger.error("frequency '%s' not in range [2786, 9615]", freq)
-        raise Exception
+        raise ValueError("frequency '%s' not in range [2786, 9615]", freq)
 
     return freq
 

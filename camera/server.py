@@ -5,13 +5,7 @@ from camera.neunkdemo import Neunkdemo
 from common.config import Config
 from common.package import Command, Response
 
-logger = logging.getLogger(__name__)
-logger.setLevel(Config.LOG_LEVEL)
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(Config.LOG_LEVEL)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
+logger = Config.get_logger()
 
 class Server:
     SCRIPT = "G:\\data\\pywinauto\\tdi-Neunkdemo.py"
@@ -70,13 +64,13 @@ class Server:
             logger.error("server: no data")
             raise RuntimeError("no data")
 
-        logger.info("camera: received '%s'", data)
+        logger.info("camera: received \'%s\'", data)
 
         program = Neunkdemo()
         command  = Command.from_string(data)
         response = Response(command, program.run(command))
 
-        logger.info("camera: send message '%s'", response)
+        logger.info("camera: send message \'%s\'", response)
 
         total_sent = 0
         while total_sent < len(str(response).encode('utf-8')):

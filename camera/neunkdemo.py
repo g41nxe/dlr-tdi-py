@@ -5,15 +5,7 @@ from pywinauto.timings import TimeoutError
 
 from common.config import Config
 
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(Config.LOG_LEVEL)
-ch.setFormatter(formatter)
-
-logger = logging.getLogger(__name__)
-logger.setLevel(Config.LOG_LEVEL)
-logger.addHandler(ch)
+logger = Config.get_logger()
 
 class Neunkdemo:
 
@@ -68,13 +60,13 @@ class Neunkdemo:
         return True
 
 
-    def __profile_stop(self, run_id=None):
+    def __profile_stop(self, prefix=None):
 
         stop      = self.dlg["Profile S&top"]
         store     = self.dlg["Stop Store Sector"]
         save      = self.app["Spot-File"]
 
-        filename = run_id + ".spot"
+        filename = prefix + ".spot"
         directory = self.base_path + "\\" + datetime.now().strftime("%d%m%y")
 
         if not store.is_visible() or not store.is_enabled():
@@ -93,10 +85,13 @@ class Neunkdemo:
         save.Edit.set_text(directory + "\\" + filename)
         save.Speichern.click()
 
-        if save.is_visible():
+        try:
             save = self.app["Spot-File"]
-            save.Ja.click()
-            logger.warning("9kdemo: file already existed")
+            if save.is_visible():
+                save.Ja.click()
+                logger.warning("9kdemo: file already existed")
+        except Exception as e:
+            pass
 
         if (stop.is_enabled):
             stop.click()
@@ -109,7 +104,7 @@ class Neunkdemo:
         task      = package.command
         parameter = package.value
 
-        logger.info("9kdemo: run task '%s' with parameter '%s'", task, parameter)
+        logger.debug("9kdemo: run task '%s' with parameter '%s'", task, parameter)
 
         try:
             if task == "freq":

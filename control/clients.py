@@ -1,20 +1,11 @@
-import socket, sys, logging, ftplib, os
+import socket, ftplib, os
 from datetime import datetime
 
 from common.config  import Config
 from common.package import Response, Command
 from control.xps    import XPS
 
-logger = logging.getLogger(__name__)
-logger.setLevel(Config.LOG_LEVEL)
-
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(Config.LOG_LEVEL)
-
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-ch.setFormatter(formatter)
-
-logger.addHandler(ch)
+logger = Config.get_logger()
 
 class XPSClient:
 
@@ -67,25 +58,23 @@ class XPSClient:
             logger.error("client: init error")
             raise RuntimeError(e)
 
-    def move_to_position_and_move(self, row):
-        logger.info("client: move xps to %s", row)
+    def change_position(self, row):
+        logger.debug("client: change positions to %s", row)
 
         try:
             for group, position in row:
                 self.xps.GroupMoveAbsolute(self.socket_id, group, position)
                 logger.debug("client: change %s's position to %s", group, position)
 
-            self.move()
-
         except Exception as e:
-            logger.error("client: XPS move to pos error")
+            logger.error("client: XPS change position error")
             raise RuntimeError(e)
 
         return True
 
     def move(self):
 
-        logger.info("client: move fp %s times from %s to %s", Config.ITERATIONS, Config.FP_START, Config.FP_END)
+        logger.debug("client: move fp %s times from %s to %s", Config.ITERATIONS, Config.FP_START, Config.FP_END)
 
         try:
             self.xps.GatheringReset(self.socket_id)
@@ -98,7 +87,7 @@ class XPSClient:
             self.xps.GatheringStopAndSave(self.socket_id)
 
         except Exception as e:
-            logger.error("client: XPS jog error")
+            logger.error("client: XPS move error")
             raise RuntimeError(e)
 
         return True
@@ -149,7 +138,7 @@ class XPSClient:
             logger.error('client: cannot save gathering file %s')
             raise RuntimeError(e)
 
-        logger.info("client: gathering data saved to %s", file)
+        logger.debug("client: gathering data saved to %s", file)
 
 class CameraClient:
 
@@ -201,7 +190,7 @@ class CameraClient:
             bytes_rcved += len(chunk)
 
         if (len(data) > 0):
-            logger.debug("client: received '%s'", data)
+            logger.debug("client: received \'%s\'", data)
         else:
             logger.error("client: no response received")
             raise RuntimeError("no response")
@@ -213,7 +202,7 @@ class CameraClient:
         connection = self.__connect()
 
         package = Command(command, value)
-        logger.debug("client: send message  '%s'", str(package))
+        logger.debug("client: send message \'%s\'", str(package))
 
         try:
             connection.send(str(package).encode("utf-8"))

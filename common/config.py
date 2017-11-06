@@ -1,4 +1,4 @@
-import logging
+import logging, sys
 
 class Config:
 
@@ -35,11 +35,18 @@ class Config:
     ITERATIONS      = 30                # number of iterations
     FREQUENCIES     = [2786, 9615]      # for each frequency
     POSITIONS       = (                 # for all this positions
-        [(
+        [
             (CAM_X_GROUP, [259.849]),
-            (CAM_Y_GROUP, [5]),
+            (CAM_Y_GROUP, [0]),
             (CAM_Z_GROUP, [101.615])
-        )]
+        ],
+        [
+            (CAM_Y_GROUP, [5])
+        ],
+        [
+            (CAM_Y_GROUP, [10])
+        ],
+
     )
 
     CLAMP_INTENSITY = 500  # intensities > value are outliers
@@ -61,7 +68,25 @@ class Config:
 
         f.close()
 
+    __logger = None
+    @staticmethod
+    def get_logger():
 
+        if not Config.__logger is None:
+            return Config.__logger
+
+        formatter = logging.Formatter("%(asctime)s - %(message)s")
+
+        ch = logging.StreamHandler(sys.stdout)
+        ch.setLevel(Config.LOG_LEVEL)
+        ch.setFormatter(formatter)
+
+        logger = logging.getLogger('global')
+        logger.setLevel(Config.LOG_LEVEL)
+        logger.addHandler(ch)
+
+        Config.__logger = logger
+        return logger
 
 
 
