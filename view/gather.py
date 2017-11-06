@@ -17,7 +17,7 @@ def plot(header, spot, gather):
 
     ax2 =  plt.subplot(212, sharex=ax1)
     ax2.scatter(x, speed, s=s)
-    ax2.set_ylabel('Velocity (m/s)')
+    ax2.set_ylabel('Velocity (mm/s)')
 
     plt.setp(ax2.get_xticklabels(), fontsize=6)
     plt.setp(ax1.get_xticklabels(), visible=False)
