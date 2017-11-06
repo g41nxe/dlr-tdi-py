@@ -4,7 +4,6 @@ from pywinauto.application import Application
 from pywinauto.timings import TimeoutError
 
 from common.config import Config
-from common.helper import *
 
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 

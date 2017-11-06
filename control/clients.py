@@ -1,9 +1,9 @@
 import socket, sys, logging, ftplib, os
+from datetime import datetime
 
+from common.config  import Config
 from common.package import Response, Command
-from common.helper import *
-
-from control.xps import XPS
+from control.xps    import XPS
 
 logger = logging.getLogger(__name__)
 logger.setLevel(Config.LOG_LEVEL)
@@ -54,6 +54,10 @@ class XPSClient:
                 self.xps.GroupHomeSearch(self.socket_id, group)
 
             # setup event for data recording
+
+            self.xps.PositionerSGammaParametersSet(self.socket_id, Config.FP_GROUP + '.' + Config.FP_GROUP_NAME,
+                                                   Config.FP_VELOCITY, Config.FP_ACCELERATION, Config.FP_JERKTIME[0], Config.FP_JERKTIME[1])
+
             self.init_event()
 
         except Exception as e:
@@ -78,13 +82,13 @@ class XPSClient:
 
     def move(self):
 
-        logger.info("client: move fp %s times from %s to %s", Config.FP_ITERATIONS, Config.FP_START, Config.FP_END)
+        logger.info("client: move fp %s times from %s to %s", Config.ITERATIONS, Config.FP_START, Config.FP_END)
 
         try:
             self.xps.GatheringReset(self.socket_id)
             logger.debug("client: reset xps data")
 
-            for i in range(Config.FP_ITERATIONS):
+            for i in range(Config.ITERATIONS):
                 self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_START])
                 self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_END])
 

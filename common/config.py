@@ -20,21 +20,22 @@ class Config:
     XPS_TRIGGER     = "GPIO1.DI.DILowHigh"
     XPS_DATA_TYPES  = ["CurrentPosition", "CurrentVelocity"]
 
-    FP_START        = -10
-    FP_END          = 10
-    FP_ITERATIONS   = 30
     FP_GROUP        = 'GROUP3'
     FP_GROUP_NAME   = 'POSITIONER'
+    FP_START        = -10 #mm
+    FP_END          = 10 #mm
+    FP_VELOCITY     = 81 # mm/s
+    FP_ACCELERATION = 1500 # mm/s^2
+    FP_JERKTIME     = [0.02, 0.02] # min, max
 
     # The following should be adjustable later on
 
-    CLAMP_INTENSITY = 5000
-
     LOG_LEVEL       = logging.DEBUG
 
-    FREQUENCIES     = [2786, 9615]
-
-    POSITIONS       = (
+    CLAMP_INTENSITY = 5000              # intensities > value are outliers
+    ITERATIONS      = 30                # number of iterations
+    FREQUENCIES     = [2786, 9615]      # for each frequency
+    POSITIONS       = (                 # for all this positions
         (
             (CAM_X_GROUP, [259.849]),
             (CAM_Y_GROUP, [5]),
