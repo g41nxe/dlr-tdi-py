@@ -1,15 +1,21 @@
 import matplotlib.pyplot as plt
 from common.config import Config
+from common import helper
+
 import numpy as np
 def plot(header, spot, gather):
 
-    spot         = np.transpose(spot)
+    #x, y = helper.align_data(header, spot, gather)
+    y = spot
+
     fig, ax      = plt.subplots()
-    pcm          = ax.pcolormesh(spot, cmap='Greys_r', vmin=0, vmax=Config.CLAMP_INTENSITY)
+
+    ax.scatter(np.linspace(1, len(y), len(y)), y.mean(axis=1), s=0.5)
 
     plt.xlabel('Pixel')
-    plt.ylabel('Line')
+    plt.ylabel('Intensity')
+    plt.title('Intensity')
+    plt.ylim(0, Config.CLAMP_INTENSITY)
 
-    fig.colorbar(pcm, ax=ax)
-    plt.tight_layout()
+    #fig.colorbar(pcm, ax=ax)
     plt.show()
