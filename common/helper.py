@@ -20,10 +20,6 @@ def get_freq(i):
     return freq
 
 def load_spot_file(spot_file):
-
-    if not os.path.exists(spot_file):
-        raise ValueError("File %s does not exist!")
-
     header = dict()
 
     with open(spot_file, "r") as fp:
@@ -52,9 +48,6 @@ def load_spot_file(spot_file):
     return header, z
 
 def load_gathering_file(gathering_file):
-    if not os.path.exists(gathering_file):
-        raise ValueError("File %s does not exist!", gathering_file)
-
     return np.loadtxt(gathering_file, skiprows=2)
 
 def align_data(header, spot_data, gathering_data):
