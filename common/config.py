@@ -73,36 +73,12 @@ class Config:
     LOG_LEVEL       = logging.DEBUG
 
     ITERATIONS      = 30                      # number of iterations
-    FREQUENCIES     = [9615]                  # for each frequency
+    FREQUENCIES     = get_freq_range(10 )      # for each frequency
     POSITIONS = (                             # for all this positions
         [
             (CAM_X_GROUP, [259.849]),
-            (CAM_Y_GROUP, [5]),
-            (CAM_Z_GROUP, [101.615])
-        ],
-        [
-            (CAM_Y_GROUP, [5.5]),
-        ],
-        [
-            (CAM_Y_GROUP, [6]),
-        ],
-        [
-            (CAM_Y_GROUP, [6.5]),
-        ],
-        [
             (CAM_Y_GROUP, [7]),
-        ],
-        [
-            (CAM_Y_GROUP, [7.5]),
-        ],
-        [
-            (CAM_Y_GROUP, [8]),
-        ],
-        [
-            (CAM_Y_GROUP, [8.5]),
-        ],
-        [
-            (CAM_Y_GROUP, [9]),
+            (CAM_Z_GROUP, [101.615])
         ],
     )
 

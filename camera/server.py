@@ -38,7 +38,6 @@ class Server:
             self.thread.start()
 
             time.sleep(1)
-
         return
 
     def receive(self, connection, addr):

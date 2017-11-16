@@ -14,6 +14,7 @@ from common import config
 from control.clients import *
 import getopt, sys
 from threading import Thread
+import time
 
 logger = Config.get_logger()
 
@@ -58,6 +59,7 @@ def start(subdirectoy=None):
             xps.save_gathering_data(subdirectoy)
             cam.send_command("stop", subdirectoy + "\\" + xps.run_id)
 
+            time.sleep(2)
             i += 1
 
     path = Config.XPS_RESULT_PATH + "\\" + datetime.now().strftime("%d%m%y")
