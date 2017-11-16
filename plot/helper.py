@@ -1,23 +1,8 @@
 from datetime import datetime
-from .config import Config
+from common.config import Config
 
 import re, os
 import numpy as np
-
-# i in [0, 255]
-def get_freq(i):
-
-    # hard coded values from 9kdemo cam software
-    max_freq = 9615
-    steps    = 1000000
-
-    delta = int(round(steps / max_freq))
-    freq  = int(round(steps / (delta + i)))
-
-    if freq not in range(2786, 9615+1):
-        raise ValueError("frequency '%s' not in range [2786, 9615]", freq)
-
-    return freq
 
 def load_spot_file(spot_file):
     header = dict()

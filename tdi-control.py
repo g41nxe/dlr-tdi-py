@@ -10,6 +10,7 @@ OPTIONS:
     --show-config
 """
 
+from common import config
 from control.clients import *
 import getopt, sys
 from threading import Thread
@@ -64,7 +65,7 @@ def start(subdirectoy=None):
     if not subdirectoy is None:
         path += "\\" + subdirectoy
 
-    Config.save_to_file(path, id)
+    config.save_to_file(path, id)
     logger.info("cli: finished")
 
 def main():

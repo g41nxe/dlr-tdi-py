@@ -1,5 +1,45 @@
 import logging, sys
 
+
+def save_to_file(folder, id):
+    file = folder + "\\" + id + "_versuchsdaten.txt"
+
+    f = open(file, "w")
+
+    for name in dir(Config):
+        if callable(getattr(Config, name)) or name.startswith("__"):
+            break
+
+        value = getattr(Config, name)
+
+        f.write(str(name) + ": " + str(value) + "\n")
+
+    f.close()
+
+# i in [0, 255]
+def get_freq_range(steps):
+    # hard coded values from 9kdemo cam software
+    max_freq     = 9615
+    sample_count = 1000000
+    max          = 256
+    min          = 0
+    step_range   = max // steps
+
+    if steps > max:
+        raise RuntimeError("parameter 'i' cannot be > 256")
+
+    frequencies = []
+    for i in range(min, max, step_range):
+        delta = int(round(sample_count / max_freq))
+        freq  = int(round(sample_count / (delta + i)))
+
+        if freq not in range(2785, 9615+1):
+            raise ValueError("frequency '%s' not in range [2786, 9615]", freq)
+
+        frequencies.append(freq)
+
+    return frequencies
+
 class Config:
 
     CAM_HOST         = "192.168.0.77"
@@ -32,43 +72,43 @@ class Config:
 
     LOG_LEVEL       = logging.DEBUG
 
-    ITERATIONS      = 30                # number of iterations
-    FREQUENCIES     = [2786, 9615]      # for each frequency
-    POSITIONS       = (                 # for all this positions
+    ITERATIONS      = 30                      # number of iterations
+    FREQUENCIES     = [9615]                  # for each frequency
+    POSITIONS = (                             # for all this positions
         [
             (CAM_X_GROUP, [259.849]),
-            (CAM_Y_GROUP, [0]),
+            (CAM_Y_GROUP, [5]),
             (CAM_Z_GROUP, [101.615])
         ],
         [
-            (CAM_Y_GROUP, [5])
+            (CAM_Y_GROUP, [5.5]),
         ],
         [
-            (CAM_Y_GROUP, [10])
+            (CAM_Y_GROUP, [6]),
         ],
-
+        [
+            (CAM_Y_GROUP, [6.5]),
+        ],
+        [
+            (CAM_Y_GROUP, [7]),
+        ],
+        [
+            (CAM_Y_GROUP, [7.5]),
+        ],
+        [
+            (CAM_Y_GROUP, [8]),
+        ],
+        [
+            (CAM_Y_GROUP, [8.5]),
+        ],
+        [
+            (CAM_Y_GROUP, [9]),
+        ],
     )
 
     CLAMP_INTENSITY = 1000  # intensities > value are outliers
 
-    PLOT_DEFAULT_FILE = "\\data\\021117\\160128_2786hz"
-
-    @staticmethod
-    def save_to_file(folder, id):
-
-        file = folder + "\\" + id + "_versuchsdaten.txt"
-
-        f = open(file, "w")
-
-        for name in dir(Config):
-            if callable(getattr(Config, name)) or name.startswith("__"):
-                break
-
-            value = getattr(Config, name)
-
-            f.write( str(name) + ": " + str(value) + "\n")
-
-        f.close()
+    PLOT_DEFAULT_FILE = "\\data\\161117\\schaerfe_rot\\113413_9615hz_position1"
 
     __logger = None
 
@@ -91,6 +131,5 @@ class Config:
         Config.__logger = logger
 
         return logger
-
 
 

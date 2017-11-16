@@ -20,8 +20,7 @@ OPTIONS:
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss
-from common import helper
+from plot import gather, spot, psf, gauss, helper
 from common.config import Config
 
 
