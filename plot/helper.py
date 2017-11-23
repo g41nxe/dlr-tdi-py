@@ -61,7 +61,7 @@ def align_data(header, spot_data, gathering_data):
         # only store data in radius of pixelCount pixels
         # remove outlier and backwards travel
         if Config.FP_START <= current_position and Config.FP_END >= current_position\
-            and spot_data[line, pixel] < Config.CLAMP_INTENSITY \
+            and spot_data[line, pixel] < Config.CLAMP_MAX_INTENSITY \
             and current_speed > 0:
 
             valid_lines.append([j, line, current_position])

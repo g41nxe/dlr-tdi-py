@@ -20,7 +20,7 @@ OPTIONS:
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, helper
+from plot import gather, spot, psf, gauss, gauss2d, helper
 from common.config import Config
 
 
@@ -47,6 +47,8 @@ def show(task, file):
         psf.plot(h, s, g)
     elif task == 'gauss':
         gauss.plot(h, s, g)
+    elif task == 'gauss2d':
+        gauss2d.plot(h, s, g)
 
 
 def main():

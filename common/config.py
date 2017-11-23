@@ -73,7 +73,7 @@ class Config:
     LOG_LEVEL       = logging.DEBUG
 
     ITERATIONS      = 30                      # number of iterations
-    FREQUENCIES     = get_freq_range(10 )      # for each frequency
+    FREQUENCIES     = get_freq_range(10)      # for each frequency
     POSITIONS = (                             # for all this positions
         [
             (CAM_X_GROUP, [259.849]),
@@ -82,9 +82,10 @@ class Config:
         ],
     )
 
-    CLAMP_INTENSITY = 1000  # intensities > value are outliers
+    CLAMP_MAX_INTENSITY = 1000  # intensities > value are outliers
+    CLAMP_MIN_INTENSITY = 100   # intensities < value are noise
 
-    PLOT_DEFAULT_FILE = "\\data\\161117\\schaerfe_rot\\113413_9615hz_position1"
+    PLOT_DEFAULT_FILE = "\\data\\161117\\rot_Y5to9\\153824_9615hz_position6"
 
     __logger = None
 

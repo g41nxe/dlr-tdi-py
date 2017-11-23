@@ -1,9 +1,15 @@
 from plot import helper
+from common.config import Config
 import numpy as np
 import math
 from scipy.optimize import curve_fit
+from scipy.interpolate import spline
+
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
 import matplotlib.colors as colors
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
@@ -29,7 +35,6 @@ def plot(header, spot, gather):
 
     ydata = y[start_row:end_row, :]
 
-
     cx, cy = np.unravel_index(ydata.argmax(), ydata.shape)
 
     x0 = ydata[:, cy].mean()
@@ -37,55 +42,67 @@ def plot(header, spot, gather):
     dx = ydata[:, cy].std()
     dy = ydata[cx, :].std()
 
-    print([A, x0, dx, y0, dy])
-
-    x = np.linspace(1, pixelCount, pixelCount)
-    y = np.linspace(1, pixelCount, pixelCount)
+    x = np.arange(pixelCount)
+    y = np.arange(pixelCount)
 
     x, y = np.meshgrid(x, y)
 
-    f, (ax1, ax2, ax3) = plt.subplots(1, 3)
+    # plot
+    f   = plt.figure(figsize=(6,6))
+    gs  = gridspec.GridSpec(3,3, wspace=0.0, hspace=0.0)
 
+    ax1 = plt.subplot2grid((3, 3), (1, 0), colspan=2, rowspan=2)
+    ax2 = plt.subplot2grid((3, 3), (1, 2), rowspan=2, sharey=ax1)
+    ax3 = plt.subplot2grid((3, 3), (0, 0), colspan=2, sharex=ax1)
+    ax4 = plt.subplot2grid((3, 3), (0, 2))
 
-    p1 = ax1.imshow(ydata, cmap=cm.magma, aspect="equal", origin="bottom")
-    c1 = f.colorbar(p1, ax=ax1, shrink=0.45)
+    p = ax1.imshow(ydata, cmap=cm.gray, origin="bottom")
+    ax2.scatter(ydata[:, cy], np.arange(pixelCount), alpha=0.6, s=10, color='black')
+    ax3.scatter(np.arange(pixelCount), ydata[cx, :], alpha=0.6, s=10, color='black')
 
-    f.set_size_inches(12.0, 6.0, True)
+    ax1.set_aspect('equal')
 
-    plt.setp(ax1.get_xticklabels(), fontsize=6)
-    plt.setp(ax1.get_yticklabels(), fontsize=6)
+    cax = inset_axes(ax1, width="95%", height="3%", loc=9)
+    c = plt.colorbar(p, cax=cax, orientation="horizontal")
 
-    c1.ax.tick_params(labelsize=6)
+    c.ax.tick_params(labelsize=6, color='#cccccc')
+    c.outline.set_edgecolor('#cccccc')
 
-    ax1.set_title("Brightest Spot")
+    cxtick = plt.getp(c.ax.axes, 'yticklabels')
+    cytick = plt.getp(c.ax.axes, 'xticklabels')
+    plt.setp([cxtick, cytick], color='#cccccc')
+
+    plt.setp([ax1.get_yticklabels(), ax2.get_yticklabels(), ax3.get_yticklabels()], fontsize=6)
+    plt.setp([ax1.get_xticklabels(), ax2.get_xticklabels(), ax3.get_xticklabels()], fontsize=6)
+    plt.setp([ax2.get_yticklabels(), ax3.get_xticklabels()], visible=False)
+
+    ax1.set_xlim(0, pixelCount-1)
+    ax1.set_ylim(0, pixelCount-1)
+    ax2.set_ylim(0, pixelCount-1)
+    ax3.set_xlim(0, pixelCount-1)
 
     try:
         popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(), p0=[A, x0, y0, dx, dy])
         ydata_fitted = gauss2d((x, y), *popt)
         ydata_fitted = ydata_fitted.reshape(pixelCount, pixelCount)
 
-        p2 = ax2.imshow(ydata_fitted, cmap=cm.magma, aspect="equal", origin="bottom")
-        p3 = ax3.imshow(ydata_fitted - ydata, cmap=cm.magma, interpolation="gaussian", aspect="equal", origin="bottom",
-                        extent=(x.min(), x.max(), y.min(), y.max()))
+        ax2.plot(spline(np.arange(pixelCount), ydata_fitted[:, cy], np.linspace(0, pixelCount, 100)), np.linspace(0, pixelCount, 100), color='black', alpha=0.4)
+        ax3.plot(np.linspace(0, pixelCount, 100), spline(np.arange(pixelCount), ydata_fitted[cx, :], np.linspace(0, pixelCount, 100)), color='black', alpha=0.4)
 
-        c2 = f.colorbar(p2, ax=ax2, shrink=0.45)
-        c3 = f.colorbar(p3, ax=ax3, shrink=0.45)
+        print(ydata_fitted.shape)
 
-        plt.setp(ax2.get_xticklabels(), fontsize=6)
-        plt.setp(ax2.get_yticklabels(), fontsize=6)
-        plt.setp(ax3.get_xticklabels(), fontsize=6)
-        plt.setp(ax3.get_yticklabels(), fontsize=6)
-
-        c2.ax.tick_params(labelsize=6)
-        c3.ax.tick_params(labelsize=6)
-
-        ax2.set_title("2D-Gauss")
-        ax3.set_title("Difference")
-
-        at = AnchoredText(r'$\delta_x = ' + str(round(popt[2], 4)) + "$\n" + '$\delta_y =' + str(round(popt[4], 4)) + '$', prop=dict(size=6), frameon=True, loc=4)
-        at.patch.set_boxstyle("round, pad=0.3, rounding_size=0.1")
-        ax2.add_artist(at)
     except:
         pass
+
+    plt.suptitle('Spot-Image with 2D-Gaussian Fit')
+
+    ax4.axis('off')
+    text =  r'$\delta_x = ' + str(round(popt[3], 4)) + "$\n" \
+         +   '$\delta_y = ' + str(round(popt[4], 4)) + "$\n" \
+         +   '$x_0 = '      + str(round(popt[1], 4)) + "$\n" \
+         +   '$y_0 = '      + str(round(popt[2], 4)) + "$\n" \
+         +   '$A = '        + str(round(popt[0], 4)) + "$\n" \
+
+    ax4.text(0.25, 0.25, text, fontsize=8)
 
     plt.show()

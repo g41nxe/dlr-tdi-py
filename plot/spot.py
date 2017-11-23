@@ -15,7 +15,7 @@ def plot(header, spot, gather):
     plt.xlabel('Pixel')
     plt.ylabel('Intensity')
     plt.title('Intensity')
-    plt.ylim(0, Config.CLAMP_INTENSITY)
+    plt.ylim(0, Config.CLAMP_MAX_INTENSITY)
 
     #fig.colorbar(pcm, ax=ax)
     plt.show()
