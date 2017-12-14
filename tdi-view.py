@@ -52,7 +52,7 @@ def show(task, file):
 
 
 def main():
-    file = os.getcwd() + Config.PLOT_DEFAULT_FILE
+    file = Config.PLOT_DATA_FOLDER + Config.PLOT_DEFAULT_FILE
     action = None
 
     try:
