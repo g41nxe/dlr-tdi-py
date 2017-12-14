@@ -15,7 +15,7 @@ def plot(header, spot, gather):
     ax1.set_ylabel('Position (mm)')
     ax1.set_title('Position and Velocity')
 
-    ax2 =  plt.subplot(212, sharex=ax1)
+    ax2 = plt.subplot(212, sharex=ax1)
     ax2.scatter(x, speed, s=s)
     ax2.set_ylabel('Velocity (mm/s)')
 

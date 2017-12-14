@@ -8,7 +8,7 @@ def plot(header, spot, gather):
     #x, y = helper.align_data(header, spot, gather)
     y = spot
 
-    fig, ax      = plt.subplots()
+    fig, ax = plt.subplots()
 
     ax.scatter(np.linspace(1, len(y), len(y)), y.mean(axis=1), s=0.5)
 

@@ -7,9 +7,9 @@ import numpy as np
 def load_spot_file(spot_file):
     header = dict()
 
-    with open(spot_file, "r") as fp:
+    with open(spot_file, "r", encoding="ISO-8859-1") as fp:
         for line in fp:
-            m = re.search("\[([aA-zZ -]+)\]([0-9.:]+)", line)
+            m = re.search(r"\[([aA-zZ -]+)\]([0-9.:]+)", line)
 
             if m is None:
                 break
@@ -30,10 +30,18 @@ def load_spot_file(spot_file):
     z = np.reshape(np.fromfile(spot_file, dtype=np.ushort)[:-8 * header['PixelCount']],
                    (header['LineCount'], header['PixelCount']))
 
+    if (len(z) < 1):
+        Config.get_logger().warning("spot file " + spot_file + " is empty")
+
     return header, z
 
 def load_gathering_file(gathering_file):
-    return np.loadtxt(gathering_file, skiprows=2)
+    data = np.loadtxt(gathering_file, skiprows=2)
+
+    if len(data) < 1:
+        Config.get_logger().warning("spot file " + gathering_file + " is empty")
+
+    return data
 
 def align_data(header, spot_data, gathering_data):
     position = gathering_data[:, 0]
