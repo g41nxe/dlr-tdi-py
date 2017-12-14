@@ -89,8 +89,6 @@ def plot(header, spot, gather):
         ax2.plot(spline(np.arange(pixelCount), ydata_fitted[:, cy], np.linspace(0, pixelCount, 100)), np.linspace(0, pixelCount, 100), color='black', alpha=0.4)
         ax3.plot(np.linspace(0, pixelCount, 100), spline(np.arange(pixelCount), ydata_fitted[cx, :], np.linspace(0, pixelCount, 100)), color='black', alpha=0.4)
 
-        print(ydata_fitted.shape)
-
     except:
         pass
 
@@ -105,4 +103,3 @@ def plot(header, spot, gather):
 
     ax4.text(0.25, 0.25, text, fontsize=8)
 
-    plt.show()

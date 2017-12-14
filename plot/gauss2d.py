@@ -88,4 +88,3 @@ def plot(header, spot, gather):
     except:
         pass
 
-    plt.show()

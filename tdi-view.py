@@ -13,6 +13,7 @@ OPTIONS:
         - psf
         - gauss
         - delta
+        - all
 
     --file=FILENAME
         .spot and .gathering file must have the same name; exclude file-extension
@@ -28,6 +29,7 @@ import getopt, sys, os
 
 from plot import gather, spot, psf, gauss, gauss2d, helper, delta
 from common.config import Config
+import matplotlib.pyplot as plt
 
 
 def usage():
@@ -66,7 +68,13 @@ def show(task, file, type=None):
         gauss.plot(h, s, g)
     elif task == 'gauss2d':
         gauss2d.plot(h, s, g)
+    elif task == 'all':
+        spot.plot(h, s, g)
+        gather.plot(h, s, g)
+        psf.plot(h, s, g)
+        gauss.plot(h, s, g)
 
+    plt.show()
 
 def main():
     file   = Config.PLOT_DATA_FOLDER + Config.PLOT_DEFAULT_FILE

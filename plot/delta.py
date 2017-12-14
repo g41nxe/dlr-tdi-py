@@ -106,4 +106,3 @@ def plot(subdirectory, type):
 
     ax[i-1].set_xlabel(label)
 
-    plt.show()

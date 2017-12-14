@@ -10,12 +10,17 @@ def plot(header, spot, gather):
 
     fig, ax = plt.subplots()
 
-    ax.scatter(np.linspace(1, len(y), len(y)), y.mean(axis=1), s=0.5)
+    ax.scatter(np.linspace(1, len(y), np.size(y, 0)), y.mean(axis=1), s=1)
 
-    plt.xlabel('Pixel')
-    plt.ylabel('Intensity')
+    plt.xlabel('Line')
+    plt.ylabel('mean intensity of all pixels')
     plt.title('Intensity')
-    plt.ylim(0, Config.CLAMP_MAX_INTENSITY)
+    plt.ylim(Config.CLAMP_MIN_INTENSITY, Config.CLAMP_MAX_INTENSITY)
+    textstr = "clamp min: " + str(Config.CLAMP_MIN_INTENSITY) + "\n" \
+            + "clamp max: " + str(Config.CLAMP_MAX_INTENSITY)
+
+    props = dict(boxstyle='round', facecolor='white', alpha=0.5)
+    ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=9, verticalalignment='top', bbox=props)
+
 
     #fig.colorbar(pcm, ax=ax)
-    plt.show()
