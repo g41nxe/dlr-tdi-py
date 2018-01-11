@@ -147,8 +147,8 @@ class Config:
     DEFAULT_FREQUENCY   = "single"
     DEFAULT_POSITION    = "single"
 
-    CLAMP_MAX_INTENSITY = 200  # intensities > value are outliers
-    CLAMP_MIN_INTENSITY = 20   # intensities < value are noise
+    CLAMP_MAX_INTENSITY = 2500 # intensities > value are outliers
+    CLAMP_MIN_INTENSITY = 25   # intensities < value are noise
 
     PLOT_DATA_FOLDER    = "D:\\Daten\\software\\Python\\dlr-tdi-py\\data\\"
     PLOT_DEFAULT_FILE   = "161117\\rot_Y5to9\\153824_9615hz_position5"

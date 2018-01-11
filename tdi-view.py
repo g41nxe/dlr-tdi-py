@@ -14,6 +14,7 @@ OPTIONS:
         - gauss
         - delta
         - all
+        - test
 
     --file=FILENAME
         .spot and .gathering file must have the same name; exclude file-extension
@@ -27,7 +28,7 @@ OPTIONS:
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta
+from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test
 from common.config import Config
 import matplotlib.pyplot as plt
 
@@ -73,6 +74,8 @@ def show(task, file, type=None):
         gather.plot(h, s, g)
         psf.plot(h, s, g)
         gauss.plot(h, s, g)
+    elif task == 'test':
+        test.plot(h, s, g)
 
     plt.show()
 

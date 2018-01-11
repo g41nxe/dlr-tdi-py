@@ -47,9 +47,7 @@ def align_data(header, spot_data, gathering_data):
     position = gathering_data[:, 0]
     speed    = gathering_data[:, 1]
 
-    pixel       = int(round(header['PixelCount'] / 2))
     alpha       = (10000 / header['LineFreq'])
-
     aligned_size = min(int((len(position) / alpha)), len(spot_data))
     spot_data    = spot_data[1:aligned_size, :]
 
@@ -57,7 +55,9 @@ def align_data(header, spot_data, gathering_data):
     valid_lines = []
 
     # calculate valid lines and values
-    j = 0
+    x = []
+    y = []
+
     for line in range(0, len(spot_data)):
         # position doesn't exist
         try :
@@ -68,23 +68,15 @@ def align_data(header, spot_data, gathering_data):
 
         # only store data in radius of pixelCount pixels
         # remove outlier and backwards travel
-        if Config.FP_START <= current_position and Config.FP_END >= current_position\
-            and spot_data[line, pixel] < Config.CLAMP_MAX_INTENSITY \
+        if Config.FP_START <= current_position and Config.FP_END >= current_position \
+            and np.min(spot_data[line, :]) <  Config.CLAMP_MAX_INTENSITY \
+            and np.max(spot_data[line, :]) >= Config.CLAMP_MIN_INTENSITY \
             and current_speed > 0:
 
-            valid_lines.append([j, line, current_position])
-            j +=1
+            x.append(current_position)
+            y.append(spot_data[line, :])
 
-    # init arrays
-    x = np.empty(len(valid_lines)) # position
-    y = np.empty([len(valid_lines), header['PixelCount']]) # intensity
-
-    # build data arrays
-    for j, line, current_position in valid_lines:
-        x[j] = current_position
-        y[j, :] = spot_data[line, :]
-
-    return x, y
+    return np.array(x), np.array(y)
 
 # fix errors due to different recording frequencies of 9kdemo and xps
 def get_aligned_data(index, alpha, data):

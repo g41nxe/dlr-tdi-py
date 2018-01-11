@@ -72,27 +72,6 @@ class XPSClient:
 
         return True
 
-    def move(self):
-
-        logger.debug("client: move fp %s times from %s to %s", Config.ITERATIONS, Config.FP_START, Config.FP_END)
-
-        try:
-            self.xps.GatheringReset(self.socket_id)
-            logger.debug("client: reset xps data")
-
-            for i in range(Config.ITERATIONS):
-                self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_START])
-                self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_END])
-
-            self.xps.GatheringStopAndSave(self.socket_id)
-
-        except Exception as e:
-            logger.error("client: XPS move error")
-            raise RuntimeError(e)
-
-        return True
-
-
     def init_event(self):
         logger.debug('client: init xps events')
 
@@ -109,8 +88,37 @@ class XPSClient:
         self.xps.EventExtendedConfigurationActionSet(self.socket_id, ["GatheringRun"], ['50000'], ['1'], ['0'], ['0'])
         logger.debug("client: set xps event action")
 
-        self.xps.EventExtendedStart(self.socket_id)
+
+    def move(self):
+
+        logger.debug("client: move fp %s times from %s to %s", Config.ITERATIONS, Config.FP_START, Config.FP_END)
+
+        eventID = 0
         logger.debug("client: set xps event start")
+
+        try:
+            self.xps.GatheringReset(self.socket_id)
+            logger.debug("client: reset xps data")
+
+            for i in range(Config.ITERATIONS):
+                self.xps.EventExtendedStart(self.socket_id, eventID)
+
+                self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_START])
+                self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_END])
+
+                self.xps.EventExtendedRemove(self.socket_id, eventID)
+                logger.debug("client: remove event")
+
+
+            self.xps.GatheringStopAndSave(self.socket_id)
+            logger.debug("client: save xps data")
+
+
+        except Exception as e:
+            logger.error("client: XPS move error")
+            raise RuntimeError(e)
+
+        return True
 
     def save_gathering_data(self, subdirectory=None):
         try:
