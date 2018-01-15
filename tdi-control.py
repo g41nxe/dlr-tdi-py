@@ -47,10 +47,10 @@ def start(subdirectoy=None, freq=None, pos=None):
     if pos is None:
         pos = Config.DEFAULT_POSITION
 
-    for f in Config.FREQUENCIES[freq]:
+    for f in freq:
         logger.info("cli: frequency: %s Hz", f)
         i = 0
-        for row in Config.POSITIONS[pos]:
+        for row in pos:
             logger.info("cli: positions %s", row)
 
             cam = CameraClient()
@@ -59,7 +59,7 @@ def start(subdirectoy=None, freq=None, pos=None):
             cam.send_command("freq", f)
             xps.change_position(row)
 
-            t1 = Thread(target=xps.move, args=())
+            t1 = Thread(target=xps.move_and_gather, args=())
             t2 = Thread(target=cam.send_command, args=("start", ))
 
             try:

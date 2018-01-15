@@ -60,7 +60,6 @@ class XPSClient:
 
     def change_position(self, row):
         logger.debug("client: change positions to %s", row)
-
         try:
             for group, position in row:
                 self.xps.GroupMoveAbsolute(self.socket_id, group, position)
@@ -88,8 +87,7 @@ class XPSClient:
         self.xps.EventExtendedConfigurationActionSet(self.socket_id, ["GatheringRun"], ['50000'], ['1'], ['0'], ['0'])
         logger.debug("client: set xps event action")
 
-
-    def move(self):
+    def move_and_gather(self):
 
         logger.debug("client: move fp %s times from %s to %s", Config.ITERATIONS, Config.FP_START, Config.FP_END)
 
@@ -100,15 +98,13 @@ class XPSClient:
             self.xps.GatheringReset(self.socket_id)
             logger.debug("client: reset xps data")
 
+            self.xps.EventExtendedStart(self.socket_id)
             for i in range(Config.ITERATIONS):
-                self.xps.EventExtendedStart(self.socket_id, eventID)
-
                 self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_START])
                 self.xps.GroupMoveAbsolute(self.socket_id, Config.FP_GROUP, [Config.FP_END])
 
-                self.xps.EventExtendedRemove(self.socket_id, eventID)
-                logger.debug("client: remove event")
-
+                #self.xps.EventExtendedRemove(self.socket_id)
+                #logger.debug("client: remove event")
 
             self.xps.GatheringStopAndSave(self.socket_id)
             logger.debug("client: save xps data")
@@ -116,6 +112,7 @@ class XPSClient:
 
         except Exception as e:
             logger.error("client: XPS move error")
+            logger.debug(e)
             raise RuntimeError(e)
 
         return True

@@ -89,13 +89,13 @@ class Config:
     FP_ACCELERATION = 1500         # mm/s^2
     FP_JERKTIME     = [0.02, 0.02] # min, max
 
-    LOG_LEVEL       = logging.DEBUG
+    LOG_LEVEL       = logging.INFO
 
     ITERATIONS      = 30
 
     FREQUENCIES     = {
 
-        "single" : 9615,
+        "single" : [9615],
         "small"  : get_freq_range(10),
         "full"   : get_freq_range(255),
 
@@ -103,15 +103,16 @@ class Config:
 
     POSITIONS       = {
 
-        "single" :(
+        "single" : [
             [
                 (CAM_X_GROUP, [259.849]),
                 (CAM_Y_GROUP, [7.1]),
                 (CAM_Z_GROUP, [101.615])
             ]
-        ),
+        ]
+        ,
 
-        "focus" : (
+        "focus" : [
             [
                 (CAM_X_GROUP, [259.849]),
                 (CAM_Y_GROUP, [5]),
@@ -134,21 +135,21 @@ class Config:
             ],
             [
                 (CAM_Y_GROUP, [8]),
-             ],
-             [
+            ],
+            [
                 (CAM_Y_GROUP, [8.5]),
             ],
             [
                 (CAM_Y_GROUP, [9]),
             ]
-        )
+        ]
     }
 
     DEFAULT_FREQUENCY   = "single"
     DEFAULT_POSITION    = "single"
 
     CLAMP_MAX_INTENSITY = 2500 # intensities > value are outliers
-    CLAMP_MIN_INTENSITY = 25   # intensities < value are noise
+    CLAMP_MIN_INTENSITY = 0    # intensities < value are noise
 
     PLOT_DATA_FOLDER    = "D:\\Daten\\software\\Python\\dlr-tdi-py\\data\\"
     PLOT_DEFAULT_FILE   = "161117\\rot_Y5to9\\153824_9615hz_position5"

@@ -29,7 +29,7 @@ class Neunkdemo:
             stop.click()
 
         self.dlg.Spinner4.get_buddy_control().set_text(value)
-        self.dlg.Spinner4.type_keys("{ENTER}")
+        self.dlg.Spinner4.get_buddy_control().type_keys("{ENTER}")
 
         self.frequency = self.dlg.Spinner4.get_buddy_control().text_block()
         logger.debug("9kdemo: frequency set to %s", self.frequency)
@@ -81,7 +81,7 @@ class Neunkdemo:
         store.click()
 
         try:
-            self.app["Spot-File"].Wait('visible', timeout=20)
+            self.app["Spot-File"].Wait('visible', timeout=5)
             self.app["Spot-File"].Edit.set_text(directory + "\\" + filename)
             self.app["Spot-File"].Speichern.click()
         except TimeoutError:
@@ -89,12 +89,12 @@ class Neunkdemo:
             return False
 
         try:
-           self.app["Spot-File"].WaitNot('visible', timeout=2)
+           self.app["Spot-File"].WaitNot('visible', timeout=5)
         except TimeoutError:
             self.app["Spot-File"].Ja.click()
             logger.warning("9kdemo: file already existed")
 
-        if (stop.is_enabled):
+        if stop.is_enabled():
             stop.click()
         else:
             logger.debug("9kdemo: stop not enabled")
