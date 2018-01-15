@@ -26,12 +26,15 @@ def gauss2d(xy, A, x0, y0, dx, dy):
 
 def plot(header, spot, gather):
     x, y = helper.align_data(header, spot, gather)
-
+    print(x.shape)
+    print(y.shape)
     pixelCount  = header["PixelCount"]
 
     line, A   = np.unravel_index(y.argmax(), y.shape)
     start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
     end_row   = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
+
+    rowCount  = end_row - start_row
 
     ydata = y[start_row:end_row, :]
 
@@ -42,7 +45,7 @@ def plot(header, spot, gather):
     dx = ydata[:, cy].std()
     dy = ydata[cx, :].std()
 
-    x = np.arange(pixelCount)
+    x = np.arange(rowCount)
     y = np.arange(pixelCount)
 
     x, y = np.meshgrid(x, y)
@@ -57,7 +60,7 @@ def plot(header, spot, gather):
     ax4 = plt.subplot2grid((3, 3), (0, 2))
 
     p = ax1.imshow(ydata, cmap=cm.gray, origin="bottom")
-    ax2.scatter(ydata[:, cy], np.arange(pixelCount), alpha=0.6, s=10, color='black')
+    ax2.scatter(ydata[:, cy], np.arange(rowCount), alpha=0.6, s=10, color='black')
     ax3.scatter(np.arange(pixelCount), ydata[cx, :], alpha=0.6, s=10, color='black')
 
     ax1.set_aspect('equal')
@@ -82,12 +85,21 @@ def plot(header, spot, gather):
     ax3.set_xlim(0, pixelCount-1)
 
     try:
-        popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(), p0=[A, x0, y0, dx, dy])
+        popt, pcov   = curve_fit(gauss2d, (x, y), ydata.ravel(), p0=[A, x0, y0, dx, dy])
         ydata_fitted = gauss2d((x, y), *popt)
         ydata_fitted = ydata_fitted.reshape(pixelCount, pixelCount)
 
         ax2.plot(spline(np.arange(pixelCount), ydata_fitted[:, cy], np.linspace(0, pixelCount, 100)), np.linspace(0, pixelCount, 100), color='black', alpha=0.4)
+
         ax3.plot(np.linspace(0, pixelCount, 100), spline(np.arange(pixelCount), ydata_fitted[cx, :], np.linspace(0, pixelCount, 100)), color='black', alpha=0.4)
+
+        text = r'$\delta_x = ' + str(round(popt[3], 4)) + "$\n" \
+               + '$\delta_y = ' + str(round(popt[4], 4)) + "$\n" \
+               + '$x_0 = ' + str(round(popt[1], 4)) + "$\n" \
+               + '$y_0 = ' + str(round(popt[2], 4)) + "$\n" \
+               + '$A = ' + str(round(popt[0], 4)) + "$\n" \
+
+        ax4.text(0.25, 0.25, text, fontsize=8)
 
     except:
         pass
@@ -95,11 +107,4 @@ def plot(header, spot, gather):
     plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
     ax4.axis('off')
-    text =  r'$\delta_x = ' + str(round(popt[3], 4)) + "$\n" \
-         +   '$\delta_y = ' + str(round(popt[4], 4)) + "$\n" \
-         +   '$x_0 = '      + str(round(popt[1], 4)) + "$\n" \
-         +   '$y_0 = '      + str(round(popt[2], 4)) + "$\n" \
-         +   '$A = '        + str(round(popt[0], 4)) + "$\n" \
-
-    ax4.text(0.25, 0.25, text, fontsize=8)
 

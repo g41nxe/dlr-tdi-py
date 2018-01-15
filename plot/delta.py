@@ -45,7 +45,6 @@ def deltas(header, spot, gather):
 
 def plot(subdirectory, type):
     data = {}
-
     for root, dirs, files in os.walk(subdirectory):
         for file in files:
             if (not file.endswith('.spot')):
@@ -69,40 +68,48 @@ def plot(subdirectory, type):
             if len(s) < 1 or len(g) < 1:
                 continue
 
+            try:
+                params = deltas(h, s, g)
+            except Exception:
+                continue
+
             if id not in data:
                 data[id] = {
-                    'position'  : [],
-                    'frequency' : [],
-                    'delta_x'   : [],
-                    'delta_y'   : [],
+                    'position': [],
+                    'frequency': [],
+                    'delta_x': [],
+                    'delta_y': [],
                 }
 
-            params = deltas(h, s, g)
-
-            data[id]['delta_x'].append(params[3])
-            data[id]['delta_y'].append(params[4])
+            data[id]['delta_x'].append(abs(params[3]))
+            data[id]['delta_y'].append(abs(params[4]))
             data[id]['position'].append(p)
             data[id]['frequency'].append(f)
 
-    if type in "frequency":
+
+    if type == "frequency":
         key   = "frequency"
         label = "Frequency (Hz)"
     else:
         key   = "position"
         label = "Position"
 
-    f, ax = plt.subplots(len(data), sharex=True)
+    f, ax = plt.subplots(len(data.items()), sharex=True)
     plt.suptitle(r'Development of $\delta_x$ and $\delta_y$ with increasing frequency')
 
     i = 0
     for id, values in data.items():
-        ax[i].plot(values[key], values['delta_x'], label=r'$\delta_x$')
-        ax[i].plot(values[key], values['delta_y'], label=r'$\delta_y$')
+        print(key)
+        print(values)
+        ax.scatter(values[key], values['delta_x'], label=r'$\delta_x$')
+        ax.scatter(values[key], values['delta_y'], label=r'$\delta_y$')
 
-        ax[i].set_title("Run " + id, loc='right', fontsize=9)
-        ax[i].set_ylabel(r'$\delta$')
-        ax[i].legend(numpoints=1, loc='upper left')
+        ax.set_title("Run " + id, loc='right', fontsize=9)
+        ax.set_ylabel(r'$\delta$')
+        ax.legend(numpoints=1, loc='upper left')
         i += 1
 
-    ax[i-1].set_xlabel(label)
+    ax.set_xlabel(label)
+
+    plt.show()
 

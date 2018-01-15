@@ -2,8 +2,24 @@ from plot import helper
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import argrelextrema
+import matplotlib.gridspec as gridspec
+import matplotlib.cm as cm
+from plot import helper
+from common.config import Config
+import numpy as np
+import math
+from scipy.optimize import curve_fit
+from scipy.interpolate import spline
 
-def plot(header, spot, gather):
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import matplotlib.cm as cm
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+import matplotlib.colors as colors
+from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
+
+def plot2(header, spot, gather):
 
     x, y = helper.align_data(header, spot, gather)
 
@@ -34,4 +50,19 @@ def plot(header, spot, gather):
     plt.title('Position of max. Intensities vs. XPS Position')
     plt.ylabel('Position (mm)')
     plt.xlabel('Line')
+
+def plot(header, spot, gather):
+    x, y = helper.align_data(header, spot, gather)
+
+
+    ax1 = plt.subplot()
+    print (y.shape)
+    p = ax1.imshow(np.transpose(y[0:500,:]), cmap=cm.gray, origin="bottom")
+
+    cax = inset_axes(ax1, width="95%", height="3%", loc=9)
+    c = plt.colorbar(p, cax=cax, orientation="horizontal")
+
+    c.ax.tick_params(labelsize=6, color='#cccccc')
+    c.outline.set_edgecolor('#cccccc')
+
 
