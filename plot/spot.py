@@ -15,9 +15,9 @@ def plot(header, spot, gather):
     plt.xlabel('Line')
     plt.ylabel('mean intensity of all pixels')
     plt.title('Intensity')
-    plt.ylim(Config.CLAMP_MIN_INTENSITY, Config.CLAMP_MAX_INTENSITY)
-    textstr = "clamp min: " + str(Config.CLAMP_MIN_INTENSITY) + "\n" \
-            + "clamp max: " + str(Config.CLAMP_MAX_INTENSITY)
+    plt.ylim(Config.get('CLAMP_MIN_INTENSITY'), Config.get('CLAMP_MAX_INTENSITY'))
+    textstr = "clamp min: " + str(Config.get('CLAMP_MIN_INTENSITY')) + "\n" \
+            + "clamp max: " + str(Config.get('CLAMP_MAX_INTENSITY'))
 
     props = dict(boxstyle='round', facecolor='white', alpha=0.5)
     ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=9, verticalalignment='top', bbox=props)

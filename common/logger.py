@@ -12,13 +12,13 @@ class Logger:
         formatter = logging.Formatter("%(asctime)s - %(message)s")
 
         ch = logging.StreamHandler(sys.stdout)
-        ch.setLevel(Config.LOG_LEVEL)
+        ch.setLevel(Config.get("LOG_LEVEL"))
         ch.setFormatter(formatter)
 
         logger = logging.getLogger("global")
-        logger.setLevel(Config.LOG_LEVEL)
+        logger.setLevel(Config.get("LOG_LEVEL"))
         logger.addHandler(ch)
 
-        Config.__logger = logger
+        Logger.__logger = logger
 
         return logger

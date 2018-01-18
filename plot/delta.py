@@ -5,6 +5,7 @@ import os
 import re
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
+import json
 
 
 def gauss2d(xy, A, x0, y0, dx, dy):
@@ -54,16 +55,18 @@ def plot(subdirectory, type):
             if not (name + ".gather") in files:
                 continue
 
-            m = re.search(r"(\d*)_(\d*)hz_position(\d*)", name)
+            m = re.search(r"(\d*)_task-([-\w]*)-#(\d*)", name)
+
             if m is None:
                 continue
 
-            id     = m.group(1)
-            f      = int(m.group(2))
-            p      = int(m.group(3))
+            h, s = helper.load_spot_file(subdirectory + "\\" + name + '.spot')
+            g = helper.load_gathering_file(subdirectory + "\\" + name + '.gather')
 
-            h, s   = helper.load_spot_file(subdirectory + "\\" + name + '.spot')
-            g      = helper.load_gathering_file(subdirectory + "\\" + name + '.gather')
+            f        = h['LineFreq']
+            id       = m.group(1)
+            task     = str(m.group(2))
+            i        = int(m.group(3))
 
             if len(s) < 1 or len(g) < 1:
                 continue
@@ -75,7 +78,6 @@ def plot(subdirectory, type):
 
             if id not in data:
                 data[id] = {
-                    'position': [],
                     'frequency': [],
                     'delta_x': [],
                     'delta_y': [],
@@ -83,7 +85,6 @@ def plot(subdirectory, type):
 
             data[id]['delta_x'].append(abs(params[3]))
             data[id]['delta_y'].append(abs(params[4]))
-            data[id]['position'].append(p)
             data[id]['frequency'].append(f)
 
 

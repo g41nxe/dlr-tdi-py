@@ -1,21 +1,3 @@
-from .config import Config
-
-def save_to_file(folder, id):
-    file = folder + "\\" + id + "_versuchsdaten.txt"
-
-    f = open(file, "w")
-
-    for name in dir(Config):
-        if callable(getattr(Config, name)) or name.startswith("__"):
-            break
-
-        value = getattr(Config, name)
-
-        f.write(str(name) + ": " + str(value) + "\n")
-
-    f.close()
-
-
 
 # steps in [0, 255]
 def get_freq_range(steps):

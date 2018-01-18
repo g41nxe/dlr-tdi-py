@@ -1,11 +1,10 @@
-import os
+import logging, os, sys
 from datetime import datetime
 from pywinauto.application import Application
 from pywinauto.timings import TimeoutError
 
 
 from common.config import Config
-from common.logger import Logger
 
 logger = Logger.get_logger()
 

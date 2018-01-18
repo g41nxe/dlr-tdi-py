@@ -30,13 +30,11 @@ def main():
         sys.exit(2)
 
     for o, a in opts:
-
-        if o in "--start":
-            start()
-
-        else:
+        if o in ["--help", "h"]:
             usage()
             sys.exit(2)
+
+    start()
 
 if __name__ == "__main__":
     main()

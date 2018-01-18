@@ -7,130 +7,111 @@ OPTIONS:
     -h, --help
         Display this help message.
 
-    --start=NAME
-        Start measurement run
+    --task=FILE
+        The file containing config data about the frequency, position, velocity
 
-    --show-config
-        Print config file
-
-    --frequency=FREQ
-        single = 9615
-        small  = 10  values between [2786, 9615]
-        full   = 255 values between [2786, 9615]
-
-    --position=POS
-        single  = ( 259.849, 7.1, 101.615 )
-        focus   = ( 259.849, 5 .. 5.5 .. 6 .. 9, 101.615 )
-
+    --name=NAME
+        The (folder-)name of the current run
 
 """
 
 from common.logger import Logger
-from common.util import save_to_file
 from control.clients import *
+from control.run import RunConfig, Run
 
 from threading import Thread
-import getopt, sys, time
+import getopt, sys, time, os
 
 logger = Logger.get_logger()
 
 def usage():
     print(__doc__)
 
-def start(subdirectoy=None, freq=None, pos=None):
+def start(run_file, subdir=None):
     xps = XPSClient()
 
-    id = datetime.now().strftime("%H%M%S")
-    logger.info("cli: id %s\\%s", subdirectoy, id)
+    cfg = RunConfig(run_file)
 
-    if freq is None:
-        freq = Config.DEFAULT_FREQUENCY
-    if pos is None:
-        pos = Config.DEFAULT_POSITION
+    logger.info("cli: run %s\\$s with config %s", subdir, cfg.id, run_file)
 
-    for f in freq:
-        logger.info("cli: frequency: %s Hz", f)
-        i = 0
-        for row in pos:
-            logger.info("cli: positions %s", row)
+    for r in cfg.getRuns():
 
-            cam = CameraClient()
-            xps.run_id = id + "_" + str(f) + "hz_position" + str(i)
+        logger.info("cli: frequency: %s Hz", r.freq)
+        logger.info("cli: positions: %s", r.pos)
+        logger.info("cli: velocity: %s", r.vel)
 
-            cam.send_command("freq", f)
-            xps.change_position(row)
+        cam = CameraClient()
 
-            t1 = Thread(target=xps.move_and_gather, args=())
-            t2 = Thread(target=cam.send_command, args=("start", ))
+        xps.run_id = r.id
 
-            try:
-                t1.start()
-                t2.start()
-            except Exception as e:
-                logger.error(e)
-                raise RuntimeError(e)
+        if not r.freq is None:
+            cam.send_command("freq", r.freq)
 
-            try:
-                t1.join(120)
-                t2.join(120)
-            except Exception as e:
-                logger.error(e)
-                raise RuntimeError(e)
+        xps.change_parameter(r.pos, r.vel)
 
-            xps.save_gathering_data(subdirectoy)
-            cam.send_command("stop", subdirectoy + "\\" + xps.run_id)
+        t1 = Thread(target=xps.move_and_gather, args=())
+        t2 = Thread(target=cam.send_command, args=("start", ))
 
-            time.sleep(2)
-            i += 1
+        try:
+            t1.start()
+            t2.start()
+        except Exception as e:
+            logger.error(e)
+            raise RuntimeError(e)
 
-    path = Config.XPS_RESULT_PATH + "\\" + datetime.now().strftime("%d%m%y")
+        try:
+            t1.join(120)
+            t2.join(120)
+        except Exception as e:
+            logger.error(e)
+            raise RuntimeError(e)
 
-    if not subdirectoy is None:
-        path += "\\" + subdirectoy
+        xps.save_gathering_data(subdir, r.id)
+        cam.send_command("stop", subdir + "\\" + r.id)
 
-    save_to_file(path, id)
+        time.sleep(2)
+
     logger.info("cli: finished")
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "start=", "show-config", "position=", "frequency="])
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "name=", "task=", "show-config"])
 
     except getopt.GetoptError as err:
         print("Error: ", err)
         sys.exit(2)
 
-    name = freq = pos = None
+    name = task = None
 
     for o, a in opts:
 
-        if o in "--frequency":
-            if not a in Config.FREQUENCIES.keys():
-                print("Error: ", a, " is not a valid option for parameter ", 0)
-                sys.exit(2)
-            else:
-                freq = Config.FREQUENCIES[a]
-
-        elif o in "--position":
-            if not a in Config.POSITIONS.keys():
-                print("Error: ", a, " is not a valid option for parameter ", o)
-                sys.exit(2)
-            else:
-                pos = Config.POSITIONS[a]
-
-        elif o in "--start":
+        if o in "--name":
             name = a
+
+        elif o in "--task":
+            a += ".json"
+
+            if not os.path.isabs(a):
+                a = dir(__file__) + "\\tasks\\" + a
+
+            if os.path.exists(a):
+                task = a
+            else:
+                print("Task file %s does'nt exist!", a)
 
         elif o in "--show-config":
             print(vars(Config))
 
         else:
-            print(o)
             usage()
             sys.exit(2)
 
-    for o,a in opts:
-        if o in "--start":
-            start(name, freq, pos)
+    if task is None:
+        print("No task!")
+        usage()
+        sys.exit()
+
+    start(task, name)
 
 if __name__ == "__main__":
     main()

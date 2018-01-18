@@ -15,7 +15,7 @@ class Server:
         logger.info("camera: started")
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind((Config.CAM_HOST, Config.CAM_PORT))
+        self.socket.bind((Config.get("CAM_HOST"), Config.get("CAM_PORT")))
         self.socket.listen(10)
 
     def __del__(self):

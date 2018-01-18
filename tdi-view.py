@@ -41,7 +41,7 @@ def usage():
 def show(task, file, type=None):
 
     if not os.path.isabs(file):
-        file = Config.PLOT_DATA_FOLDER + file
+        file = Config.get("PLOT_DATA_FOLDER") + file
 
     if task == 'delta':
         if not os.path.exists(file) or not os.path.isdir(file):
@@ -80,7 +80,7 @@ def show(task, file, type=None):
     plt.show()
 
 def main():
-    file   = Config.PLOT_DATA_FOLDER + Config.PLOT_DEFAULT_FILE
+    file   = Config.get("PLOT_DATA_FOLDER") + Config.get("PLOT_DEFAULT_FILE")
     action = None
     type   = None
 
