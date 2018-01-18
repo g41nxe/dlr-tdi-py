@@ -1,11 +1,12 @@
-import logging, socket, time, msvcrt, sys
+import socket, time, msvcrt
 from threading import Thread
 
 from camera.neunkdemo import Neunkdemo
 from common.config import Config
+from common.logger import Logger
 from common.package import Command, Response
 
-logger = Config.get_logger()
+logger = Logger.get_logger()
 
 class Server:
     SCRIPT = "G:\\data\\pywinauto\\tdi-Neunkdemo.py"

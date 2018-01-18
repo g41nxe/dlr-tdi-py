@@ -1,12 +1,13 @@
-import logging, os, sys
+import os
 from datetime import datetime
 from pywinauto.application import Application
 from pywinauto.timings import TimeoutError
-import time
+
 
 from common.config import Config
+from common.logger import Logger
 
-logger = Config.get_logger()
+logger = Logger.get_logger()
 
 class Neunkdemo:
 

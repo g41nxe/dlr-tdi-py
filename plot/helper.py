@@ -1,5 +1,6 @@
 from datetime import datetime
 from common.config import Config
+from common.logger import Logger
 
 import re, os
 import numpy as np
@@ -31,7 +32,7 @@ def load_spot_file(spot_file):
                    (header['LineCount'], header['PixelCount']))
 
     if (len(z) < 1):
-        Config.get_logger().warning("spot file " + spot_file + " is empty")
+        Logger.get_logger().warning("spot file " + spot_file + " is empty")
 
     return header, z
 
@@ -39,7 +40,7 @@ def load_gathering_file(gathering_file):
     data = np.loadtxt(gathering_file, skiprows=2)
 
     if len(data) < 1:
-        Config.get_logger().warning("spot file " + gathering_file + " is empty")
+        Logger.get_logger().warning("spot file " + gathering_file + " is empty")
 
     return data
 

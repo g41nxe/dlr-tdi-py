@@ -25,13 +25,14 @@ OPTIONS:
 
 """
 
-from common import config
+from common.logger import Logger
+from common.util import save_to_file
 from control.clients import *
-import getopt, sys
-from threading import Thread
-import time
 
-logger = Config.get_logger()
+from threading import Thread
+import getopt, sys, time
+
+logger = Logger.get_logger()
 
 def usage():
     print(__doc__)
@@ -87,7 +88,7 @@ def start(subdirectoy=None, freq=None, pos=None):
     if not subdirectoy is None:
         path += "\\" + subdirectoy
 
-    config.save_to_file(path, id)
+    save_to_file(path, id)
     logger.info("cli: finished")
 
 def main():

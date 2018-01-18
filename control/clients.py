@@ -2,10 +2,11 @@ import socket, ftplib, os
 from datetime import datetime
 
 from common.config  import Config
+from common.logger import Logger
 from common.package import Response, Command
 from control.xps    import XPS
 
-logger = Config.get_logger()
+logger = Logger.get_logger()
 
 class XPSClient:
 

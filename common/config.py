@@ -1,67 +1,7 @@
-import logging, sys
-
-def save_to_file(folder, id):
-    file = folder + "\\" + id + "_versuchsdaten.txt"
-
-    f = open(file, "w")
-
-    for name in dir(Config):
-        if callable(getattr(Config, name)) or name.startswith("__"):
-            break
-
-        value = getattr(Config, name)
-
-        f.write(str(name) + ": " + str(value) + "\n")
-
-    f.close()
-
-# i in [0, 255]
-def get_freq_range(steps):
-    # hard coded values from 9kdemo cam software
-    max_freq     = 9615
-    sample_count = 1000000
-    max          = 256
-    min          = 0
-    step_range   = max // steps
-
-    if steps > max:
-        raise RuntimeError("parameter 'i' cannot be > 256")
-
-    frequencies = []
-    for i in range(min, max, step_range):
-        delta = int(round(sample_count / max_freq))
-        freq  = int(round(sample_count / (delta + i)))
-
-        if freq not in range(2785, 9615+1):
-            raise ValueError("frequency '%s' not in range [2786, 9615]", freq)
-
-        frequencies.append(freq)
-
-    return frequencies
+import logging
+from .util import get_freq_range
 
 class Config:
-
-    __logger         = None
-
-    @staticmethod
-    def get_logger():
-
-        if not Config.__logger is None:
-            return Config.__logger
-
-        formatter = logging.Formatter("%(asctime)s - %(message)s")
-
-        ch = logging.StreamHandler(sys.stdout)
-        ch.setLevel(Config.LOG_LEVEL)
-        ch.setFormatter(formatter)
-
-        logger = logging.getLogger("global")
-        logger.setLevel(Config.LOG_LEVEL)
-        logger.addHandler(ch)
-
-        Config.__logger = logger
-
-        return logger
 
     CAM_HOST         = "192.168.0.77"
     CAM_PORT         = 8089
@@ -91,7 +31,15 @@ class Config:
 
     LOG_LEVEL       = logging.INFO
 
-    ITERATIONS      = 30
+    CLAMP_MAX_INTENSITY = 2500 # intensities > value are outliers
+    CLAMP_MIN_INTENSITY = 0    # intensities < value are noise
+
+    PLOT_DATA_FOLDER    = "D:\\Daten\\software\\Python\\dlr-tdi-py\\data\\"
+    PLOT_DEFAULT_FILE   = "161117\\rot_Y5to9\\153824_9615hz_position5"
+
+    ITERATIONS = 30
+
+    DEFAULT_FREQUENCY   = "single"
 
     FREQUENCIES     = {
 
@@ -100,6 +48,8 @@ class Config:
         "full"   : get_freq_range(255),
 
     }
+
+    DEFAULT_POSITION    = "single"
 
     POSITIONS       = {
 
@@ -145,14 +95,6 @@ class Config:
         ]
     }
 
-    DEFAULT_FREQUENCY   = "single"
-    DEFAULT_POSITION    = "single"
-
-    CLAMP_MAX_INTENSITY = 2500 # intensities > value are outliers
-    CLAMP_MIN_INTENSITY = 0    # intensities < value are noise
-
-    PLOT_DATA_FOLDER    = "D:\\Daten\\software\\Python\\dlr-tdi-py\\data\\"
-    PLOT_DEFAULT_FILE   = "161117\\rot_Y5to9\\153824_9615hz_position5"
 
 
 
