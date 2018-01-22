@@ -1,10 +1,10 @@
-import logging, os, sys
+import os
 from datetime import datetime
 from pywinauto.application import Application
 from pywinauto.timings import TimeoutError
 
-
 from common.config import Config
+from common.logger import Logger
 
 logger = Logger.get_logger()
 
@@ -12,9 +12,9 @@ class Neunkdemo:
 
     def __init__(self):
 
-        self.base_path  = Config.CAM_RESULT_PATH
+        self.base_path  = Config.get("CAM_RESULT_PATH")
        
-        self.app        = Application(backend="win32").connect(path=Config.CAM_PROGRAM_PATH)
+        self.app        = Application(backend="win32").connect(path=Config.get("CAM_PROGRAM_PATH"))
         self.dlg        = self.app["Test9k"]
 
         self.frequency = self.dlg.Spinner4.get_buddy_control().text_block()

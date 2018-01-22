@@ -1,6 +1,6 @@
 from datetime import datetime
 import json, os
-from config import Config
+from common.config import Config
 
 class Run:
 
@@ -38,31 +38,34 @@ class RunConfig:
 
         self.id = data['id']
 
-        for runs in data['runs']:
+        for run in data['runs']:
 
-            for (k, v) in runs['config']:
-                Config.set(k, v)
+            if 'config' in run.keys():
+                cfg   = run['config']
+                for (k, v) in cfg.items():
+                    Config.set(k, v)
 
-            for run in runs['run']:
+            param = run['param']
 
-                if 'frequency' not in run:
-                    run['frequency'] = None
+            if 'frequency' not in param.keys():
+                param['frequency'] = None
 
-                if 'velocity' not in run:
-                    run['velocity'] = None
+            if 'velocity' not in param.keys():
+                param['velocity'] = None
 
-                if 'position' not in run:
-                    run['position'] = []
+            if 'position' not in param.keys():
+                param['position'] = []
 
-                position = []
-                name = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + str(len(self.iterations))
 
-                for (grp, pos) in run['position']:
-                    position.append((Config.get(grp), pos))
+            name = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + str(len(self.iterations))
 
-                r = Run(run['frequency'], position, run['velocity'], name)
+            position = []
+            for (grp, pos) in param['position']:
+                position.append((Config.get(grp), pos))
 
-                self.iterations.append(r)
+            r = Run(param['frequency'], position, param['velocity'], name)
+
+            self.iterations.append(r)
 
     def getRuns(self):
         return self.iterations

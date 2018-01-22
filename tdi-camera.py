@@ -11,7 +11,7 @@ OPTIONS:
 
 from camera.server import *
 
-import getopt
+import getopt, sys
 
 def usage():
     print(__doc__)

@@ -1,794 +1,928 @@
 {
+  "id": "multiple-velocities",
   "runs": [
     {
-      "frequency": 9615,
-      "position": [
-        [
-          "CAM_X_GROUP",
+      "param": {
+        "position": [
           [
-            259.849
+            "CAM_X_GROUP",
+            [
+              259.849
+            ]
+          ],
+          [
+            "CAM_Y_GROUP",
+            [
+              7.1
+            ]
+          ],
+          [
+            "CAM_Z_GROUP",
+            [
+              101.615
+            ]
           ]
         ],
-        [
-          "CAM_Y_GROUP",
-          [
-            7.1
-          ]
-        ],
-        [
-          "CAM_Z_GROUP",
-          [
-            101.615
-          ]
-        ]
-      ],
-      "velocity": 81
+        "velocity": 81,
+        "frequency": 9615
+      }
     },
     {
-      "frequency": 9524
+      "param": {
+        "frequency": 9524
+      }
     },
     {
-      "frequency": 9434
+      "param": {
+        "frequency": 9434
+      }
     },
     {
-      "frequency": 9346
+      "param": {
+        "frequency": 9346
+      }
     },
     {
-      "frequency": 9259
+      "param": {
+        "frequency": 9259
+      }
     },
     {
-      "frequency": 9174
+      "param": {
+        "frequency": 9174
+      }
     },
     {
-      "frequency": 9091
+      "param": {
+        "frequency": 9091
+      }
     },
     {
-      "frequency": 9009
+      "param": {
+        "frequency": 9009
+      }
     },
     {
-      "frequency": 8929
+      "param": {
+        "frequency": 8929
+      }
     },
     {
-      "frequency": 8850
+      "param": {
+        "frequency": 8850
+      }
     },
     {
-      "frequency": 8772
+      "param": {
+        "frequency": 8772
+      }
     },
     {
-      "frequency": 8696
+      "param": {
+        "frequency": 8696
+      }
     },
     {
-      "frequency": 8621
+      "param": {
+        "frequency": 8621
+      }
     },
     {
-      "frequency": 8547
+      "param": {
+        "frequency": 8547
+      }
     },
     {
-      "frequency": 8475
+      "param": {
+        "frequency": 8475
+      }
     },
     {
-      "frequency": 8403
+      "param": {
+        "frequency": 8403
+      }
     },
     {
-      "frequency": 8333
+      "param": {
+        "frequency": 8333
+      }
     },
     {
-      "frequency": 8264
+      "param": {
+        "frequency": 8264
+      }
     },
     {
-      "frequency": 8197
+      "param": {
+        "frequency": 8197
+      }
     },
     {
-      "frequency": 8130
+      "param": {
+        "frequency": 8130
+      }
     },
     {
-      "frequency": 8065
+      "param": {
+        "frequency": 8065
+      }
     },
     {
-      "frequency": 8000
+      "param": {
+        "frequency": 8000
+      }
     },
     {
-      "frequency": 7937
+      "param": {
+        "frequency": 7937
+      }
     },
     {
-      "frequency": 7874
+      "param": {
+        "frequency": 7874
+      }
     },
     {
-      "frequency": 7812
+      "param": {
+        "frequency": 7812
+      }
     },
     {
-      "frequency": 7752
+      "param": {
+        "frequency": 7752
+      }
     },
     {
-      "frequency": 7692
+      "param": {
+        "frequency": 7692
+      }
     },
     {
-      "frequency": 7634
+      "param": {
+        "frequency": 7634
+      }
     },
     {
-      "frequency": 7576
+      "param": {
+        "frequency": 7576
+      }
     },
     {
-      "frequency": 7519
+      "param": {
+        "frequency": 7519
+      }
     },
     {
-      "frequency": 7463
+      "param": {
+        "frequency": 7463
+      }
     },
     {
-      "frequency": 7407
+      "param": {
+        "frequency": 7407
+      }
     },
     {
-      "frequency": 7353
+      "param": {
+        "frequency": 7353
+      }
     },
     {
-      "frequency": 7299
+      "param": {
+        "frequency": 7299
+      }
     },
     {
-      "frequency": 7246
+      "param": {
+        "frequency": 7246
+      }
     },
     {
-      "frequency": 7194
+      "param": {
+        "frequency": 7194
+      }
     },
     {
-      "frequency": 7143
+      "param": {
+        "frequency": 7143
+      }
     },
     {
-      "frequency": 7092
+      "param": {
+        "frequency": 7092
+      }
     },
     {
-      "frequency": 7042
+      "param": {
+        "frequency": 7042
+      }
     },
     {
-      "frequency": 6993
+      "param": {
+        "frequency": 6993
+      }
     },
     {
-      "frequency": 6944
+      "param": {
+        "frequency": 6944
+      }
     },
     {
-      "frequency": 6897
+      "param": {
+        "frequency": 6897
+      }
     },
     {
-      "frequency": 6849
+      "param": {
+        "frequency": 6849
+      }
     },
     {
-      "frequency": 6803
+      "param": {
+        "frequency": 6803
+      }
     },
     {
-      "frequency": 6757
+      "param": {
+        "frequency": 6757
+      }
     },
     {
-      "frequency": 6711
+      "param": {
+        "frequency": 6711
+      }
     },
     {
-      "frequency": 6667
+      "param": {
+        "frequency": 6667
+      }
     },
     {
-      "frequency": 6623
+      "param": {
+        "frequency": 6623
+      }
     },
     {
-      "frequency": 6579
+      "param": {
+        "frequency": 6579
+      }
     },
     {
-      "frequency": 6536
+      "param": {
+        "frequency": 6536
+      }
     },
     {
-      "frequency": 6494
+      "param": {
+        "frequency": 6494
+      }
     },
     {
-      "frequency": 6452
+      "param": {
+        "frequency": 6452
+      }
     },
     {
-      "frequency": 6410
+      "param": {
+        "frequency": 6410
+      }
     },
     {
-      "frequency": 6369
+      "param": {
+        "frequency": 6369
+      }
     },
     {
-      "frequency": 6329
+      "param": {
+        "frequency": 6329
+      }
     },
     {
-      "frequency": 6289
+      "param": {
+        "frequency": 6289
+      }
     },
     {
-      "frequency": 6250
+      "param": {
+        "frequency": 6250
+      }
     },
     {
-      "frequency": 6211
+      "param": {
+        "frequency": 6211
+      }
     },
     {
-      "frequency": 6173
+      "param": {
+        "frequency": 6173
+      }
     },
     {
-      "frequency": 6135
+      "param": {
+        "frequency": 6135
+      }
     },
     {
-      "frequency": 6098
+      "param": {
+        "frequency": 9615,
+        "velocity": 55
+      }
     },
     {
-      "frequency": 6061
+      "param": {
+        "frequency": 9524
+      }
     },
     {
-      "frequency": 6024
+      "param": {
+        "frequency": 9434
+      }
     },
     {
-      "frequency": 5988
+      "param": {
+        "frequency": 9346
+      }
     },
     {
-      "frequency": 5952
+      "param": {
+        "frequency": 9259
+      }
     },
     {
-      "frequency": 5917
+      "param": {
+        "frequency": 9174
+      }
     },
     {
-      "frequency": 5882
+      "param": {
+        "frequency": 9091
+      }
     },
     {
-      "frequency": 5848
+      "param": {
+        "frequency": 9009
+      }
     },
     {
-      "frequency": 5814
+      "param": {
+        "frequency": 8929
+      }
     },
     {
-      "frequency": 5780
+      "param": {
+        "frequency": 8850
+      }
     },
     {
-      "frequency": 5747
+      "param": {
+        "frequency": 8772
+      }
     },
     {
-      "frequency": 5714
+      "param": {
+        "frequency": 8696
+      }
     },
     {
-      "frequency": 5682
+      "param": {
+        "frequency": 8621
+      }
     },
     {
-      "frequency": 5650
+      "param": {
+        "frequency": 8547
+      }
     },
     {
-      "frequency": 5618
+      "param": {
+        "frequency": 8475
+      }
     },
     {
-      "frequency": 5587
+      "param": {
+        "frequency": 8403
+      }
     },
     {
-      "frequency": 5556
+      "param": {
+        "frequency": 8333
+      }
     },
     {
-      "frequency": 5525
+      "param": {
+        "frequency": 8264
+      }
     },
     {
-      "frequency": 5495
+      "param": {
+        "frequency": 8197
+      }
     },
     {
-      "frequency": 5464
+      "param": {
+        "frequency": 8130
+      }
     },
     {
-      "frequency": 5435
+      "param": {
+        "frequency": 8065
+      }
     },
     {
-      "frequency": 5405
+      "param": {
+        "frequency": 8000
+      }
     },
     {
-      "frequency": 5376
+      "param": {
+        "frequency": 7937
+      }
     },
     {
-      "frequency": 5348
+      "param": {
+        "frequency": 7874
+      }
     },
     {
-      "frequency": 5319
+      "param": {
+        "frequency": 7812
+      }
     },
     {
-      "frequency": 5291
+      "param": {
+        "frequency": 7752
+      }
     },
     {
-      "frequency": 5263
+      "param": {
+        "frequency": 7692
+      }
     },
     {
-      "frequency": 5236
+      "param": {
+        "frequency": 7634
+      }
     },
     {
-      "frequency": 5208
+      "param": {
+        "frequency": 7576
+      }
     },
     {
-      "frequency": 5181
+      "param": {
+        "frequency": 7519
+      }
     },
     {
-      "frequency": 5155
+      "param": {
+        "frequency": 7463
+      }
     },
     {
-      "frequency": 5128
+      "param": {
+        "frequency": 7407
+      }
     },
     {
-      "frequency": 5102
+      "param": {
+        "frequency": 7353
+      }
     },
     {
-      "frequency": 5076
+      "param": {
+        "frequency": 7299
+      }
     },
     {
-      "frequency": 5051
+      "param": {
+        "frequency": 7246
+      }
     },
     {
-      "frequency": 5025
+      "param": {
+        "frequency": 7194
+      }
     },
     {
-      "frequency": 5000
+      "param": {
+        "frequency": 7143
+      }
     },
     {
-      "frequency": 4975
+      "param": {
+        "frequency": 7092
+      }
     },
     {
-      "frequency": 4950
+      "param": {
+        "frequency": 7042
+      }
     },
     {
-      "frequency": 4926
+      "param": {
+        "frequency": 6993
+      }
     },
     {
-      "frequency": 4902
+      "param": {
+        "frequency": 6944
+      }
     },
     {
-      "frequency": 4878
+      "param": {
+        "frequency": 6897
+      }
     },
     {
-      "frequency": 4854
+      "param": {
+        "frequency": 6849
+      }
     },
     {
-      "frequency": 4831
+      "param": {
+        "frequency": 6803
+      }
     },
     {
-      "frequency": 4808
+      "param": {
+        "frequency": 6757
+      }
     },
     {
-      "frequency": 4785
+      "param": {
+        "frequency": 6711
+      }
     },
     {
-      "frequency": 4762
+      "param": {
+        "frequency": 6667
+      }
     },
     {
-      "frequency": 4739
+      "param": {
+        "frequency": 6623
+      }
     },
     {
-      "frequency": 4717
+      "param": {
+        "frequency": 6579
+      }
     },
     {
-      "frequency": 4695
+      "param": {
+        "frequency": 6536
+      }
     },
     {
-      "frequency": 4673
+      "param": {
+        "frequency": 6494
+      }
     },
     {
-      "frequency": 4651
+      "param": {
+        "frequency": 6452
+      }
     },
     {
-      "frequency": 4630
+      "param": {
+        "frequency": 6410
+      }
     },
     {
-      "frequency": 4608
+      "param": {
+        "frequency": 6369
+      }
     },
     {
-      "frequency": 4587
+      "param": {
+        "frequency": 6329
+      }
     },
     {
-      "frequency": 4566
+      "param": {
+        "frequency": 6289
+      }
     },
     {
-      "frequency": 4545
+      "param": {
+        "frequency": 6250
+      }
     },
     {
-      "frequency": 4525
+      "param": {
+        "frequency": 6211
+      }
     },
     {
-      "frequency": 4505
+      "param": {
+        "frequency": 6173
+      }
     },
     {
-      "frequency": 4484
+      "param": {
+        "frequency": 6135
+      }
     },
     {
-      "frequency": 4464
+      "param": {
+        "frequency": 9615,
+        "velocity": 22
+      }
     },
     {
-      "frequency": 4444
+      "param": {
+        "frequency": 9524
+      }
     },
     {
-      "frequency": 4425
+      "param": {
+        "frequency": 9434
+      }
     },
     {
-      "frequency": 4405
+      "param": {
+        "frequency": 9346
+      }
     },
     {
-      "frequency": 4386
+      "param": {
+        "frequency": 9259
+      }
     },
     {
-      "frequency": 4367
+      "param": {
+        "frequency": 9174
+      }
     },
     {
-      "frequency": 4348
+      "param": {
+        "frequency": 9091
+      }
     },
     {
-      "frequency": 4329
+      "param": {
+        "frequency": 9009
+      }
     },
     {
-      "frequency": 4310
+      "param": {
+        "frequency": 8929
+      }
     },
     {
-      "frequency": 4292
+      "param": {
+        "frequency": 8850
+      }
     },
     {
-      "frequency": 4274
+      "param": {
+        "frequency": 8772
+      }
     },
     {
-      "frequency": 4255
+      "param": {
+        "frequency": 8696
+      }
     },
     {
-      "frequency": 4237
+      "param": {
+        "frequency": 8621
+      }
     },
     {
-      "frequency": 4219
+      "param": {
+        "frequency": 8547
+      }
     },
     {
-      "frequency": 4202
+      "param": {
+        "frequency": 8475
+      }
     },
     {
-      "frequency": 4184
+      "param": {
+        "frequency": 8403
+      }
     },
     {
-      "frequency": 4167
+      "param": {
+        "frequency": 8333
+      }
     },
     {
-      "frequency": 4149
+      "param": {
+        "frequency": 8264
+      }
     },
     {
-      "frequency": 4132
+      "param": {
+        "frequency": 8197
+      }
     },
     {
-      "frequency": 4115
+      "param": {
+        "frequency": 8130
+      }
     },
     {
-      "frequency": 4098
+      "param": {
+        "frequency": 8065
+      }
     },
     {
-      "frequency": 4082
+      "param": {
+        "frequency": 8000
+      }
     },
     {
-      "frequency": 4065
+      "param": {
+        "frequency": 7937
+      }
     },
     {
-      "frequency": 4049
+      "param": {
+        "frequency": 7874
+      }
     },
     {
-      "frequency": 4032
+      "param": {
+        "frequency": 7812
+      }
     },
     {
-      "frequency": 4016
+      "param": {
+        "frequency": 7752
+      }
     },
     {
-      "frequency": 4000
+      "param": {
+        "frequency": 7692
+      }
     },
     {
-      "frequency": 3984
+      "param": {
+        "frequency": 7634
+      }
     },
     {
-      "frequency": 3968
+      "param": {
+        "frequency": 7576
+      }
     },
     {
-      "frequency": 3953
+      "param": {
+        "frequency": 7519
+      }
     },
     {
-      "frequency": 3937
+      "param": {
+        "frequency": 7463
+      }
     },
     {
-      "frequency": 3922
+      "param": {
+        "frequency": 7407
+      }
     },
     {
-      "frequency": 3906
+      "param": {
+        "frequency": 7353
+      }
     },
     {
-      "frequency": 3891
+      "param": {
+        "frequency": 7299
+      }
     },
     {
-      "frequency": 3876
+      "param": {
+        "frequency": 7246
+      }
     },
     {
-      "frequency": 3861
+      "param": {
+        "frequency": 7194
+      }
     },
     {
-      "frequency": 3846
+      "param": {
+        "frequency": 7143
+      }
     },
     {
-      "frequency": 3831
+      "param": {
+        "frequency": 7092
+      }
     },
     {
-      "frequency": 3817
+      "param": {
+        "frequency": 7042
+      }
     },
     {
-      "frequency": 3802
+      "param": {
+        "frequency": 6993
+      }
     },
     {
-      "frequency": 3788
+      "param": {
+        "frequency": 6944
+      }
     },
     {
-      "frequency": 3774
+      "param": {
+        "frequency": 6897
+      }
     },
     {
-      "frequency": 3759
+      "param": {
+        "frequency": 6849
+      }
     },
     {
-      "frequency": 3745
+      "param": {
+        "frequency": 6803
+      }
     },
     {
-      "frequency": 3731
+      "param": {
+        "frequency": 6757
+      }
     },
     {
-      "frequency": 3717
+      "param": {
+        "frequency": 6711
+      }
     },
     {
-      "frequency": 3704
+      "param": {
+        "frequency": 6667
+      }
     },
     {
-      "frequency": 3690
+      "param": {
+        "frequency": 6623
+      }
     },
     {
-      "frequency": 3676
+      "param": {
+        "frequency": 6579
+      }
     },
     {
-      "frequency": 3663
+      "param": {
+        "frequency": 6536
+      }
     },
     {
-      "frequency": 3650
+      "param": {
+        "frequency": 6494
+      }
     },
     {
-      "frequency": 3636
+      "param": {
+        "frequency": 6452
+      }
     },
     {
-      "frequency": 3623
+      "param": {
+        "frequency": 6410
+      }
     },
     {
-      "frequency": 3610
+      "param": {
+        "frequency": 6369
+      }
     },
     {
-      "frequency": 3597
+      "param": {
+        "frequency": 6329
+      }
     },
     {
-      "frequency": 3584
+      "param": {
+        "frequency": 6289
+      }
     },
     {
-      "frequency": 3571
+      "param": {
+        "frequency": 6250
+      }
     },
     {
-      "frequency": 3559
+      "param": {
+        "frequency": 6211
+      }
     },
     {
-      "frequency": 3546
+      "param": {
+        "frequency": 6173
+      }
     },
     {
-      "frequency": 3534
-    },
-    {
-      "frequency": 3521
-    },
-    {
-      "frequency": 3509
-    },
-    {
-      "frequency": 3497
-    },
-    {
-      "frequency": 3484
-    },
-    {
-      "frequency": 3472
-    },
-    {
-      "frequency": 3460
-    },
-    {
-      "frequency": 3448
-    },
-    {
-      "frequency": 3436
-    },
-    {
-      "frequency": 3425
-    },
-    {
-      "frequency": 3413
-    },
-    {
-      "frequency": 3401
-    },
-    {
-      "frequency": 3390
-    },
-    {
-      "frequency": 3378
-    },
-    {
-      "frequency": 3367
-    },
-    {
-      "frequency": 3356
-    },
-    {
-      "frequency": 3344
-    },
-    {
-      "frequency": 3333
-    },
-    {
-      "frequency": 3322
-    },
-    {
-      "frequency": 3311
-    },
-    {
-      "frequency": 3300
-    },
-    {
-      "frequency": 3289
-    },
-    {
-      "frequency": 3279
-    },
-    {
-      "frequency": 3268
-    },
-    {
-      "frequency": 3257
-    },
-    {
-      "frequency": 3247
-    },
-    {
-      "frequency": 3236
-    },
-    {
-      "frequency": 3226
-    },
-    {
-      "frequency": 3215
-    },
-    {
-      "frequency": 3205
-    },
-    {
-      "frequency": 3195
-    },
-    {
-      "frequency": 3185
-    },
-    {
-      "frequency": 3175
-    },
-    {
-      "frequency": 3165
-    },
-    {
-      "frequency": 3155
-    },
-    {
-      "frequency": 3145
-    },
-    {
-      "frequency": 3135
-    },
-    {
-      "frequency": 3125
-    },
-    {
-      "frequency": 3115
-    },
-    {
-      "frequency": 3106
-    },
-    {
-      "frequency": 3096
-    },
-    {
-      "frequency": 3086
-    },
-    {
-      "frequency": 3077
-    },
-    {
-      "frequency": 3067
-    },
-    {
-      "frequency": 3058
-    },
-    {
-      "frequency": 3049
-    },
-    {
-      "frequency": 3040
-    },
-    {
-      "frequency": 3030
-    },
-    {
-      "frequency": 3021
-    },
-    {
-      "frequency": 3012
-    },
-    {
-      "frequency": 3003
-    },
-    {
-      "frequency": 2994
-    },
-    {
-      "frequency": 2985
-    },
-    {
-      "frequency": 2976
-    },
-    {
-      "frequency": 2967
-    },
-    {
-      "frequency": 2959
-    },
-    {
-      "frequency": 2950
-    },
-    {
-      "frequency": 2941
-    },
-    {
-      "frequency": 2933
-    },
-    {
-      "frequency": 2924
-    },
-    {
-      "frequency": 2915
-    },
-    {
-      "frequency": 2907
-    },
-    {
-      "frequency": 2899
-    },
-    {
-      "frequency": 2890
-    },
-    {
-      "frequency": 2882
-    },
-    {
-      "frequency": 2874
-    },
-    {
-      "frequency": 2865
-    },
-    {
-      "frequency": 2857
-    },
-    {
-      "frequency": 2849
-    },
-    {
-      "frequency": 2841
-    },
-    {
-      "frequency": 2833
-    },
-    {
-      "frequency": 2825
-    },
-    {
-      "frequency": 2817
-    },
-    {
-      "frequency": 2809
-    },
-    {
-      "frequency": 2801
-    },
-    {
-      "frequency": 2793
-    },
-    {
-      "frequency": 2786
+      "param": {
+        "frequency": 6135
+      }
     }
-  ],
-  "id": "multiple-velocity"
+  ]
 }

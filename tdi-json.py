@@ -11,22 +11,23 @@ def build_vel_and_freq_range_json():
     ]
 
     runs = {}
-    runs['id'] = 'full-freq-3-velocities'
+    runs['id'] = 'test-multi-vel'
     runs['runs'] = []
 
-    for v in [81, 55, 22]:
+    for v in [81.02, 72.31, 63.87]: #, 55.03]:
         first_freq = True
 
-        for f in get_freq_range(255):
+        for f in get_freq_range_mm(0,2):
             run = {}
+            run['param'] = {}
 
             if first_freq is True:
-                run['velocity'] = v
+                run['param']['velocity'] = v
 
             if (len(runs['runs']) < 1):
-                run['position'] = p
+                run['param']['position'] = p
 
-            run['frequency'] = f
+            run['param']['frequency'] = f
 
             runs['runs'].append(run)
 
@@ -93,6 +94,4 @@ def build_pos_range_json():
 
     return json.dumps(runs)
 
-print(build_freq_range_json())
-print(build_pos_range_json())
 print(build_vel_and_freq_range_json())

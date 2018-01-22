@@ -32,7 +32,7 @@ def start(run_file, subdir=None):
 
     cfg = RunConfig(run_file)
 
-    logger.info("cli: run %s\\$s with config %s", subdir, cfg.id, run_file)
+    logger.info("cli: run %s\\%s with config %s", subdir, cfg.id, run_file)
 
     for r in cfg.getRuns():
 
@@ -92,7 +92,7 @@ def main():
             a += ".json"
 
             if not os.path.isabs(a):
-                a = dir(__file__) + "\\tasks\\" + a
+                a = os.path.dirname(os.path.abspath(__file__))+ "\\tasks\\" + a
 
             if os.path.exists(a):
                 task = a

@@ -29,7 +29,7 @@ class Config:
         "FP_VELOCITY":      81,             # mm/s
         "FP_ACCELERATION":  1500,           # mm/s^2,
         "FP_JERKTIME":      [0.02, 0.02],   # min, max:
-        "LOG_LEVEL":        logging.INFO,
+        "LOG_LEVEL":        logging.DEBUG,
 
         "ITERATIONS":       30,
 
@@ -43,7 +43,7 @@ class Config:
     @staticmethod
     def set(key, value):
         if key in Config.data:
-            self.data[key] = value
+            Config.data[key] = value
 
     @staticmethod
     def get(key):

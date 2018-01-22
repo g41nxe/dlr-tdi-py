@@ -2,7 +2,7 @@ import logging, sys
 from .config import Config
 
 class Logger:
-    _logger = None
+    __logger = None
 
     @staticmethod
     def get_logger():
