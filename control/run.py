@@ -55,7 +55,7 @@ class RunConfig:
                     run['position'] = []
 
                 position = []
-                name = self.timestamp.strftime('%H%M%S') + '_task-' + self.id + '_#' + str(len(self.iterations))
+                name = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + str(len(self.iterations))
 
                 for (grp, pos) in run['position']:
                     position.append((Config.get(grp), pos))

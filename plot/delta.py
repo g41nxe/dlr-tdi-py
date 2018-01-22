@@ -55,18 +55,23 @@ def plot(subdirectory, type):
             if not (name + ".gather") in files:
                 continue
 
-            m = re.search(r"(\d*)_task-([-\w]*)-#(\d*)", name)
+            pattern = r"(\d*)_([\w-]*)_#(\d)*"
+            m = re.search(pattern, name)
+
+            # old version
+            if m is None:
+                pattern =  r"(\d*)_(\d*)hz_position(\d+)"
+                m = re.search(pattern, name)
 
             if m is None:
                 continue
+
 
             h, s = helper.load_spot_file(subdirectory + "\\" + name + '.spot')
             g = helper.load_gathering_file(subdirectory + "\\" + name + '.gather')
 
             f        = h['LineFreq']
             id       = m.group(1)
-            task     = str(m.group(2))
-            i        = int(m.group(3))
 
             if len(s) < 1 or len(g) < 1:
                 continue
@@ -79,14 +84,13 @@ def plot(subdirectory, type):
             if id not in data:
                 data[id] = {
                     'frequency': [],
-                    'delta_x': [],
-                    'delta_y': [],
+                    'delta_x':   [],
+                    'delta_y':   [],
                 }
 
             data[id]['delta_x'].append(abs(params[3]))
             data[id]['delta_y'].append(abs(params[4]))
             data[id]['frequency'].append(f)
-
 
     if type == "frequency":
         key   = "frequency"
@@ -96,7 +100,7 @@ def plot(subdirectory, type):
         label = "Position"
 
     f, ax = plt.subplots(len(data.items()), sharex=True)
-    plt.suptitle(r'Development of $\delta_x$ and $\delta_y$ with increasing frequency')
+    plt.suptitle(r'Development of $\delta_x$ and $\delta_y$ (2D-Gauss-Fit) With Increasing Frequency')
 
     i = 0
     for id, values in data.items():
