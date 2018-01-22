@@ -1,8 +1,9 @@
 {
-  "id": "multiple-velocities",
   "runs": [
     {
       "param": {
+        "frequency": 9615,
+        "velocity": 81.02,
         "position": [
           [
             "CAM_X_GROUP",
@@ -22,9 +23,7 @@
               101.615
             ]
           ]
-        ],
-        "velocity": 81,
-        "frequency": 9615
+        ]
       }
     },
     {
@@ -325,7 +324,7 @@
     {
       "param": {
         "frequency": 9615,
-        "velocity": 55
+        "velocity": 72.31
       }
     },
     {
@@ -626,7 +625,308 @@
     {
       "param": {
         "frequency": 9615,
-        "velocity": 22
+        "velocity": 63.87
+      }
+    },
+    {
+      "param": {
+        "frequency": 9524
+      }
+    },
+    {
+      "param": {
+        "frequency": 9434
+      }
+    },
+    {
+      "param": {
+        "frequency": 9346
+      }
+    },
+    {
+      "param": {
+        "frequency": 9259
+      }
+    },
+    {
+      "param": {
+        "frequency": 9174
+      }
+    },
+    {
+      "param": {
+        "frequency": 9091
+      }
+    },
+    {
+      "param": {
+        "frequency": 9009
+      }
+    },
+    {
+      "param": {
+        "frequency": 8929
+      }
+    },
+    {
+      "param": {
+        "frequency": 8850
+      }
+    },
+    {
+      "param": {
+        "frequency": 8772
+      }
+    },
+    {
+      "param": {
+        "frequency": 8696
+      }
+    },
+    {
+      "param": {
+        "frequency": 8621
+      }
+    },
+    {
+      "param": {
+        "frequency": 8547
+      }
+    },
+    {
+      "param": {
+        "frequency": 8475
+      }
+    },
+    {
+      "param": {
+        "frequency": 8403
+      }
+    },
+    {
+      "param": {
+        "frequency": 8333
+      }
+    },
+    {
+      "param": {
+        "frequency": 8264
+      }
+    },
+    {
+      "param": {
+        "frequency": 8197
+      }
+    },
+    {
+      "param": {
+        "frequency": 8130
+      }
+    },
+    {
+      "param": {
+        "frequency": 8065
+      }
+    },
+    {
+      "param": {
+        "frequency": 8000
+      }
+    },
+    {
+      "param": {
+        "frequency": 7937
+      }
+    },
+    {
+      "param": {
+        "frequency": 7874
+      }
+    },
+    {
+      "param": {
+        "frequency": 7812
+      }
+    },
+    {
+      "param": {
+        "frequency": 7752
+      }
+    },
+    {
+      "param": {
+        "frequency": 7692
+      }
+    },
+    {
+      "param": {
+        "frequency": 7634
+      }
+    },
+    {
+      "param": {
+        "frequency": 7576
+      }
+    },
+    {
+      "param": {
+        "frequency": 7519
+      }
+    },
+    {
+      "param": {
+        "frequency": 7463
+      }
+    },
+    {
+      "param": {
+        "frequency": 7407
+      }
+    },
+    {
+      "param": {
+        "frequency": 7353
+      }
+    },
+    {
+      "param": {
+        "frequency": 7299
+      }
+    },
+    {
+      "param": {
+        "frequency": 7246
+      }
+    },
+    {
+      "param": {
+        "frequency": 7194
+      }
+    },
+    {
+      "param": {
+        "frequency": 7143
+      }
+    },
+    {
+      "param": {
+        "frequency": 7092
+      }
+    },
+    {
+      "param": {
+        "frequency": 7042
+      }
+    },
+    {
+      "param": {
+        "frequency": 6993
+      }
+    },
+    {
+      "param": {
+        "frequency": 6944
+      }
+    },
+    {
+      "param": {
+        "frequency": 6897
+      }
+    },
+    {
+      "param": {
+        "frequency": 6849
+      }
+    },
+    {
+      "param": {
+        "frequency": 6803
+      }
+    },
+    {
+      "param": {
+        "frequency": 6757
+      }
+    },
+    {
+      "param": {
+        "frequency": 6711
+      }
+    },
+    {
+      "param": {
+        "frequency": 6667
+      }
+    },
+    {
+      "param": {
+        "frequency": 6623
+      }
+    },
+    {
+      "param": {
+        "frequency": 6579
+      }
+    },
+    {
+      "param": {
+        "frequency": 6536
+      }
+    },
+    {
+      "param": {
+        "frequency": 6494
+      }
+    },
+    {
+      "param": {
+        "frequency": 6452
+      }
+    },
+    {
+      "param": {
+        "frequency": 6410
+      }
+    },
+    {
+      "param": {
+        "frequency": 6369
+      }
+    },
+    {
+      "param": {
+        "frequency": 6329
+      }
+    },
+    {
+      "param": {
+        "frequency": 6289
+      }
+    },
+    {
+      "param": {
+        "frequency": 6250
+      }
+    },
+    {
+      "param": {
+        "frequency": 6211
+      }
+    },
+    {
+      "param": {
+        "frequency": 6173
+      }
+    },
+    {
+      "param": {
+        "frequency": 6135
+      }
+    },
+    {
+      "param": {
+        "frequency": 9615,
+        "velocity": 55.03
       }
     },
     {
@@ -924,5 +1224,6 @@
         "frequency": 6135
       }
     }
-  ]
+  ],
+  "id": "test-multi-vel"
 }

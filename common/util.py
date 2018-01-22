@@ -43,3 +43,6 @@ def get_freq_range_mm(min, max):
         frequencies.append(freq)
 
     return frequencies
+
+def get_vel_from_freq(f):
+    return f * 0.00875

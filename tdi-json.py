@@ -3,6 +3,34 @@ from common.config import Config
 
 import json
 
+def build_speed_equal_freq_json():
+    p = [
+        ('CAM_X_GROUP', [259.849]),
+        ('CAM_Y_GROUP', [7.1]),
+        ('CAM_Z_GROUP', [101.615])
+    ]
+
+    runs = {}
+    runs['id'] = 'speed-equal-freq'
+    runs['runs'] = []
+
+
+    for f in get_freq_range_mm(0, 60):
+
+        v = get_vel_from_freq(f)
+        run = {}
+        run['param'] = {}
+
+        if (len(runs['runs']) < 1):
+            run['param']['position'] = p
+
+        run['param']['frequency'] = f
+        run['param']['velocity']  = v
+
+        runs['runs'].append(run)
+    return json.dumps(runs)
+
+
 def build_vel_and_freq_range_json():
     p = [
         ('CAM_X_GROUP', [259.849]),
@@ -14,10 +42,10 @@ def build_vel_and_freq_range_json():
     runs['id'] = 'test-multi-vel'
     runs['runs'] = []
 
-    for v in [81.02, 72.31, 63.87]: #, 55.03]:
+    for v in [81.02, 72.31, 63.87, 55.03]:
         first_freq = True
 
-        for f in get_freq_range_mm(0,2):
+        for f in get_freq_range_mm(0,60):
             run = {}
             run['param'] = {}
 
@@ -94,4 +122,4 @@ def build_pos_range_json():
 
     return json.dumps(runs)
 
-print(build_vel_and_freq_range_json())
+print(build_speed_equal_freq_json())
