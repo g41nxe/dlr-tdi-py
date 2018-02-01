@@ -1,9 +1,11 @@
 from common.util import *
 from common.config import Config
+from common.logger import Logger
+import os, getopt, sys
 
 import json
 
-def build_speed_equal_freq_json():
+def json_equal():
     p = [
         ('CAM_X_GROUP', [259.849]),
         ('CAM_Y_GROUP', [7.1]),
@@ -11,7 +13,7 @@ def build_speed_equal_freq_json():
     ]
 
     runs = {}
-    runs['id'] = 'speed-equal-freq'
+    runs['id'] = 'equal'
     runs['runs'] = []
 
 
@@ -28,10 +30,10 @@ def build_speed_equal_freq_json():
         run['param']['velocity']  = v
 
         runs['runs'].append(run)
-    return json.dumps(runs)
 
+    return runs
 
-def build_vel_and_freq_range_json(v):
+def json_speed(v):
     p = [
         ('CAM_X_GROUP', [259.849]),
         ('CAM_Y_GROUP', [7.1]),
@@ -51,37 +53,9 @@ def build_vel_and_freq_range_json(v):
 
         runs['runs'].append(run)
 
-    return json.dumps(runs)
+    return runs
 
-
-def build_freq_range_json(v=None):
-    if v is None:
-        v = Config.get('FP_VELOCITY')
-
-    p = [
-            ('CAM_X_GROUP', [259.849] ),
-            ('CAM_Y_GROUP', [7.1]),
-            ('CAM_Z_GROUP', [101.615])
-        ]
-
-    runs = {}
-    runs['id'] = 'full-freq-single-velocity'
-    runs['runs'] = []
-
-    for f in get_freq_range(255):
-        run = {}
-
-        if (len(runs['runs']) < 1):
-            run['velocity'] = v
-            run['position'] = p
-
-        run['frequency'] = f
-
-        runs['runs'].append(run)
-
-    return json.dumps(runs)
-
-def build_pos_range_json():
+def json_focus():
 
     y = 5.0
 
@@ -110,8 +84,39 @@ def build_pos_range_json():
         runs['runs'].append(run)
         y += .5
 
-    return json.dumps(runs)
+    return runs
 
+def writeTask(runs):
+    fname = os.path.dirname(os.path.abspath(__file__)) + "\\tasks\\" + str(runs['id'])
 
-for v in [81.02 , 63.87, 55.03]:
-    print(build_vel_and_freq_range_json(v))
+    Logger.get_logger().info('Writing JSON file %s', str(runs['id']))
+    with open(fname + '.json', 'w') as outfile:
+        json.dump(runs, outfile)
+
+def main():
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "", ["focus", "speed", "equal"])
+
+    except getopt.GetoptError as err:
+        print("Error: ", err)
+        sys.exit(2)
+
+    data = []
+
+    for o, a in opts:
+        if o in ("--focus"):
+            data.append(json_focus())
+
+        elif o in ("--speed"):
+            for v in [81.02, 63.87, 55.03]:
+                data.append(json_speed(v))
+
+        elif o in ("--equal"):
+            data.append(json_equal())
+
+    for task in data:
+        writeTask(task)
+
+if __name__ == "__main__":
+    main()

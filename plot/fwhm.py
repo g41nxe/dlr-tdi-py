@@ -56,7 +56,7 @@ def plot(subdirectory, type):
             if not (name + ".gather") in files:
                 continue
 
-            pattern = r"(\d*)_([\w-]*)_#(\d)*"
+            pattern = r"(\d*)_([\d\w-]*)_(\d)*"
             m = re.search(pattern, name)
 
             # old version
@@ -108,16 +108,21 @@ def plot(subdirectory, type):
     f, ax = plt.subplots(len(data.items()), sharex=True)
     plt.suptitle(r'Development of FWHM (2D-Gauss-Fit) With Increasing Frequency')
 
+    if not isinstance(ax, list):
+        ax = [ax]
+
     i = 0
     for id, values in data.items():
-        ax.scatter(values[key], values['fwhm_x'], label=r'$FWHM_x$')
-        ax.scatter(values[key], values['fwhm_y'], label=r'$FWHM_y$')
+        ax[i].scatter(values[key], values['fwhm_x'], label=r'$FWHM_x$')
+        ax[i].scatter(values[key], values['fwhm_y'], label=r'$FWHM_y$')
 
-        ax.set_title("Run " + id, loc='right', fontsize=9)
-        ax.set_ylabel(r'FWHM')
-        ax.legend(numpoints=1, loc='upper left')
+        ax[i].set_title("Run " + id, loc='right', fontsize=9)
+        ax[i].set_ylabel(r'FWHM')
+        ax[i].legend(numpoints=1, loc='upper left')
+        ax[i].grid()
+
         i += 1
 
-    ax.set_xlabel(label)
+    ax[0].set_xlabel(label)
     plt.show()
 

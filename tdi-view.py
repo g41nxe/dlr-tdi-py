@@ -28,7 +28,7 @@ OPTIONS:
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm
+from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, gaussIO
 from common.config import Config
 import matplotlib.pyplot as plt
 
@@ -42,6 +42,15 @@ def show(task, file, type=None):
 
     if not os.path.isabs(file):
         file = Config.get("PLOT_DATA_FOLDER") + file
+
+
+    if task == 'gaussIO':
+        if not os.path.exists(file) or not os.path.isdir(file):
+            print("Error: folder " + file + " does not exist!")
+            sys.exit(0)
+
+        gaussIO.plot(file, type)
+        sys.exit(1)
 
     if task == 'delta':
         if not os.path.exists(file) or not os.path.isdir(file):

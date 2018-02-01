@@ -55,7 +55,7 @@ def plot(subdirectory, type):
             if not (name + ".gather") in files:
                 continue
 
-            pattern = r"(\d*)_([\w-]*)_#(\d)*"
+            pattern = r"(\d*)_([\d\w-]*)_(\d)*"
             m = re.search(pattern, name)
 
             # old version
@@ -66,13 +66,12 @@ def plot(subdirectory, type):
             if m is None:
                 continue
 
-
             h, s = helper.load_spot_file(subdirectory + "\\" + name + '.spot')
             g = helper.load_gathering_file(subdirectory + "\\" + name + '.gather')
 
             f  = h['LineFreq']
             id = m.group(1)
-            p  = m.group(3)
+            r  = m.group(3)
 
             if len(s) < 1 or len(g) < 1:
                 continue
@@ -87,37 +86,36 @@ def plot(subdirectory, type):
                     'frequency': [],
                     'delta_x':   [],
                     'delta_y':   [],
-                    'position':  0,
+                    'run':  [],
                 }
 
             data[id]['delta_x'].append(abs(params[3]))
             data[id]['delta_y'].append(abs(params[4]))
             data[id]['frequency'].append(f)
-            data[id]['position'].append(p)
+            data[id]['position'].append(r)
 
     if type == "frequency":
         key   = "frequency"
         label = "Frequency (Hz)"
     else:
-        key   = "position"
-        label = "Position"
+        key   = "run"
+        label = "Run"
 
-    f, ax = plt.subplots(len(data.items()), sharex=True)
+    f, ax = plt.subplots(len(data.items())+1, sharex=True)
     plt.suptitle(r'Development of $\delta_x$ and $\delta_y$ (2D-Gauss-Fit) With Increasing Frequency')
 
     i = 0
     for id, values in data.items():
-        print(key)
-        print(values)
-        ax.scatter(values[key], values['delta_x'], label=r'$\delta_x$')
-        ax.scatter(values[key], values['delta_y'], label=r'$\delta_y$')
+        ax[i].scatter(values[key], values['delta_x'], label=r'$\delta_x$')
+        ax[i].scatter(values[key], values['delta_y'], label=r'$\delta_y$')
 
-        ax.set_title("Run " + id, loc='right', fontsize=9)
-        ax.set_ylabel(r'$\delta$')
-        ax.legend(numpoints=1, loc='upper left')
+        ax[i].set_title("Run " + id, loc='right', fontsize=9)
+        ax[i].set_ylabel(r'$\delta$')
+        ax[i].legend(numpoints=1, loc='upper left')
+        ax[i].grid()
         i += 1
 
-    ax.set_xlabel(label)
+    ax[0].set_xlabel(label)
 
     plt.show()
 
