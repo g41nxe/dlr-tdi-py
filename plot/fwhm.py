@@ -5,6 +5,7 @@ import os
 import re
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
+import math
 import json
 
 
@@ -66,13 +67,12 @@ def plot(subdirectory, type):
             if m is None:
                 continue
 
-
             h, s = helper.load_spot_file(subdirectory + "\\" + name + '.spot')
             g = helper.load_gathering_file(subdirectory + "\\" + name + '.gather')
 
-            f  = h['LineFreq']
-            id = m.group(1)
-            p  = m.group(3)
+            f   = h['LineFreq']
+            id  = m.group(1)
+            r   = m.group(3)
 
             if len(s) < 1 or len(g) < 1:
                 continue
@@ -84,40 +84,40 @@ def plot(subdirectory, type):
 
             if id not in data:
                 data[id] = {
+                    'run': [],
                     'frequency': [],
-                    'delta_x':   [],
-                    'delta_y':   [],
-                    'position':  0,
+                    'fwhm_x':   [],
+                    'fwhm_y':   [],
                 }
 
-            data[id]['delta_x'].append(abs(params[3]))
-            data[id]['delta_y'].append(abs(params[4]))
+            delta_x = abs(params[3])
+            delta_y = abs(params[4])
+
+            data[id]['fwhm_x'].append(2 * math.sqrt(2 * np.log(2)) * delta_x)
+            data[id]['fwhm_y'].append(2 * math.sqrt(2 * np.log(2)) * delta_y)
             data[id]['frequency'].append(f)
-            data[id]['position'].append(p)
+            data[id]['run'].append(r)
 
     if type == "frequency":
         key   = "frequency"
         label = "Frequency (Hz)"
     else:
-        key   = "position"
-        label = "Position"
+        key   = "run"
+        label = "Run"
 
     f, ax = plt.subplots(len(data.items()), sharex=True)
-    plt.suptitle(r'Development of $\delta_x$ and $\delta_y$ (2D-Gauss-Fit) With Increasing Frequency')
+    plt.suptitle(r'Development of FWHM (2D-Gauss-Fit) With Increasing Frequency')
 
     i = 0
     for id, values in data.items():
-        print(key)
-        print(values)
-        ax.scatter(values[key], values['delta_x'], label=r'$\delta_x$')
-        ax.scatter(values[key], values['delta_y'], label=r'$\delta_y$')
+        ax.scatter(values[key], values['fwhm_x'], label=r'$FWHM_x$')
+        ax.scatter(values[key], values['fwhm_y'], label=r'$FWHM_y$')
 
         ax.set_title("Run " + id, loc='right', fontsize=9)
-        ax.set_ylabel(r'$\delta$')
+        ax.set_ylabel(r'FWHM')
         ax.legend(numpoints=1, loc='upper left')
         i += 1
 
     ax.set_xlabel(label)
-
     plt.show()
 

@@ -29,7 +29,7 @@ class Config:
         "FP_VELOCITY":      81,             # mm/s
         "FP_ACCELERATION":  1500,           # mm/s^2,
         "FP_JERKTIME":      [0.02, 0.02],   # min, max:
-        "LOG_LEVEL":        logging.DEBUG,
+        "LOG_LEVEL":        logging.INFO,
 
         "ITERATIONS":       30,
 

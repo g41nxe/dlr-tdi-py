@@ -32,6 +32,9 @@ def start(run_file, subdir=None):
 
     cfg = RunConfig(run_file)
 
+    if subdir is None:
+        subdir = "default"
+
     logger.info("cli: run %s\\%s with config %s", subdir, cfg.id, run_file)
 
     for r in cfg.getRuns():

@@ -13,14 +13,14 @@ OPTIONS:
         - psf
         - gauss
         - delta
-        - all
+        - fwhm
         - test
 
     --file=FILENAME
         .spot and .gathering file must have the same name; exclude file-extension
         for plot use the folder containing multiple spot/gather files
 
-    --type=TYPE (only for plot=delta)
+    --type=TYPE (only for delta and fwhm)
         - position
         - frequency
 
@@ -28,7 +28,7 @@ OPTIONS:
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test
+from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm
 from common.config import Config
 import matplotlib.pyplot as plt
 
@@ -51,6 +51,15 @@ def show(task, file, type=None):
         delta.plot(file, type)
         sys.exit(1)
 
+    if task == 'fwhm':
+        if not os.path.exists(file) or not os.path.isdir(file):
+            print("Error: folder " + file + " does not exist!")
+            sys.exit(0)
+
+        fwhm.plot(file, type)
+        sys.exit(1)
+
+
     for ext in ("spot", "gather"):
         if not os.path.exists(file + "." + ext):
             print("Error: folder " + file + "." + ext + " does not exist!")
@@ -61,19 +70,19 @@ def show(task, file, type=None):
 
     if task == 'spot':
         spot.plot(h, s, g)
+
     elif task == 'gather':
         gather.plot(h, s, g)
+
     elif task == 'psf':
         psf.plot(h, s, g)
+
     elif task == 'gauss':
         gauss.plot(h, s, g)
+
     elif task == 'gauss2d':
         gauss2d.plot(h, s, g)
-    elif task == 'all':
-        spot.plot(h, s, g)
-        gather.plot(h, s, g)
-        psf.plot(h, s, g)
-        gauss.plot(h, s, g)
+
     elif task == 'test':
         test.plot(h, s, g)
 

@@ -31,7 +31,7 @@ def build_speed_equal_freq_json():
     return json.dumps(runs)
 
 
-def build_vel_and_freq_range_json():
+def build_vel_and_freq_range_json(v):
     p = [
         ('CAM_X_GROUP', [259.849]),
         ('CAM_Y_GROUP', [7.1]),
@@ -39,27 +39,17 @@ def build_vel_and_freq_range_json():
     ]
 
     runs = {}
-    runs['id'] = 'test-multi-vel'
+    runs['id'] = 'speed-' + str(round(v))
     runs['runs'] = []
 
-    for v in [81.02, 72.31, 63.87, 55.03]:
-        first_freq = True
+    for f in get_freq_range_mm(0,60): #60):
+        run = {}
+        run['param'] = {}
+        run['param']['velocity']  = v
+        run['param']['position']  = p
+        run['param']['frequency'] = f
 
-        for f in get_freq_range_mm(0,60):
-            run = {}
-            run['param'] = {}
-
-            if first_freq is True:
-                run['param']['velocity'] = v
-
-            if (len(runs['runs']) < 1):
-                run['param']['position'] = p
-
-            run['param']['frequency'] = f
-
-            runs['runs'].append(run)
-
-            first_freq = False
+        runs['runs'].append(run)
 
     return json.dumps(runs)
 
@@ -122,4 +112,6 @@ def build_pos_range_json():
 
     return json.dumps(runs)
 
-print(build_speed_equal_freq_json())
+
+for v in [81.02 , 63.87, 55.03]:
+    print(build_vel_and_freq_range_json(v))
