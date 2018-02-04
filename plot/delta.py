@@ -92,7 +92,7 @@ def plot(subdirectory, type):
             data[id]['delta_x'].append(abs(params[3]))
             data[id]['delta_y'].append(abs(params[4]))
             data[id]['frequency'].append(f)
-            data[id]['position'].append(r)
+            data[id]['run'].append(r)
 
     if type == "frequency":
         key   = "frequency"

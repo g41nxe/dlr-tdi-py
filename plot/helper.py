@@ -2,13 +2,13 @@ from datetime import datetime
 from common.config import Config
 from common.logger import Logger
 
-import re, os
+import re, io
 import numpy as np
 
 def load_spot_file(spot_file):
     header = dict()
 
-    with open(spot_file, "r", encoding="ISO-8859-1") as fp:
+    with io.open(spot_file, "r", encoding="ISO-8859-1") as fp:
         for line in fp:
             m = re.search(r"\[([aA-zZ -]+)\]([0-9.:]+)", line)
 
