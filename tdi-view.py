@@ -28,7 +28,7 @@ OPTIONS:
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, gaussIO
+from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, speedratio
 from common.config import Config
 import matplotlib.pyplot as plt
 
@@ -44,12 +44,12 @@ def show(task, file, type=None):
         file = Config.get("PLOT_DATA_FOLDER") + file
 
 
-    if task == 'gaussIO':
+    if task == 'jsonify':
         if not os.path.exists(file) or not os.path.isdir(file):
             print("Error: folder " + file + " does not exist!")
             sys.exit(0)
 
-        gaussIO.plot(file, type)
+        speedratio.plot(file)
         sys.exit(1)
 
     if task == 'delta':

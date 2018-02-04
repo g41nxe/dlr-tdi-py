@@ -25,7 +25,8 @@ class RunConfig:
     timestamp  = None
 
     def __init__(self, file):
-
+        self.iterations = []
+        self.id = None
         self.timestamp = datetime.now()
         self.load(file)
 
@@ -57,9 +58,9 @@ class RunConfig:
                 param['position'] = []
 
 
-            name = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + str(len(self.iterations))
-
+            name     = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + str(len(self.iterations))
             position = []
+
             for (grp, pos) in param['position']:
                 position.append((Config.get(grp), pos))
 
