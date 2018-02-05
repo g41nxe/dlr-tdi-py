@@ -6,6 +6,7 @@ import os, re, math
 import matplotlib.pyplot as plt
 from control.run import RunConfig, Run
 from common.util import get_vel_from_freq as vel
+from matplotlib.animation import FuncAnimation
 
 def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
@@ -67,20 +68,21 @@ def plot(subdirectory, save=False):
     f, ax = plt.subplots(3, sharex=True)
     plt.suptitle(r'Development of $\sigma_x$ and $\sigma_y$ of 2D-Gauss-Fit with changing speed-ratio')
 
-    for i, values in data.items():
-        values = values.tolist()
+    for i in [163216, 152841, 114324]:
+        print(i)
+        values = data[str(i)].tolist()
         label = str(int(values['vel'][0] / 0.00875)) + " Hz"
 
         ax[0].scatter(values['speed-ratio'], values['delta_x'], label=label, alpha=.75, s=10)
         ax[0].legend(numpoints=1, loc='upper left')
         ax[0].grid()
-        ax[0].set_ylim([0, 5])
+        ax[0].set_ylim([1, 10])
         ax[0].set_ylabel("$\sigma_x$")
 
         ax[1].scatter(values['speed-ratio'], values['delta_y'], label=label, alpha=.75, s=10)
         ax[1].legend(numpoints=1, loc='upper left')
         ax[1].grid()
-        ax[1].set_ylim([0,11])
+        ax[1].set_ylim([1,10])
         ax[1].set_ylabel("$\sigma_y$")
 
         ax[2].scatter(values['speed-ratio'], values['theta'], label=label, alpha=.75, s=10)
