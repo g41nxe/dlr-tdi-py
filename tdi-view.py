@@ -24,11 +24,13 @@ OPTIONS:
         - position
         - frequency
 
+    --save (only for speed ratio)
+
 """
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, speedratio
+from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, speedratio, gaussIO
 from common.config import Config
 import matplotlib.pyplot as plt
 
@@ -38,18 +40,26 @@ def usage():
     sys.exit(0)
 
 
-def show(task, file, type=None):
+def show(task, file, type=None, save=False):
 
     if not os.path.isabs(file):
         file = Config.get("PLOT_DATA_FOLDER") + file
 
 
-    if task == 'jsonify':
+    if task == 'speedratio':
         if not os.path.exists(file) or not os.path.isdir(file):
             print("Error: folder " + file + " does not exist!")
             sys.exit(0)
 
-        speedratio.plot(file)
+        speedratio.plot(file, save)
+        sys.exit(1)
+
+    if task == 'gaussIO':
+        if not os.path.exists(file) or not os.path.isdir(file):
+            print("Error: folder " + file + " does not exist!")
+            sys.exit(0)
+
+        gaussIO.plot(file)
         sys.exit(1)
 
     if task == 'delta':
@@ -92,18 +102,16 @@ def show(task, file, type=None):
     elif task == 'gauss2d':
         gauss2d.plot(h, s, g)
 
-    elif task == 'test':
-        test.plot(h, s, g)
-
     plt.show()
 
 def main():
     file   = Config.get("PLOT_DATA_FOLDER") + Config.get("PLOT_DEFAULT_FILE")
     action = None
     type   = None
+    save   = False
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "plot=", "file=", "type="])
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "plot=", "file=", "type=", "save"])
 
     except getopt.GetoptError as err:
         print("Error: %s", err)
@@ -112,6 +120,9 @@ def main():
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
+
+        elif o in ("--save"):
+            save = True
 
         elif o in ("--file"):
             file = a
@@ -129,7 +140,7 @@ def main():
         print("Error: parameter 'plot' is mandatory")
         sys.exit(2)
 
-    show(action, file, type)
+    show(action, file, type, save)
     sys.exit(0)
 
 

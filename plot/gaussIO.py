@@ -1,179 +1,181 @@
 from plot import helper
-from common.config import Config
+from common.logger import Logger
 import numpy as np
-import math, os
+import math, os, re, json
 from scipy.optimize import curve_fit
-from scipy.interpolate import spline
-
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-from matplotlib.widgets import Slider
-
-def gauss2d(xy, A, x0, y0, dx, dy):
+def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
 
-    a = ((x - x0) ** 2) / (2 * dx ** 2)
-    b = ((y - y0) ** 2) / (2 * dy ** 2)
+    a = math.cos(theta) ** 2 / (2 * sigma_x ** 2) + math.sin(theta) ** 2 / (2 * sigma_y ** 2)
+    b = -math.sin(2 * theta) / (4 * sigma_x ** 2) + math.sin(2 * theta) / (4 * sigma_y ** 2)
+    c = math.sin(theta) ** 2 / (2 * sigma_x ** 2) + math.cos(theta) ** 2 / (2 * sigma_y ** 2)
 
-    g = A * np.exp(-(a + b))
+    g = A * np.exp(- (a * (x - x0) ** 2 + 2 * b * (x - x0) * (y - y0) + c * (y - y0) ** 2))
 
     return g.ravel()
 
-def plot(subdirectory, type):
+def initial(data):
+    cx, cy = np.unravel_index(data.argmax(), data.shape)
+    A = data[cx, cy]
+    sigma_x = np.sqrt(data[cx, :].std())
+    sigma_y = np.sqrt(data[:, cy].std())
 
-    gauss = {}
-    max_x = 0
-    max_y = 0
-    pixelCount = 0
-    rowCount = 0
+    total = data.sum()
+
+    X, Y = np.indices(data.shape)
+
+    Mxx = np.ma.sum((X - cx) * (X - cx) * data) / total
+    Myy = np.ma.sum((Y - cy) * (Y - cy) * data) / total
+    Mxy = np.ma.sum((X - cx) * (Y - cy) * data) / total
+
+    rot = 0.5 * np.arctan(2 * Mxy / (Mxx - Myy))
+
+    return A, cx, cy, sigma_x, sigma_y, rot
+
+def gaussfit(header, spot, gather):
+    x, y = helper.align_data(header, spot, gather)
+
+    pixelCount = header["PixelCount"]
+
+    line, col = np.unravel_index(y.argmax(), y.shape)
+    start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
+    end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
+    ydata = y[start_row:end_row, :]
+
+    x, y = np.meshgrid(np.linspace(1, pixelCount, pixelCount), np.linspace(1, pixelCount, pixelCount))
+
+    try:
+        popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(),
+                               p0=initial(ydata),
+                               bounds=([0, 0, 0, 0, 0, -math.pi], [5000, 32, 32, np.inf, np.inf, math.pi]))
+    except ValueError:
+        try:
+            popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(),
+                                   p0=initial(ydata))
+        except Exception as e:
+            raise e
+
+
+    return popt, ydata
+
+def saveNPY(subdirectory):
+    data = {}
 
     for root, dirs, files in os.walk(subdirectory):
         for file in files:
             if (not file.endswith('.spot')):
                 continue
 
-            id, ext = os.path.splitext(file)
-            if not (id + ".gather") in files:
+            name, ext = os.path.splitext(file)
+            if not (name + ".gather") in files:
                 continue
 
-            header, spot = helper.load_spot_file(subdirectory + "\\" + id + '.spot')
-            gather = helper.load_gathering_file(subdirectory + "\\" + id + '.gather')
+            Logger.get_logger().info("Loading file " + name)
 
-            x, y = helper.align_data(header, spot, gather)
-            pixelCount = header["PixelCount"]
+            pattern = r"(\d*)_([\d\w-]*)_(\d*)"
+            m = re.search(pattern, name)
 
-            line, A = np.unravel_index(y.argmax(), y.shape)
-            start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
-            end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
+            if m is None:
+                continue
 
-            rowCount = end_row - start_row
+            run = int(m.group(3))
+            id  = int(m.group(1))
 
-            ydata = y[start_row:end_row, :]
+            header, spot = helper.load_spot_file(subdirectory + "\\" + name + '.spot')
+            gather = helper.load_gathering_file(subdirectory + "\\" + name + '.gather')
 
-            cx, cy = np.unravel_index(ydata.argmax(), ydata.shape)
-
-            x0 = ydata[:, cy].mean()
-            y0 = ydata[cx, :].mean()
-            dx = ydata[:, cy].std()
-            dy = ydata[cx, :].std()
-
-            x = np.arange(rowCount)
-            y = np.arange(pixelCount)
-
-            x, y = np.meshgrid(x, y)
             try:
-                gauss[id] = {}
-                popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(), p0=[A, x0, y0, dx, dy])
+                popt, ydata = gaussfit(header, spot, gather)
+            except Exception as e:
+                print(e)
+                continue
 
-                gauss[id]['popt']  = popt
-                gauss[id]['ydata'] = ydata
-                gauss[id]['cx']    = cx
-                gauss[id]['cy']    = cy
+            if id not in data.keys():
+                data[id] = {}
 
-                max_x = max(max(ydata[:, cy]),  max_x)
-                max_y = max( max(ydata[cx, :]), max_y)
+            data[id][run] = {}
+            data[id][run]['popt'] = popt
+            data[id][run]['ydata'] = ydata
 
-            except:
-                gauss.pop(id, None)
-                pass
+    for id in data.keys():
+        f = subdirectory + "\\" + str(id)
+        np.save(f, data)
+        Logger.get_logger().info("Save file %s", id)
 
-    axes = style(max_x, max_y, pixelCount, rowCount)
+def loadNPY(subdirectory):
+    data = {}
 
-    for (id, data) in gauss.items():
-        cb = update(data['ydata'], data['popt'], rowCount, pixelCount, data['cx'], data['cy'], axes)
+    for root, dirs, files in os.walk(subdirectory):
+        for file in files:
+            if (not file.endswith('.npy')):
+                continue
 
-        plt.show()
+            name, ext = os.path.splitext(file)
+            data[name] = np.load(os.path.join(root, file))
 
-        plt.pause(0.1)
+    return data
 
-        for ax in axes:
+def plot(subirectory, save=True):
+
+    if save is True:
+        saveNPY(subirectory)
+
+    gauss = loadNPY(subirectory)
+
+    ax = style()
+
+    for id in gauss.keys():
+        for (run, values) in (gauss[id]).tolist()[int(id)].items():
+
+            cb = update(values['ydata'], values['popt'], ax, run)
+            plt.show()
+
+            plt.pause(0.05)
             ax.clear()
+            cb.remove()
 
-        cb.remove()
+    while True:
+        plt.pause(0.01)
 
-def style(max_x, max_y, pixelCount, rowCount):
+def style(pixelCount=32):
+    # plot
+    f, ax = plt.subplots(1)
+    plt.ion()
 
-        # plot
-        f = plt.figure(figsize=(6, 6))
-        gs = gridspec.GridSpec(3, 3, wspace=0.0, hspace=0.0)
-        plt.ion()
+    ax.grid(linestyle='dashed', alpha=.3)
 
-        ax1 = plt.subplot2grid((3, 3), (1, 0), colspan=2, rowspan=2)
-        ax2 = plt.subplot2grid((3, 3), (1, 2), rowspan=2)
-        ax3 = plt.subplot2grid((3, 3), (0, 0), colspan=2)
-        ax4 = plt.subplot2grid((3, 3), (0, 2))
+    ax.set_xticks(np.arange(0.5, pixelCount, 1))
+    ax.set_yticks(np.arange(0.5, pixelCount, 1))
 
-        ax1.set_aspect('equal')
+    ax.set_xticklabels('')
+    ax.set_yticklabels('')
 
+    ax.set_xticks(np.arange(0, pixelCount, 5), minor=True)
+    ax.set_xticklabels(np.arange(0, pixelCount, 5), minor=True)
 
-        ax1.grid(linestyle='dashed', alpha=.3)
-        ax2.grid(linestyle='dashed', alpha=.75)
-        ax3.grid(linestyle='dashed', alpha=.75)
+    ax.set_yticks(np.arange(0, pixelCount, 5), minor=True)
+    ax.set_yticklabels(np.arange(0, pixelCount, 5), minor=True)
 
-        ax1.set_xticks(np.arange(0.5, pixelCount, 1))
-        ax1.set_yticks(np.arange(0.5, pixelCount, 1))
+    ax.tick_params(axis='both', which='major', length=1.5, right=True, top=True)
+    ax.tick_params(axis='both', which='minor', length=1.5, color='white')
 
-        ax3.set_xticks(np.arange(0.5, pixelCount, 1))
-        ax2.set_yticks(np.arange(0.5, pixelCount, 1))
+    plt.setp([
+        ax.get_yminorticklabels(), ax.get_xminorticklabels(),
+    ], fontsize=6, linespacing=1)
 
-        ax3.set_xticklabels(np.arange(0, pixelCount, 1), minor=True)
-        ax2.set_yticklabels(np.arange(0, pixelCount, 1), minor=True)
+    ax.set_xlim(-0.5, pixelCount - 0.5)
+    ax.set_ylim(-0.5, pixelCount - 0.5)
 
-        ax3.set_yticks(np.arange(0, max_x, 100))
-        ax2.set_xticks(np.arange(0, max_y, 100))
+    plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
-        ax1.set_xticklabels('')
-        ax1.set_yticklabels('')
+    return ax
 
-        ax1.set_xticks(np.arange(0, pixelCount, 5), minor=True)
-        ax1.set_xticklabels(np.arange(0, pixelCount, 5), minor=True)
-
-        ax1.set_yticks(np.arange(0, pixelCount, 5), minor=True)
-        ax1.set_yticklabels(np.arange(0, pixelCount, 5), minor=True)
-
-        ax2.set_yticks(np.arange(0, pixelCount, 1), minor=True)
-        ax3.set_xticks(np.arange(0, pixelCount, 1), minor=True)
-
-        ax1.tick_params(axis='both', which='major', length=1.5, right=True, top=True)
-        ax1.tick_params(axis='both', which='minor', length=1.5, color='white')
-
-        ax2.tick_params(axis='y', which='major', length=0)
-        ax2.tick_params(axis='y', which='minor', length=1.5)
-        ax2.tick_params(axis='x', which='major', length=1.5)
-
-        ax3.tick_params(axis='y', which='major', length=1.5)
-        ax3.tick_params(axis='x', which='minor', length=1.5)
-        ax3.tick_params(axis='x', which='major', length=0)
-
-        plt.setp([
-            ax1.get_yminorticklabels(), ax1.get_xminorticklabels(),
-            ax2.get_xticklabels(), ax2.get_yticklabels(), ax2.get_xminorticklabels(), ax2.get_yminorticklabels(),
-            ax3.get_yticklabels(), ax3.get_xticklabels(), ax3.get_xminorticklabels(), ax3.get_yminorticklabels(),
-        ], fontsize=6, linespacing=1)
-
-        plt.setp([
-            ax2.get_yminorticklabels(),
-            ax3.get_xminorticklabels(),
-            ax2.get_yticklabels(),
-            ax3.get_xticklabels()
-        ], visible=False)
-
-        ax1.set_xlim(-0.5, pixelCount - 0.5)
-        ax1.set_ylim(-0.5, pixelCount - 0.5)
-        ax2.set_ylim(-0.5, pixelCount - 0.5)
-        ax3.set_xlim(-0.5, pixelCount - 0.5)
-
-        plt.suptitle('Spot-Image with 2D-Gaussian Fit')
-
-        ax4.axis('off')
-
-        return (ax1, ax2, ax3, ax4)
-
-def colorbar(ax1, p):
-    cax = inset_axes(ax1, width="95%", height="3%", loc=9)
+def colorbar(ax, p):
+    cax = inset_axes(ax, width="95%", height="3%", loc=9)
     c = plt.colorbar(p, cax=cax, orientation="horizontal")
 
     c.ax.tick_params(labelsize=6, color='#cccccc')
@@ -185,30 +187,10 @@ def colorbar(ax1, p):
 
     return c
 
-def update(ydata, popt, rowCount, pixelCount, cx, cy, axes):
+def update(ydata, popt, ax, id):
+    p = ax.imshow(ydata, cmap=cm.gray, origin="bottom")
+    ax.set_title("Run " + str(id), loc='right', fontsize=9)
 
-    (ax1, ax2, ax3, ax4) = axes
-
-    x = np.arange(rowCount)
-    y = np.arange(pixelCount)
-
-    x, y = np.meshgrid(x, y)
-    ydata_fitted = gauss2d((x, y), *popt)
-    ydata_fitted = ydata_fitted.reshape(pixelCount, pixelCount)
-
-    p = ax1.imshow(ydata, cmap=cm.gray, origin="bottom")
-    ax2.scatter(ydata[:, cy], np.arange(rowCount), alpha=0.6, s=10, color='black')
-
-    ax2.plot(spline(np.arange(pixelCount), ydata_fitted[:, cy], np.linspace(0, pixelCount, 100)),
-             np.linspace(0, pixelCount, 100), color='black', alpha=0.4)
-
-    ax3.scatter(np.arange(pixelCount), ydata[cx, :], alpha=0.6, s=10, color='black')
-
-    ax3.plot(np.linspace(0, pixelCount, 100),
-             spline(np.arange(pixelCount), ydata_fitted[cx, :], np.linspace(0, pixelCount, 100)), color='black',
-             alpha=0.4)
-
-    cb = colorbar(ax1, p)
-
+    ax.set
+    cb = colorbar(ax, p)
     return cb
-

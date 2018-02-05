@@ -2,7 +2,7 @@ from plot import helper
 from common.config import Config
 import numpy as np
 import math
-from scipy.optimize import curve_fit
+import scipy.optimize
 from scipy.interpolate import spline
 
 import matplotlib.pyplot as plt
@@ -14,37 +14,46 @@ import matplotlib.colors as colors
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 
-def gauss2d(xy, A, x0, y0, dx, dy):
+def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
 
-    a = ((x - x0) ** 2) / (2 * dx ** 2)
-    b = ((y - y0) ** 2) / (2 * dy ** 2)
+    a =  np.cos(  theta)**2 / (2 * sigma_x ** 2) + np.sin(  theta)**2 / (2*sigma_y**2)
+    b = -np.sin(2*theta)    / (4 * sigma_x ** 2) + np.sin(2*theta)    / (4*sigma_y**2)
+    c =  np.sin(  theta)**2 / (2 * sigma_x ** 2) + np.cos(  theta)**2 / (2*sigma_y**2)
 
-    g = A * np.exp(-(a + b))
-
+    g = A * np.exp( - (a*(x-x0)**2 + 2*b*(x-x0)*(y-y0) + c*(y-y0)**2))
     return g.ravel()
 
+def moments(data):
+    cx, cy = np.unravel_index(data.argmax(), data.shape)
+    A = data[cx, cy]
+    sigma_x = np.sqrt(data[cx, :].std())
+    sigma_y = np.sqrt(data[:, cy].std())
+
+    total = data.sum()
+
+    X, Y = np.indices(data.shape)
+
+    Mxx = np.ma.sum((X - cx) * (X - cx) * data) / total
+    Myy = np.ma.sum((Y - cy) * (Y - cy) * data) / total
+    Mxy = np.ma.sum((X - cx) * (Y - cy) * data) / total
+
+    rot = 0.5 * np.arctan(2 * Mxy / (Mxx - Myy))
+
+    return A, cx, cy, sigma_x, sigma_y, rot
 
 def plot(header, spot, gather):
     x, y = helper.align_data(header, spot, gather)
-    print(x.shape)
-    print(y.shape)
     pixelCount = header["PixelCount"]
 
-    line, A = np.unravel_index(y.argmax(), y.shape)
+    line, col = np.unravel_index(y.argmax(), y.shape)
+
     start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
     end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
-
     rowCount = end_row - start_row
-
     ydata = y[start_row:end_row, :]
 
-    cx, cy = np.unravel_index(ydata.argmax(), ydata.shape)
-
-    x0 = ydata[:, cy].mean()
-    y0 = ydata[cx, :].mean()
-    dx = ydata[:, cy].std()
-    dy = ydata[cx, :].std()
+    cx, cy  = np.unravel_index(ydata.argmax(), ydata.shape)
 
     x = np.arange(rowCount)
     y = np.arange(pixelCount)
@@ -135,27 +144,40 @@ def plot(header, spot, gather):
     ax3.set_xlim(-0.5, pixelCount - 0.5)
 
     try:
-        popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(), p0=[A, x0, y0, dx, dy])
-        ydata_fitted = gauss2d((x, y), *popt)
-        ydata_fitted = ydata_fitted.reshape(pixelCount, pixelCount)
+        print(moments(ydata))
+        print(np.rad2deg(moments(ydata)[5]))
+        popt, pcov = scipy.optimize.curve_fit(gauss2d, (x, y), ydata.ravel(),
+                                              p0=moments(ydata),
+                                              bounds=([0,0,0,0,0,-math.pi], [5000, 32, 32, np.inf, np.inf, math.pi]))
+    except Exception as e:
+        try:
+            print(e)
+            popt, pcov = scipy.optimize.curve_fit(gauss2d, (x, y), ydata.ravel(), p0=moments(ydata))
 
-        ax2.plot(spline(np.arange(pixelCount), ydata_fitted[:, cy], np.linspace(0, pixelCount, 100)),
-                 np.linspace(0, pixelCount, 100), color='black', alpha=0.4)
+        except Exception as e:
+            raise e
 
-        ax3.plot(np.linspace(0, pixelCount, 100),
-                 spline(np.arange(pixelCount), ydata_fitted[cx, :], np.linspace(0, pixelCount, 100)), color='black',
-                 alpha=0.4)
 
-        text = r'$\delta_x = ' + str(round(popt[3], 4)) + "$\n" \
-               + '$\delta_y = ' + str(round(popt[4], 4)) + "$\n" \
-               + '$x_0 = ' + str(round(popt[1], 4)) + "$\n" \
-               + '$y_0 = ' + str(round(popt[2], 4)) + "$\n" \
-               + '$A = ' + str(round(popt[0], 4)) + "$\n"
+    ydata_fitted = gauss2d((x, y), *popt)
+    ydata_fitted = ydata_fitted.reshape(pixelCount, pixelCount)
 
-        ax4.text(0.25, 0.25, text, fontsize=8)
+    ax2.plot(spline(np.arange(pixelCount), ydata_fitted[:, cy], np.linspace(0, pixelCount, 100)),
+             np.linspace(0, pixelCount, 100), color='black', alpha=0.4)
 
-    except:
-        pass
+    ax3.plot(np.linspace(0, pixelCount, 100),
+             spline(np.arange(pixelCount), ydata_fitted[cx, :], np.linspace(0, pixelCount, 100)), color='black',
+             alpha=0.4)
+
+    text = r'$\sigma_x = ' + str(round(popt[3], 4)) + "$\n" \
+           + '$\sigma_y = ' + str(round(popt[4], 4)) + "$\n" \
+           + '$x_0 = ' + str(round(popt[1], 4)) + "$\n" \
+           + '$y_0 = ' + str(round(popt[2], 4)) + "$\n" \
+           + '$A = ' + str(round(popt[0], 4)) + "$\n" \
+           + r'$\theta = ' + str(round(popt[5], 4)) + "$\n"
+
+    ax4.text(0.25, 0.25, text, fontsize=8)
+
+
 
     plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
