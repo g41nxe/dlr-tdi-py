@@ -6,6 +6,11 @@ from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from matplotlib.animation import FuncAnimation
+
+framedata = []
+ax = None
+
 
 def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
@@ -119,6 +124,9 @@ def loadNPY(subdirectory):
 
     return data
 
+def frame(i):
+    update(framedata[i]['ydata'], framedata[i]['popt'], ax, framedata[i]['run'])
+
 def plot(subirectory, save=True):
 
     if save is True:
@@ -126,25 +134,18 @@ def plot(subirectory, save=True):
 
     gauss = loadNPY(subirectory)
 
-    ax = style()
+    f, ax = style()
 
     for id in gauss.keys():
         for (run, values) in (gauss[id]).tolist()[int(id)].items():
+            framedata.append({'ydata': values['ydata'], 'popt': values['popt'], 'id': id})
 
-            cb = update(values['ydata'], values['popt'], ax, run)
-            plt.show()
-
-            plt.pause(0.05)
-            ax.clear()
-            cb.remove()
-
-    while True:
-        plt.pause(0.01)
+    anim = FuncAnimation(f, frame, frames=np.arange(0, len(framedata)), interval=200)
+    anim.save(subirectory + "\\spot.gif", dpi=80, writer='imagemagick')
 
 def style(pixelCount=32):
     # plot
     f, ax = plt.subplots(1)
-    plt.ion()
 
     ax.grid(linestyle='dashed', alpha=.3)
 
@@ -172,7 +173,7 @@ def style(pixelCount=32):
 
     plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
-    return ax
+    return f, ax
 
 def colorbar(ax, p):
     cax = inset_axes(ax, width="95%", height="3%", loc=9)
@@ -190,7 +191,4 @@ def colorbar(ax, p):
 def update(ydata, popt, ax, id):
     p = ax.imshow(ydata, cmap=cm.gray, origin="bottom")
     ax.set_title("Run " + str(id), loc='right', fontsize=9)
-
-    ax.set
-    cb = colorbar(ax, p)
-    return cb
+    return
