@@ -9,14 +9,15 @@ class Run:
     pos  = []
     vel  = None
 
-    def __init__(self, freq, pos, vel, id):
+    def __init__(self, freq, pos, vel, id, number):
         self.freq = freq
         self.pos = pos
         self.vel = vel
         self.id = id
+        self.number = number
 
     def unpack(self):
-        return (self.freq, self.pos, self.vel, self.id)
+        return (self.freq, self.pos, self.vel, self.id, self.number)
 
 class RunConfig:
 
@@ -58,13 +59,14 @@ class RunConfig:
                 param['position'] = []
 
 
-            name     = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + str(len(self.iterations))
+            number   =  str(len(self.iterations))
+            name     = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + number
             position = []
 
             for (grp, pos) in param['position']:
                 position.append((Config.get(grp), pos))
 
-            r = Run(param['frequency'], position, param['velocity'], name)
+            r = Run(param['frequency'], position, param['velocity'], name, number)
 
             self.iterations.append(r)
 

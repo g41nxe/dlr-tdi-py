@@ -1,10 +1,10 @@
-from plot import helper
+from common.io import *
 import numpy as np
 import matplotlib.pyplot as plt
 
 def plot(header, spot, gather):
 
-    x, y = helper.align_data(header, spot, gather)
+    x, y = buildCorrectedData(header, spot, gather)
 
     max_value_per_row       = np.max(y, 1)
     row_w_max_value         = np.argmax(max_value_per_row)

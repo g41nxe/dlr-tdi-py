@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from common.config import Config
-from plot import helper
+from common import io
 
 import numpy as np
 def plot(header, spot, gather):

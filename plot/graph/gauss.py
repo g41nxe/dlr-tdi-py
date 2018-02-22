@@ -1,8 +1,7 @@
-from plot import helper
-from common.config import Config
+from common.io import *
+from common.gauss import gaussfit, gauss2d
+
 import numpy as np
-import math
-import scipy.optimize
 from scipy.interpolate import spline
 
 import matplotlib.pyplot as plt
@@ -10,55 +9,16 @@ import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-import matplotlib.colors as colors
-from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
-
-
-def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
-    (x, y) = xy
-
-    a =  np.cos(  theta)**2 / (2 * sigma_x ** 2) + np.sin(  theta)**2 / (2*sigma_y**2)
-    b = -np.sin(2*theta)    / (4 * sigma_x ** 2) + np.sin(2*theta)    / (4*sigma_y**2)
-    c =  np.sin(  theta)**2 / (2 * sigma_x ** 2) + np.cos(  theta)**2 / (2*sigma_y**2)
-
-    g = A * np.exp( - (a*(x-x0)**2 + 2*b*(x-x0)*(y-y0) + c*(y-y0)**2))
-    return g.ravel()
-
-def moments(data):
-    cx, cy = np.unravel_index(data.argmax(), data.shape)
-    A = data[cx, cy]
-    sigma_x = np.sqrt(data[cx, :].std())
-    sigma_y = np.sqrt(data[:, cy].std())
-
-    total = data.sum()
-
-    X, Y = np.indices(data.shape)
-
-    Mxx = np.ma.sum((X - cx) * (X - cx) * data) / total
-    Myy = np.ma.sum((Y - cy) * (Y - cy) * data) / total
-    Mxy = np.ma.sum((X - cx) * (Y - cy) * data) / total
-
-    rot = 0.5 * np.arctan(2 * Mxy / (Mxx - Myy))
-
-    return A, cx, cy, sigma_x, sigma_y, rot
-
 def plot(header, spot, gather):
-    x, y = helper.align_data(header, spot, gather)
-    pixelCount = header["PixelCount"]
+    ydata      = extractBrightestSpot(header, spot, gather)
+    pixelCount = ydata.shape[0]
+    rowCount   = ydata.shape[1]
 
-    line, col = np.unravel_index(y.argmax(), y.shape)
-
-    start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
-    end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
-    rowCount = end_row - start_row
-    ydata = y[start_row:end_row, :]
-
-    cx, cy  = np.unravel_index(ydata.argmax(), ydata.shape)
-
-    x = np.arange(rowCount)
-    y = np.arange(pixelCount)
-
+    x = np.linspace(1, pixelCount, pixelCount)
+    y = np.linspace(1, pixelCount, pixelCount)
     x, y = np.meshgrid(x, y)
+
+    cx, cy     = np.unravel_index(ydata.argmax(), ydata.shape)
 
     # plot
     f = plt.figure(figsize=(6, 6))
@@ -144,18 +104,9 @@ def plot(header, spot, gather):
     ax3.set_xlim(-0.5, pixelCount - 0.5)
 
     try:
-        print(moments(ydata))
-        print(np.rad2deg(moments(ydata)[5]))
-        popt, pcov = scipy.optimize.curve_fit(gauss2d, (x, y), ydata.ravel(),
-                                              p0=moments(ydata),
-                                              bounds=([0,0,0,0,0,-math.pi], [5000, 32, 32, np.inf, np.inf, math.pi]))
+        popt = gaussfit(ydata)
     except Exception as e:
-        try:
-            print(e)
-            popt, pcov = scipy.optimize.curve_fit(gauss2d, (x, y), ydata.ravel(), p0=moments(ydata))
-
-        except Exception as e:
-            raise e
+        raise e
 
 
     ydata_fitted = gauss2d((x, y), *popt)

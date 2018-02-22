@@ -12,28 +12,24 @@ OPTIONS:
         - spot
         - psf
         - gauss
-        - delta
-        - fwhm
         - movie
 
     --file=FILENAME
         .spot and .gathering file must have the same name; exclude file-extension
         for plot use the folder containing multiple spot/gather files
 
-    --type=TYPE (delta + fwhm)
-        - position
-        - frequency
-
     --save (speedratio + movie)
 
 """
 
 import getopt, sys, os
-
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, speedratio, movie
-from common.config import Config
 import matplotlib.pyplot as plt
 
+from common.io import *
+from plot.graph import gather, psf, gauss, speedratio, spot
+from plot.animation import spot as movie
+
+from common.config import Config
 
 def usage():
     print(__doc__)
@@ -62,30 +58,13 @@ def show(task, file, type=None, save=False):
         movie.plot(file, save)
         sys.exit(1)
 
-    if task == 'delta':
-        if not os.path.exists(file) or not os.path.isdir(file):
-            print("Error: folder " + file + " does not exist!")
-            sys.exit(0)
-
-        delta.plot(file, type)
-        sys.exit(1)
-
-    if task == 'fwhm':
-        if not os.path.exists(file) or not os.path.isdir(file):
-            print("Error: folder " + file + " does not exist!")
-            sys.exit(0)
-
-        fwhm.plot(file, type)
-        sys.exit(1)
-
-
     for ext in ("spot", "gather"):
         if not os.path.exists(file + "." + ext):
             print("Error: folder " + file + "." + ext + " does not exist!")
             sys.exit(0)
 
-    h, s = helper.load_spot_file(file + '.spot')
-    g    = helper.load_gathering_file(file + '.gather')
+    h, s = loadSpotFile(file + '.spot')
+    g    = loadGatheringFile(file + '.gather')
 
     if task == 'spot':
         spot.plot(h, s, g)
@@ -98,9 +77,6 @@ def show(task, file, type=None, save=False):
 
     elif task == 'gauss':
         gauss.plot(h, s, g)
-
-    elif task == 'gauss2d':
-        gauss2d.plot(h, s, g)
 
     plt.show()
 
