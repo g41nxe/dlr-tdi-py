@@ -5,12 +5,14 @@ import math, os, re, json
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.animation import FuncAnimation
 
 framedata = []
 ax = None
-
+cb = None
+ymin = ymax = None
 
 def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
@@ -114,69 +116,81 @@ def saveNPY(subdirectory):
 def loadNPY(subdirectory):
     data = {}
 
-    for root, dirs, files in os.walk(subdirectory):
-        for file in files:
-            if (not file.endswith('.npy')):
-                continue
+    for item in os.listdir(subdirectory):
+        if not os.path.isfile(os.path.join(subdirectory, item)):
+            continue
 
-            name, ext = os.path.splitext(file)
-            data[name] = np.load(os.path.join(root, file))
+        if not item.endswith('.npy'):
+            continue
+
+        name, ext = os.path.splitext(item)
+        data[name] = np.load(os.path.join(subdirectory, item))
 
     return data
 
 def frame(i):
-    update(framedata[i]['ydata'], framedata[i]['popt'], ax, framedata[i]['run'])
+    update(framedata[i]['ydata'], framedata[i]['popt'], framedata[i]['run'])
 
-def plot(subirectory, save=True):
-
-    if save is True:
-        saveNPY(subirectory)
+def plot(subirectory, save=False):
+    global ax, ymin, ymax
 
     gauss = loadNPY(subirectory)
 
-    f, ax = style()
+    if save is True or len(gauss) < 1:
+        saveNPY(subirectory)
+        gauss = loadNPY(subirectory)
 
     for id in gauss.keys():
+        pixelCount = ymin = ymax = 0
+
         for (run, values) in (gauss[id]).tolist()[int(id)].items():
-            framedata.append({'ydata': values['ydata'], 'popt': values['popt'], 'id': id})
+            ymax = max(ymax, np.max(values['ydata']))
+            ymin = min(ymin, np.min(values['ydata']))
+            pixelCount = max(pixelCount, values['ydata'].shape[0])
 
-    anim = FuncAnimation(f, frame, frames=np.arange(0, len(framedata)), interval=200)
-    anim.save(subirectory + "\\spot.gif", dpi=80, writer='imagemagick')
+            framedata.append({'ydata': values['ydata'], 'popt': values['popt'], 'run': run})
 
-def style(pixelCount=32):
-    # plot
-    f, ax = plt.subplots(1)
+        f, ax = style(pixelCount)
 
-    ax.grid(linestyle='dashed', alpha=.3)
+        anim = FuncAnimation(f, frame, frames=np.arange(0, len(framedata)), interval=200)
+        anim.save(filename=subirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
 
-    ax.set_xticks(np.arange(0.5, pixelCount, 1))
-    ax.set_yticks(np.arange(0.5, pixelCount, 1))
 
-    ax.set_xticklabels('')
-    ax.set_yticklabels('')
+def style(pixelCount):
+    f, axis = plt.subplots(1)
 
-    ax.set_xticks(np.arange(0, pixelCount, 5), minor=True)
-    ax.set_xticklabels(np.arange(0, pixelCount, 5), minor=True)
+    axis.grid(linestyle='dashed', alpha=.3)
 
-    ax.set_yticks(np.arange(0, pixelCount, 5), minor=True)
-    ax.set_yticklabels(np.arange(0, pixelCount, 5), minor=True)
+    axis.set_xticks(np.arange(0.5, pixelCount, 1))
+    axis.set_yticks(np.arange(0.5, pixelCount, 1))
 
-    ax.tick_params(axis='both', which='major', length=1.5, right=True, top=True)
-    ax.tick_params(axis='both', which='minor', length=1.5, color='white')
+    axis.set_xticklabels('')
+    axis.set_yticklabels('')
+
+    axis.set_xticks(np.arange(0, pixelCount, 5), minor=True)
+    axis.set_xticklabels(np.arange(0, pixelCount, 5), minor=True)
+
+    axis.set_yticks(np.arange(0, pixelCount, 5), minor=True)
+    axis.set_yticklabels(np.arange(0, pixelCount, 5), minor=True)
+
+    axis.tick_params(axis='both', which='major', length=1.5, right=True, top=True)
+    axis.tick_params(axis='both', which='minor', length=1.5, color='white')
 
     plt.setp([
-        ax.get_yminorticklabels(), ax.get_xminorticklabels(),
+        axis.get_yminorticklabels(), axis.get_xminorticklabels(),
     ], fontsize=6, linespacing=1)
 
-    ax.set_xlim(-0.5, pixelCount - 0.5)
-    ax.set_ylim(-0.5, pixelCount - 0.5)
+    axis.set_xlim(-0.5, pixelCount - 0.5)
+    axis.set_ylim(-0.5, pixelCount - 0.5)
 
     plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
-    return f, ax
+    return f, axis
 
 def colorbar(ax, p):
+
     cax = inset_axes(ax, width="95%", height="3%", loc=9)
+
     c = plt.colorbar(p, cax=cax, orientation="horizontal")
 
     c.ax.tick_params(labelsize=6, color='#cccccc')
@@ -188,7 +202,15 @@ def colorbar(ax, p):
 
     return c
 
-def update(ydata, popt, ax, id):
-    p = ax.imshow(ydata, cmap=cm.gray, origin="bottom")
+def update(ydata, popt, id):
+    global cb
+    norm = colors.Normalize(vmin=ymin, vmax=ymax)
+    p = ax.imshow(ydata, cmap=cm.gray, origin="bottom", norm=norm)
+
+    if not cb is None:
+        cb.remove()
+
+    cb = colorbar(ax, p)
+
     ax.set_title("Run " + str(id), loc='right', fontsize=9)
     return

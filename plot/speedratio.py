@@ -6,7 +6,6 @@ import os, re, math
 import matplotlib.pyplot as plt
 from control.run import RunConfig, Run
 from common.util import get_vel_from_freq as vel
-from matplotlib.animation import FuncAnimation
 
 def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
@@ -59,18 +58,18 @@ def fwhm(x):
     return 2 * math.sqrt(2 * np.log(2)) * abs(x)
 
 def plot(subdirectory, save=False):
+    data = loadNPY(subdirectory)
 
-    if save is True:
-        data = saveToNPY(subdirectory)
-
-    data = loadFromNPY(subdirectory)
+    if save is True or len(data) < 1:
+        saveNPY(subdirectory)
+        data = loadNPY(subdirectory)
 
     f, ax = plt.subplots(3, sharex=True)
     plt.suptitle(r'Development of $\sigma_x$ and $\sigma_y$ of 2D-Gauss-Fit with changing speed-ratio')
 
     for i in [163216, 152841, 114324]:
-        print(i)
         values = data[str(i)].tolist()
+        print(values)
         label = str(int(values['vel'][0] / 0.00875)) + " Hz"
 
         ax[0].scatter(values['speed-ratio'], values['delta_x'], label=label, alpha=.75, s=10)
@@ -95,16 +94,18 @@ def plot(subdirectory, save=False):
 
     plt.show()
 
-def loadFromNPY(subdirectory):
+def loadNPY(subdirectory):
     data = {}
 
-    for root, dirs, files in os.walk(subdirectory):
-        for file in files:
-            if (not file.endswith('.npy')):
-                continue
+    for item in os.listdir(subdirectory):
+        if not os.path.isfile(os.path.join(subdirectory, item)):
+            continue
 
-            name, ext = os.path.splitext(file)
-            data[name] = np.load(os.path.join(root,file))
+        if not item.endswith('.npy'):
+            continue
+
+        name, ext = os.path.splitext(item)
+        data[name] = np.load(os.path.join(subdirectory, item))
 
     return data
 
@@ -125,7 +126,7 @@ def loadRuns():
 
     return runs
 
-def saveToNPY(subdirectory):
+def saveNPY(subdirectory):
 
     data = {}
     runs = loadRuns()

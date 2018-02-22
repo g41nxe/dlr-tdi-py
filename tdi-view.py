@@ -14,23 +14,23 @@ OPTIONS:
         - gauss
         - delta
         - fwhm
-        - test
+        - movie
 
     --file=FILENAME
         .spot and .gathering file must have the same name; exclude file-extension
         for plot use the folder containing multiple spot/gather files
 
-    --type=TYPE (only for delta and fwhm)
+    --type=TYPE (delta + fwhm)
         - position
         - frequency
 
-    --save (only for speed ratio)
+    --save (speedratio + movie)
 
 """
 
 import getopt, sys, os
 
-from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, speedratio, gaussIO
+from plot import gather, spot, psf, gauss, gauss2d, helper, delta, test, fwhm, speedratio, movie
 from common.config import Config
 import matplotlib.pyplot as plt
 
@@ -54,12 +54,12 @@ def show(task, file, type=None, save=False):
         speedratio.plot(file, save)
         sys.exit(1)
 
-    if task == 'gaussIO':
+    if task == 'movie':
         if not os.path.exists(file) or not os.path.isdir(file):
             print("Error: folder " + file + " does not exist!")
             sys.exit(0)
 
-        gaussIO.plot(file)
+        movie.plot(file, save)
         sys.exit(1)
 
     if task == 'delta':
