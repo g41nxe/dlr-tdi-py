@@ -26,7 +26,7 @@ import getopt, sys, os
 import matplotlib.pyplot as plt
 
 from common.io import *
-from plot.graph import gather, psf, gauss, speedratio, spot
+from plot.graph import gather, psf, gauss, speedratio, spot, mtf
 from plot.animation import spot as movie
 
 from common.config import Config
@@ -77,6 +77,9 @@ def show(task, file, type=None, save=False):
 
     elif task == 'gauss':
         gauss.plot(h, s, g)
+
+    elif task == 'mtf':
+        mtf.plot(h, s, g)
 
     plt.show()
 
