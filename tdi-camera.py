@@ -9,7 +9,7 @@ OPTIONS:
         Start the Server for 9kdemo camera software
 """
 
-from camera.server import *
+from camera.cameraserver import *
 
 import getopt, sys
 
@@ -17,7 +17,7 @@ def usage():
     print(__doc__)
 
 def start():
-    s = Server()
+    s = CameraServer()
     s.start()
 
 def main():

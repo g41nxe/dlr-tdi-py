@@ -1,4 +1,4 @@
-from common.io import *
+from common.data import *
 from common.gauss import gaussfit, gauss2d
 
 import numpy as np
@@ -19,7 +19,7 @@ def plot(header, spot, gather):
     x, y = np.meshgrid(x, y)
 
     cx, cy     = np.unravel_index(ydata.argmax(), ydata.shape)
-
+pyr
     # plot
     f = plt.figure(figsize=(6, 6))
     gs = gridspec.GridSpec(3, 3, wspace=0.0, hspace=0.0)
@@ -126,10 +126,10 @@ def plot(header, spot, gather):
            + '$A = ' + str(round(popt[0], 4)) + "$\n" \
            + r'$\theta = ' + str(round(popt[5], 4)) + "$\n"
 
-    ax4.text(0.25, 0.25, text, fontsize=8)
+    ax4.text(0.25, 0, text, fontsize=10)
 
 
 
-    plt.suptitle('Spot-Image with 2D-Gaussian Fit')
+    #plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
     ax4.axis('off')

@@ -52,8 +52,8 @@ def extractBrightestSpot(header, spot, gather):
 
     line, col = np.unravel_index(y.argmax(), y.shape)
     start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
-    end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
-    ydata = y[start_row:end_row, :]
+    end_row   = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
+    ydata     = y[start_row:end_row, :]
 
     return ydata
 
@@ -98,7 +98,7 @@ def getFrequencyAlignedData(index, alpha, data):
     int_index_aligned      = int(round(index_aligned))
     int_next_index_aligned = int(round(next_index_aligned))
 
-    value = data[int_index_aligned]
+    value      = data[int_index_aligned]
     next_value = data[int_next_index_aligned]
 
     value += ((index_aligned - int_index_aligned) * (next_value - value))

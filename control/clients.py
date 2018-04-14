@@ -23,14 +23,14 @@ class XPSClient:
             logger.error("client: cannot connect to xps %s")
             raise RuntimeError(e)
 
-        self.__init()
+        self.__homing()
 
     def __del__(self):
         logger.debug("client: disconnect from XPS")
 
         self.xps.TCP_CloseSocket(self.socket_id)
 
-    def __init(self):
+    def __homing(self):
         try:
             # homing
             logger.debug('client: xps homing')
@@ -195,7 +195,16 @@ class CameraClient:
 
         return
 
-    def send_command(self, command, value=""):
+    def set_frequency(self, freq):
+        self.__send_command("freq", freq)
+
+    def profile_start(self):
+        self.__send_command("start")
+
+    def profile_stop(self, filename):
+        self.__send_command("start", filename)
+
+    def __send_command(self, command, value=""):
 
         connection = self.__connect()
 

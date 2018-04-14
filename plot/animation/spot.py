@@ -7,7 +7,7 @@ import collections
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.animation import FuncAnimation
 
-from common.io import *
+from common.data import *
 from common.gauss import gaussfit
 
 framedata = []

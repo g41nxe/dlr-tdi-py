@@ -8,8 +8,7 @@ from common.package import Command, Response
 
 logger = Logger.get_logger()
 
-class Server:
-    SCRIPT = "G:\\data\\pywinauto\\tdi-Neunkdemo.py"
+class CameraServer:
 
     def __init__(self):
         logger.info("camera: started")
@@ -66,9 +65,29 @@ class Server:
 
         logger.info("camera: received \'%s\'", data)
 
-        program = Neunkdemo()
-        command  = Command.from_string(data)
-        response = Response(command, program.run(command))
+        program  = Neunkdemo()
+        package  = Command.from_string(data)
+
+        try:
+            if package.command == "freq":
+                res = program.set_frequency(package.value)
+
+            elif package.command == "start":
+                res = program.profile_start()
+
+            elif package.command == "stop":
+                res = program.profile_stop(package.value)
+
+            else:
+                logger.warning("camera: no suitable task found for 'task'")
+                return
+
+        except Exception as e:
+            logger.error('camera: Error during task execution')
+            logger.debug(e)
+            return
+
+        response = Response(package, res)
 
         logger.info("camera: send message \'%s\'", response)
 

@@ -25,7 +25,7 @@ OPTIONS:
 import getopt, sys, os
 import matplotlib.pyplot as plt
 
-from common.io import *
+from common.data import *
 from plot.graph import gather, psf, gauss, speedratio, spot, mtf
 from plot.animation import spot as movie
 

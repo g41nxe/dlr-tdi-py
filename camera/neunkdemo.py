@@ -21,7 +21,7 @@ class Neunkdemo:
 
         return
 
-    def __set_frequency(self, value):
+    def set_frequency(self, value):
 
         stop = self.dlg["Profile S&top"]
 
@@ -31,12 +31,12 @@ class Neunkdemo:
         self.dlg.Spinner4.get_buddy_control().set_text(value)
         self.dlg.Spinner4.get_buddy_control().type_keys("{ENTER}")
 
-        self.frequency = self.dlg.Spinner4.get_buddy_control().text_block()
+        self.frequency = self.dlg.Spinne#r4.get_buddy_control().text_block()
         logger.debug("9kdemo: frequency set to %s", self.frequency)
 
         return True
 
-    def __profile_start(self):
+    def profile_start(self):
 
         start = self.dlg["Profile S&tart"]
         stop  = self.dlg["Profile S&top"]
@@ -63,7 +63,7 @@ class Neunkdemo:
         return True
 
 
-    def __profile_stop(self, filename=None):
+    def profile_stop(self, filename=None):
 
         stop      = self.dlg["Profile S&top"]
         store     = self.dlg["Stop Store Sector"]
@@ -102,29 +102,3 @@ class Neunkdemo:
         logger.debug("9kdemo: profiling stopped and saved to %s\%s", directory, filename)
 
         return True
-
-    def run(self, package):
-        task      = package.command
-        parameter = package.value
-
-        logger.info("9kdemo: run task '%s' with parameter '%s'", task, parameter)
-
-        try:
-            if task == "freq":
-                return self.__set_frequency(parameter)
-
-            if task == "start":
-                return self.__profile_start()
-
-            if task == "stop":
-                return self.__profile_stop(parameter)
-
-        except Exception as e:
-            logger.error('9kdemo: Error')
-            logger.debug(e)
-
-            return False
-
-        logger.warning("9kdemo: no suitable task found for 'task'")
-
-        return False

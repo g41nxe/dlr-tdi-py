@@ -1,4 +1,26 @@
-class Command():
+from abc import ABCMeta, abstractmethod, abstractproperty
+
+class Package():
+    __metaclass__ = ABCMeta
+
+    @abstractproperty
+    def types(self):
+        pass
+
+    @abstractproperty
+    def MSG_LENGTH(self):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def from_string(self, str):
+       pass
+
+class Command(Package):
     """
     ------------------------------------------------------------
    | length (2)      | Command.type (4-5)   | value (0-16)      |
@@ -43,7 +65,7 @@ class Command():
 
         return Command(parts[0], parts[1])
 
-class Response():
+class Response(Package):
     """
      ------------------------------------------------
     | length | Command.type | value  | Response.type |
@@ -54,7 +76,7 @@ class Response():
 
     MSG_LENGTH = 2
 
-    responses =  {"success" , "failure"}
+    types =  {"success" , "failure"}
 
     def __init__(self, package, response):
 
@@ -65,7 +87,7 @@ class Response():
         if self.command not in Command.types:
             raise (ValueError("Unknown type"))
 
-        if self.response not in self.responses:
+        if self.response not in self.types:
             raise (ValueError("Unknown type"))
 
     def __str__(self):

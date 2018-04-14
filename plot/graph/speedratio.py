@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 
-from common.io import *
+from common.data import *
 from common.gauss import gaussfit
 from common.util import get_vel_from_freq as vel, fwhm
 

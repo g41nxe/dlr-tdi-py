@@ -1,4 +1,4 @@
-from common.io import *
+from common.data import *
 import numpy as np
 import matplotlib.pyplot as plt
 
