@@ -9,110 +9,131 @@ from matplotlib.animation import FuncAnimation
 
 from common.data import *
 from common.gauss import gaussfit
+from common.data import NPYLoader
+from animationinterface import AnimationInterface
 
-framedata = []
-ax = None
-cb = None
-ymin = ymax = None
+framedata = []    # data values to plot for the current frame
+ax        = None  # axis object
+cb        = None  # colorbar object
+ymin      = 0     # global min
+ymax      = 0     # global max
 
-def plot(subdirectory, save=False):
-    global ax, ymin, ymax
+class SpotVideoLoader(NPYLoader):
 
-    gauss = loadNPY(subdirectory)
+    @staticmethod
+    def buildAndAppendData(id, header, spot, gather, run, data):
+        ydata = extractBrightestSpot(header, spot, gather)
+        popt = gaussfit(ydata)
 
-    if save is True or len(gauss) < 1:
-        saveNPY(subdirectory, func=buildAndAppendData)
-        gauss = loadNPY(subdirectory)
+        if id not in data.keys():
+            data[id] = {}
 
-    for id in gauss.keys():
-        pixelCount = ymin = ymax = 0
+        data[id][run.number] = {}
+        data[id][run.number]['popt'] = popt
+        data[id][run.number]['ydata'] = ydata
 
-        data = (gauss[id]).tolist()
+        return data
 
-        for run in sorted(data, key=int):
-            values = data[run]
-            ymax = max(ymax, np.max(values['ydata']))
-            ymin = min(ymin, np.min(values['ydata']))
-            pixelCount = max(pixelCount, values['ydata'].shape[0])
+class SpotVideoPlot(AnimationInterface):
 
-            framedata.append({'ydata': values['ydata'], 'popt': values['popt'], 'run': run})
+    @staticmethod
+    def plot(header, spot, gather):
+        pass
 
-        f, ax = style(pixelCount)
+    @staticmethod
+    def plotDirectory(subdirectory, save=False):
+        global ax, ymin, ymax, framedata
 
-        anim = FuncAnimation(f, frame, frames=np.arange(0, len(framedata)), interval=200)
-        anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
+        framedata = []
 
-def buildAndAppendData(id, header, spot, gather, run, data):
-    ydata = extractBrightestSpot(header, spot, gather)
-    popt  = gaussfit(ydata)
+        loader = SpotVideoLoader(subdirectory)
+        gauss = loader.loadNPY()
 
-    if id not in data.keys():
-        data[id] = {}
+        if save is True or len(gauss) < 1:
+            loader.saveNPY()
+            gauss = loader.loadNPY()
 
-    data[id][run.number] = {}
-    data[id][run.number]['popt']  = popt
-    data[id][run.number]['ydata'] = ydata
+        for id in gauss.keys():
+            pixelCount = ymin = ymax = 0
 
-    return data
+            data = (gauss[id]).tolist()
 
-def style(pixelCount):
-    f, axis = plt.subplots(1)
+            for run in sorted(data, key=int):
+                values = data[run]
+                ymax = max(ymax, np.max(values['ydata']))
+                ymin = min(ymin, np.min(values['ydata']))
+                pixelCount = max(pixelCount, values['ydata'].shape[0])
 
-    axis.grid(linestyle='dashed', alpha=.3)
+                framedata.append({'ydata': values['ydata'], 'popt': values['popt'], 'run': run})
 
-    axis.set_xticks(np.arange(0.5, pixelCount, 1))
-    axis.set_yticks(np.arange(0.5, pixelCount, 1))
+            f, ax = SpotVideoPlot.style(pixelCount)
 
-    axis.set_xticklabels('')
-    axis.set_yticklabels('')
+            anim = FuncAnimation(f, SpotVideoPlot.frame, frames=np.arange(0, len(framedata)), interval=200)
+            anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
 
-    axis.set_xticks(np.arange(0, pixelCount, 5), minor=True)
-    axis.set_xticklabels(np.arange(0, pixelCount, 5), minor=True)
+    def style(self, pixelCount):
+        f, axis = plt.subplots(1)
 
-    axis.set_yticks(np.arange(0, pixelCount, 5), minor=True)
-    axis.set_yticklabels(np.arange(0, pixelCount, 5), minor=True)
+        axis.grid(linestyle='dashed', alpha=.3)
 
-    axis.tick_params(axis='both', which='major', length=1.5, right=True, top=True)
-    axis.tick_params(axis='both', which='minor', length=1.5, color='white')
+        axis.set_xticks(np.arange(0.5, pixelCount, 1))
+        axis.set_yticks(np.arange(0.5, pixelCount, 1))
 
-    plt.setp([
-        axis.get_yminorticklabels(), axis.get_xminorticklabels(),
-    ], fontsize=6, linespacing=1)
+        axis.set_xticklabels('')
+        axis.set_yticklabels('')
 
-    axis.set_xlim(-0.5, pixelCount - 0.5)
-    axis.set_ylim(-0.5, pixelCount - 0.5)
+        axis.set_xticks(np.arange(0, pixelCount, 5), minor=True)
+        axis.set_xticklabels(np.arange(0, pixelCount, 5), minor=True)
 
-    plt.suptitle('Spot-Image with 2D-Gaussian Fit')
+        axis.set_yticks(np.arange(0, pixelCount, 5), minor=True)
+        axis.set_yticklabels(np.arange(0, pixelCount, 5), minor=True)
 
-    return f, axis
+        axis.tick_params(axis='both', which='major', length=1.5, right=True, top=True)
+        axis.tick_params(axis='both', which='minor', length=1.5, color='white')
 
-def colorbar(ax, p):
+        plt.setp([
+            axis.get_yminorticklabels(), axis.get_xminorticklabels(),
+        ], fontsize=6, linespacing=1)
 
-    cax = inset_axes(ax, width="95%", height="3%", loc=9)
+        axis.set_xlim(-0.5, pixelCount - 0.5)
+        axis.set_ylim(-0.5, pixelCount - 0.5)
 
-    c = plt.colorbar(p, cax=cax, orientation="horizontal")
+        plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
-    c.ax.tick_params(labelsize=6, color='#cccccc')
-    c.outline.set_edgecolor('#cccccc')
+        return f, axis
 
-    cxtick = plt.getp(c.ax.axes, 'yticklabels')
-    cytick = plt.getp(c.ax.axes, 'xticklabels')
-    plt.setp([cxtick, cytick], color='#cccccc')
+    @staticmethod
+    def colorbar(ax, p):
+        cax = inset_axes(ax, width="95%", height="3%", loc=9)
 
-    return c
+        c = plt.colorbar(p, cax=cax, orientation="horizontal")
 
-def frame(i):
-    update(framedata[i]['ydata'], framedata[i]['popt'], framedata[i]['run'])
+        c.ax.tick_params(labelsize=6, color='#cccccc')
+        c.outline.set_edgecolor('#cccccc')
 
-def update(ydata, popt, id):
-    global cb
-    norm = colors.Normalize(vmin=ymin, vmax=ymax)
-    p = ax.imshow(ydata, cmap=cm.gray, origin="bottom", norm=norm)
+        cxtick = plt.getp(c.ax.axes, 'yticklabels')
+        cytick = plt.getp(c.ax.axes, 'xticklabels')
+        plt.setp([cxtick, cytick], color='#cccccc')
 
-    if not cb is None:
-        cb.remove()
+        return c
 
-    cb = colorbar(ax, p)
+    @staticmethod
+    def frame(i):
+        global framedata
 
-    ax.set_title("Run " + str(id), loc='right', fontsize=9)
-    return
+        SpotVideoPlot.update(framedata[i]['ydata'], framedata[i]['popt'], framedata[i]['run'])
+
+    @staticmethod
+    def update(ydata, popt, id):
+        global cb, ymin, ymax, ax
+
+        norm = colors.Normalize(vmin=ymin, vmax=ymax)
+        p = ax.imshow(ydata, cmap=cm.gray, origin="bottom", norm=norm)
+
+        if not cb is None:
+            cb.remove()
+
+        cb = SpotVideoPlot.colorbar(ax, p)
+
+        ax.set_title("Run " + str(id), loc='right', fontsize=9)
+        return

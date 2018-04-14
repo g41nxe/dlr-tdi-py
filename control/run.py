@@ -4,26 +4,18 @@ from common.config import Config
 
 class Run:
 
-    id   = None
-    freq = None
-    pos  = []
-    vel  = None
-
-    def __init__(self, freq, pos, vel, id, number):
+    def __init__(self, freq, pos, vel, id, number, cfg):
         self.freq = freq
         self.pos = pos
         self.vel = vel
         self.id = id
         self.number = number
+        self.cfg = cfg
 
     def unpack(self):
-        return (self.freq, self.pos, self.vel, self.id, self.number)
+        return (self.freq, self.pos, self.vel, self.id, self.number, self.cfg)
 
 class RunConfig:
-
-    id         = None
-    iterations = []
-    timestamp  = None
 
     def __init__(self, file):
         self.iterations = []
@@ -42,10 +34,8 @@ class RunConfig:
 
         for run in data['runs']:
 
-            if 'config' in run.keys():
-                cfg   = run['config']
-                for (k, v) in cfg.items():
-                    Config.set(k, v)
+            if 'config' not in run.keys():
+                run['config'] = []
 
             param = run['param']
 
@@ -66,7 +56,7 @@ class RunConfig:
             for (grp, pos) in param['position']:
                 position.append((Config.get(grp), pos))
 
-            r = Run(param['frequency'], position, param['velocity'], name, number)
+            r = Run(param['frequency'], position, param['velocity'], name, number, run['config'])
 
             self.iterations.append(r)
 

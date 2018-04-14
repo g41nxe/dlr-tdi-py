@@ -2,6 +2,7 @@ from datetime import datetime
 from common.config import Config
 from common.logger import Logger
 from control.run import Run, RunConfig
+from abc import ABCMeta, abstractmethod
 
 import re, io, os
 import numpy as np
@@ -105,20 +106,6 @@ def getFrequencyAlignedData(index, alpha, data):
 
     return value
 
-def loadNPY(subdirectory):
-    data = {}
-
-    for item in os.listdir(subdirectory):
-        if not os.path.isfile(os.path.join(subdirectory, item)):
-            continue
-
-        if not item.endswith('.npy'):
-            continue
-
-        name, ext = os.path.splitext(item)
-        data[name] = np.load(os.path.join(subdirectory, item))
-
-    return data
 
 def loadRuns():
     runs = {}
@@ -137,47 +124,72 @@ def loadRuns():
 
     return runs
 
-def saveNPY(subdirectory, func):
+class NPYLoader():
+    __metaclass__ = ABCMeta
 
-    data = {}
-    runs = loadRuns()
+    def __init__(self, subdirectory):
+        self.subdirectory = subdirectory
 
-    for root, dirs, files in os.walk(subdirectory):
-        for file in files:
-            if (not file.endswith('.spot')):
+    @abstractmethod
+    def buildAndAppendData(id, header, spot, gather, run, data):
+        pass
+
+    def loadNPY(self):
+        data = {}
+
+        for item in os.listdir(self.subdirectory):
+            if not os.path.isfile(os.path.join(self.subdirectory, item)):
                 continue
 
-            name, ext = os.path.splitext(file)
-            if not (name + ".gather") in files:
+            if not item.endswith('.npy'):
                 continue
 
-            pattern = r"(\d*)_([\d\w-]*)_(\d*)"
-            m = re.search(pattern, name)
+            name, ext = os.path.splitext(item)
+            data[name] = np.load(os.path.join(self.subdirectory, item))
 
-            if m is None:
-                continue
+        return data
 
-            id      = m.group(1)
-            task    = m.group(2)
-            run_id  = m.group(3)
+    def saveNPY(self):
 
-            Logger.get_logger().info("Loading %s", name)
+        data = {}
+        runs = loadRuns()
 
-            if not task in runs.keys():
-                Logger.get_logger().warn("Task %s not found", task)
+        for root, dirs, files in os.walk(self.subdirectory):
+            for file in files:
+                if (not file.endswith('.spot')):
+                    continue
 
-            header, spot = loadSpotFile(os.path.join(root, name) + '.spot')
-            gather       = loadGatheringFile(os.path.join(root, name) + '.gather')
-            run          = runs[task][int(run_id)]
+                name, ext = os.path.splitext(file)
+                if not (name + ".gather") in files:
+                    continue
 
-            try:
-                data = func(id, header, spot, gather, run, data)
-            except Exception as e:
-                print(e)
-                continue
+                pattern = r"(\d*)_([\d\w-]*)_(\d*)"
+                m = re.search(pattern, name)
 
-    for id in data.keys():
-        f = subdirectory + "\\" + id
-        np.save(f, data[id])
+                if m is None:
+                    continue
 
-    return data
+                id      = m.group(1)
+                task    = m.group(2)
+                run_id  = m.group(3)
+
+                Logger.get_logger().info("Loading %s", name)
+
+                if not task in runs.keys():
+                    Logger.get_logger().warn("Task %s not found", task)
+
+                header, spot = loadSpotFile(os.path.join(root, name) + '.spot')
+                gather       = loadGatheringFile(os.path.join(root, name) + '.gather')
+                run          = runs[task][int(run_id)]
+
+                try:
+                    data = self.buildAndAppendData(id, header, spot, gather, run, data)
+                except Exception as e:
+                    print(e)
+                    continue
+
+        for id in data.keys():
+            f = self.subdirectory + "\\" + id
+            np.save(f, data[id])
+
+        return data

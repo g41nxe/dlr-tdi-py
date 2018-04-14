@@ -25,6 +25,10 @@ class Control:
             logger.info("cli: frequency: %s Hz", r.freq)
             logger.info("cli: positions: %s", r.pos)
             logger.info("cli: velocity: %s", r.vel)
+            logger.info("cli: config: %s", r.cfg)
+
+            for (key, value) in r.cfg:
+                Config.set(key, value)
 
             cam = CameraClient()
 

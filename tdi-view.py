@@ -26,7 +26,13 @@ import getopt, sys, os
 import matplotlib.pyplot as plt
 
 from common.data import *
-from plot.graph import gather, psf, gauss, speedratio, spot, mtf
+from plot.graph.gather import GatheringPlot
+from plot.graph.psf import PSFPlot
+from plot.graph.gauss import GaussPlot
+from plot.graph.speedratio import SpeedRatioPlot
+from plot.graph.spot import SpotPlot
+from plot.graph.mtf import MTFPlot
+
 from plot.animation import spot as movie
 
 from common.config import Config
@@ -47,7 +53,7 @@ def show(task, file, type=None, save=False):
             print("Error: folder " + file + " does not exist!")
             sys.exit(0)
 
-        speedratio.plot(file, save)
+        SpeedRatioPlot.plotDirectory(file, save)
         sys.exit(1)
 
     if task == 'movie':
@@ -67,19 +73,19 @@ def show(task, file, type=None, save=False):
     g    = loadGatheringFile(file + '.gather')
 
     if task == 'spot':
-        spot.plot(h, s, g)
+        SpotPlot.plot(h, s, g)
 
     elif task == 'gather':
-        gather.plot(h, s, g)
+        GatheringPlot.plot(h, s, g)
 
     elif task == 'psf':
-        psf.plot(h, s, g)
+        PSFPlot.plot(h, s, g)
 
     elif task == 'gauss':
-        gauss.plot(h, s, g)
+        GaussPlot.plot(h, s, g)
 
     elif task == 'mtf':
-        mtf.plot(h, s, g)
+        MTFPlot.plot(h, s, g)
 
     plt.show()
 
