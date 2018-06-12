@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from common.config import Config
 import numpy as np
 
-from plotinterface import PlotInterface
+from plot.graph.plotinterface import PlotInterface
 
 class SpotPlot(PlotInterface):
     @staticmethod

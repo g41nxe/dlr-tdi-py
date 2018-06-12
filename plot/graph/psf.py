@@ -1,7 +1,7 @@
 from common.data import *
 import numpy as np
 import matplotlib.pyplot as plt
-from plotinterface import PlotInterface
+from plot.graph.plotinterface import PlotInterface
 
 class PSFPlot(PlotInterface):
     @staticmethod

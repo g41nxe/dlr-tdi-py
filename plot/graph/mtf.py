@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy as sp
 import math
-from plotinterface import PlotInterface
+from plot.graph.plotinterface import PlotInterface
 
 class MTFPlot(PlotInterface):
 

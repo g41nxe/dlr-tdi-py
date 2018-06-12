@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from plotinterface import PlotInterface
+from plot.graph.plotinterface import PlotInterface
 
 class GaussPlot(PlotInterface):
 

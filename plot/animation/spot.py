@@ -10,7 +10,7 @@ from matplotlib.animation import FuncAnimation
 from common.data import *
 from common.gauss import gaussfit
 from common.data import NPYLoader
-from animationinterface import AnimationInterface
+from plot.animation.animationinterface import AnimationInterface
 
 framedata = []    # data values to plot for the current frame
 ax        = None  # axis object

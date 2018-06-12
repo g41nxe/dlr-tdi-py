@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from common.data import *
 from common.gauss import gaussfit
 from common.util import get_vel_from_freq as vel, fwhm
-from plotinterface import PlotInterface
+from plot.graph.plotinterface import PlotInterface
 
 class SpeedRatioLoader(NPYLoader):
 
