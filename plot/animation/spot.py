@@ -71,7 +71,8 @@ class SpotVideoPlot(AnimationInterface):
             anim = FuncAnimation(f, SpotVideoPlot.frame, frames=np.arange(0, len(framedata)), interval=200)
             anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
 
-    def style(self, pixelCount):
+    @staticmethod
+    def style(pixelCount):
         f, axis = plt.subplots(1)
 
         axis.grid(linestyle='dashed', alpha=.3)
@@ -128,7 +129,7 @@ class SpotVideoPlot(AnimationInterface):
         global cb, ymin, ymax, ax
 
         norm = colors.Normalize(vmin=ymin, vmax=ymax)
-        p = ax.imshow(ydata, cmap=cm.gray, origin="bottom", norm=norm)
+        p = ax.imshow(np.rot90(ydata), cmap=cm.gray, origin="bottom", norm=norm)
 
         if not cb is None:
             cb.remove()
