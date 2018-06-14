@@ -1,6 +1,6 @@
 from common.logger import Logger
-from control.clients import *
-from control.run import RunConfig, Run
+from clients import *
+from run import RunConfig, Run
 
 from threading import Thread
 import time
@@ -58,6 +58,8 @@ class Control:
 
             xps.save_gathering_data(subdir, r.id)
             cam.profile_stop(subdir + "\\" + r.id)
+
+
 
             time.sleep(2)
 

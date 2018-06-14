@@ -84,6 +84,7 @@ class CameraServer:
 
         except Exception as e:
             logger.error('camera: Error during task execution')
+            print(e)
             logger.debug(e)
             return
 

@@ -31,40 +31,33 @@ class RunConfig:
         data = json.load(open(file, 'r'))
 
         self.id = data['id']
+        self.description = data.get('desc', 'empty')
 
         for run in data['runs']:
 
             if 'config' not in run.keys():
                 run['config'] = []
 
-            param = run['param']
+            if 'frequency' not in run.keys():
+                run['frequency'] = None
 
-            if 'frequency' not in param.keys():
-                param['frequency'] = None
+            if 'velocity' not in run.keys():
+                run['velocity'] = None
 
-            if 'velocity' not in param.keys():
-                param['velocity'] = None
-
-            if 'position' not in param.keys():
-                param['position'] = []
-
+            if 'position' not in run.keys():
+                run['position'] = []
 
             number   =  str(len(self.iterations))
             name     = self.timestamp.strftime('%H%M%S') + '_' + self.id + '_' + number
             position = []
 
-            for (grp, pos) in param['position']:
+            for (grp, pos) in run['position']:
                 position.append((Config.get(grp), pos))
 
-            r = Run(param['frequency'], position, param['velocity'], name, number, run['config'])
+            r = Run(run['frequency'], position, run['velocity'], name, number, run['config'])
 
             self.iterations.append(r)
 
     def getRuns(self):
         return self.iterations
-
-
-
-
-
 

@@ -4,6 +4,7 @@ from common.logger import Logger
 from control.run import Run, RunConfig
 from abc import ABCMeta, abstractmethod
 
+import bottleneck as bn
 import re, io, os
 import numpy as np
 
@@ -46,15 +47,36 @@ def loadGatheringFile(gathering_file):
 
     return data
 
+
+def extractBrightestSpots(header, spot, gather, n):
+    x, y = buildCorrectedData(header, spot, gather)
+
+    pixelCount = header["PixelCount"]
+
+    idx   = bn.argpartition(y, y.size - n, axis=None)[-n:]
+    width = y.shape[1]
+    tops  = [divmod(i, width) for i in idx]
+
+    ydata = []
+    for (line, col) in tops:
+        start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
+        end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
+
+        ydata.append(y[start_row:end_row, :])
+
+    return ydata
+
 def extractBrightestSpot(header, spot, gather):
     x, y = buildCorrectedData(header, spot, gather)
 
     pixelCount = header["PixelCount"]
 
     line, col = np.unravel_index(y.argmax(), y.shape)
+
     start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
     end_row   = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
-    ydata     = y[start_row:end_row, :]
+
+    ydata = y[start_row:end_row, :]
 
     return ydata
 

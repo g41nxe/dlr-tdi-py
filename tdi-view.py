@@ -33,7 +33,7 @@ from plot.graph.speedratio import SpeedRatioPlot
 from plot.graph.spot import SpotPlot
 from plot.graph.mtf import MTFPlot
 
-from plot.animation import spot as movie
+from plot.animation.spot import SpotVideoPlot
 
 from common.config import Config
 
@@ -61,7 +61,7 @@ def show(task, file, type=None, save=False):
             print("Error: folder " + file + " does not exist!")
             sys.exit(0)
 
-        movie.plot(file, save)
+        SpotVideoPlot.plotDirectory(file, save)
         sys.exit(1)
 
     for ext in ("spot", "gather"):

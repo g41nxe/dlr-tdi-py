@@ -18,9 +18,7 @@ OPTIONS:
 from common.logger import Logger
 from control.clients import *
 from control.control import Control
-from control.run import RunConfig, Run
 
-from threading import Thread
 import getopt, sys, time, os
 
 logger = Logger.get_logger()
@@ -37,7 +35,8 @@ def main():
         print("Error: ", err)
         sys.exit(2)
 
-    name = task = None
+    name = None
+    tasks = []
 
     for o, a in opts:
 
@@ -45,13 +44,13 @@ def main():
             name = a
 
         elif o in "--task":
-            a += ".json"
 
             if not os.path.isabs(a):
                 a = os.path.dirname(os.path.abspath(__file__))+ "\\tasks\\" + a
 
-            if os.path.exists(a):
-                task = a
+            for i in a.split(','):
+                if os.path.exists(i + '.json' ):
+                    tasks.append(i)
             else:
                 print("Task file %s does'nt exist!", a)
 
@@ -62,7 +61,7 @@ def main():
             usage()
             sys.exit(2)
 
-    if task is None:
+    if len(tasks) < 1:
         print("No task!")
         usage()
         sys.exit()

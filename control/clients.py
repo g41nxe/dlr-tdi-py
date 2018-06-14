@@ -4,7 +4,7 @@ from datetime import datetime
 from common.config  import Config
 from common.logger import Logger
 from common.package import Response, Command
-from control.xps    import XPS
+from xps  import XPS
 
 logger = Logger.get_logger()
 
@@ -202,7 +202,7 @@ class CameraClient:
         self.__send_command("start")
 
     def profile_stop(self, filename):
-        self.__send_command("start", filename)
+        self.__send_command("stop", filename)
 
     def __send_command(self, command, value=""):
 

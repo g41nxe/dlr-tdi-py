@@ -1,6 +1,4 @@
 import logging
-from .util import get_freq_range
-
 
 class Config:
     data = {

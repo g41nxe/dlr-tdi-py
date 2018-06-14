@@ -25,13 +25,13 @@ class Neunkdemo:
 
         stop = self.dlg["Profile S&top"]
 
-        if stop.is_enabled():
+        if stop.is_enabled() and stop.is_visible():
             stop.click()
 
         self.dlg.Spinner4.get_buddy_control().set_text(value)
         self.dlg.Spinner4.get_buddy_control().type_keys("{ENTER}")
 
-        self.frequency = self.dlg.Spinne#r4.get_buddy_control().text_block()
+        self.frequency = self.dlg.Spinner4.get_buddy_control().text_block()
         logger.debug("9kdemo: frequency set to %s", self.frequency)
 
         return True
@@ -42,7 +42,7 @@ class Neunkdemo:
         stop  = self.dlg["Profile S&top"]
         qss   = self.dlg["QSS"]
 
-        if stop.is_enabled():
+        if stop.is_enabled() and stop.is_visible():
             stop.click()
 
         if not qss.is_visible():
@@ -52,7 +52,7 @@ class Neunkdemo:
 
         qss.check_by_click()
 
-        if start.is_enabled():
+        if start.is_enabled() and start.is_visible():
             start.click()
         else:
             logger.error("9kdemo: start button not enabled")
@@ -65,7 +65,6 @@ class Neunkdemo:
 
     def profile_stop(self, filename=None):
 
-        stop      = self.dlg["Profile S&top"]
         store     = self.dlg["Stop Store Sector"]
 
         filename = filename + ".spot"
@@ -81,7 +80,7 @@ class Neunkdemo:
         store.click()
 
         try:
-            self.app["Spot-File"].Wait('visible', timeout=5)
+            self.app["Spot-File"].Wait('visible', timeout=10)
             self.app["Spot-File"].Edit.set_text(directory + "\\" + filename)
             self.app["Spot-File"].Speichern.click()
         except TimeoutError:
@@ -89,15 +88,14 @@ class Neunkdemo:
             return False
 
         try:
-           self.app["Spot-File"].WaitNot('visible', timeout=5)
+           self.app["Spot-File"].WaitNot('visible', timeout=10)
         except TimeoutError:
             self.app["Spot-File"].Ja.click()
             logger.warning("9kdemo: file already existed")
 
-        if stop.is_enabled():
+        stop = self.dlg["Profile S&top"]
+        if stop.is_enabled() and stop.is_visible():
             stop.click()
-        else:
-            logger.debug("9kdemo: stop not enabled")
 
         logger.debug("9kdemo: profiling stopped and saved to %s\%s", directory, filename)
 
