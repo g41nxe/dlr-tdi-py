@@ -1,7 +1,7 @@
-import os
+import os, time
 from datetime import datetime
 from pywinauto.application import Application
-from pywinauto.timings import TimeoutError
+from pywinauto.timings import TimeoutError, Timings
 
 from common.config import Config
 from common.logger import Logger
@@ -12,10 +12,12 @@ class Neunkdemo:
 
     def __init__(self):
 
+        Timings.Slow()
+
         self.base_path  = Config.get("CAM_RESULT_PATH")
        
         self.app        = Application(backend="win32").connect(path=Config.get("CAM_PROGRAM_PATH"))
-        self.dlg        = self.app["Test9k"]
+        self.dlg        = self.app.Test9k
 
         self.frequency = self.dlg.Spinner4.get_buddy_control().text_block()
 
@@ -23,7 +25,7 @@ class Neunkdemo:
 
     def set_frequency(self, value):
 
-        stop = self.dlg["Profile S&top"]
+        stop = self.dlg.ProfileStop
 
         if stop.is_enabled() and stop.is_visible():
             stop.click()
@@ -32,71 +34,95 @@ class Neunkdemo:
         self.dlg.Spinner4.get_buddy_control().type_keys("{ENTER}")
 
         self.frequency = self.dlg.Spinner4.get_buddy_control().text_block()
-        logger.debug("9kdemo: frequency set to %s", self.frequency)
+        logger.info("9kdemo: frequency set to %s", self.frequency)
 
         return True
 
     def profile_start(self):
 
-        start = self.dlg["Profile S&tart"]
-        stop  = self.dlg["Profile S&top"]
-        qss   = self.dlg["QSS"]
+        start = self.dlg.ProfileStart
+        stop  = self.dlg.ProfileStop
+        qss   = self.dlg.QSS
 
         if stop.is_enabled() and stop.is_visible():
             stop.click()
+            logger.debug("9kdemo: stop button clicked")
 
         if not qss.is_visible():
             logger.error("9kdemo: qss not visible")
             return False
 
-
         qss.check_by_click()
+        logger.debug("9kdemo: qss button clicked")
 
         if start.is_enabled() and start.is_visible():
+            start.Wait('visible enabled', timeout=5)
             start.click()
+            logger.debug("9kdemo: start button clicked")
         else:
             logger.error("9kdemo: start button not enabled")
             return False
 
-        logger.debug("9kdemo: profiling started")
+        logger.info("9kdemo: profiling started")
 
         return True
 
+    def stop_store_sector(self, filename=None):
 
-    def profile_stop(self, filename=None):
-
-        store     = self.dlg["Stop Store Sector"]
-
-        filename = filename + ".spot"
+        store     = self.dlg.StopStoreSector
+        filename  = filename + ".spot"
         directory = self.base_path + "\\" + datetime.now().strftime("%d%m%y")
 
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        if not store.is_visible() or not store.is_enabled():
-            logger.error("9kdemo: store button not available")
+        if store.is_visible() and store.is_enabled():
+            store.click()
+            logger.debug("9kdemo: click store button")
+        else:
+            logger.error("9kdemo: store not visible")
             return False
 
-        store.click()
+        self.app.SpotFile.Wait('ready', timeout=5)
+
+        path = self.app.SpotFile.Edit
+        save = self.app.SpotFile.Speichern
+
+        logger.debug("9kdemo: set path")
+
+        path.set_text(directory + "\\" + filename)
+        save.click()
 
         try:
-            self.app["Spot-File"].Wait('visible', timeout=10)
-            self.app["Spot-File"].Edit.set_text(directory + "\\" + filename)
-            self.app["Spot-File"].Speichern.click()
+           self.app.SpotFile.WaitNot('visible', timeout=5)
         except TimeoutError:
-            logger.error("9kdemo: save dialog not visible")
-            return False
-
-        try:
-           self.app["Spot-File"].WaitNot('visible', timeout=10)
-        except TimeoutError:
-            self.app["Spot-File"].Ja.click()
             logger.warning("9kdemo: file already existed")
 
-        stop = self.dlg["Profile S&top"]
+            ja = self.app.SpotFile.Ja
+            ja.Wait('enabled visible', timeout=5)
+            ja.click()
+            logger.debug("9kdemo: ja button clicked")
+
+        try:
+            self.dlg.Wait('ready', timeout=5)
+        except TimeoutError:
+            logger.error("9kdemo: main window now tready")
+            return False
+
+        logger.info("9kdemo: data saved to %s\%s", directory, filename)
+
+        return True
+
+    def profile_stop(self):
+
+        stop      = self.dlg.ProfileStop
+
         if stop.is_enabled() and stop.is_visible():
             stop.click()
+            logger.debug("9kdemo: stop button clicked")
+        else:
+            logger.warning("9kdemo: stop button not enabled")
 
-        logger.debug("9kdemo: profiling stopped and saved to %s\%s", directory, filename)
+        logger.info("9kdemo: profiling stopped")
 
         return True

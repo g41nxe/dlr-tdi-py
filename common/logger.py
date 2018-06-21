@@ -9,7 +9,7 @@ class Logger:
         if not Logger.__logger is None:
             return Logger.__logger
 
-        formatter = logging.Formatter("%(asctime)s - %(message)s")
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
         ch = logging.StreamHandler(sys.stdout)
         ch.setLevel(Config.get("LOG_LEVEL"))

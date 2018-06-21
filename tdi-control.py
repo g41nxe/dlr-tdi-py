@@ -19,7 +19,7 @@ from common.logger import Logger
 from control.clients import *
 from control.control import Control
 
-import getopt, sys, time, os
+import getopt, sys, os
 
 logger = Logger.get_logger()
 
@@ -49,8 +49,9 @@ def main():
                 a = os.path.dirname(os.path.abspath(__file__))+ "\\tasks\\" + a
 
             for i in a.split(','):
-                if os.path.exists(i + '.json' ):
-                    tasks.append(i)
+                t = i + '.json'
+                if os.path.exists(t):
+                    tasks.append(t)
             else:
                 print("Task file %s does'nt exist!", a)
 
@@ -66,7 +67,8 @@ def main():
         usage()
         sys.exit()
 
-    Control.start(task, name)
+    for t in tasks:
+        Control.start(t, name)
 
 if __name__ == "__main__":
     main()

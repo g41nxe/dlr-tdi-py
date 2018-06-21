@@ -36,7 +36,7 @@ class Command(Package):
 
     MSG_LENGTH = 2
 
-    types = {"freq", "start", "stop"}
+    types = {"freq", "start", "stop", "save"}
 
     def __init__(self, command, value):
 

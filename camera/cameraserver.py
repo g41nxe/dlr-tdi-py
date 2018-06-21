@@ -17,6 +17,8 @@ class CameraServer:
         self.socket.bind((Config.get("CAM_HOST"), Config.get("CAM_PORT")))
         self.socket.listen(10)
 
+        self.program = Neunkdemo()
+
     def __del__(self):
         logger.info('camera: closed')
 
@@ -63,34 +65,34 @@ class CameraServer:
             logger.error("server: no data")
             raise RuntimeError("no data")
 
-        logger.info("camera: received \'%s\'", data)
+        logger.debug("camera: received \'%s\'", data)
 
-        program  = Neunkdemo()
         package  = Command.from_string(data)
 
         try:
             if package.command == "freq":
-                res = program.set_frequency(package.value)
+                res = self.program.set_frequency(package.value)
 
             elif package.command == "start":
-                res = program.profile_start()
+                res = self.program.profile_start()
+
+            elif package.command == "save":
+                res = self.program.stop_store_sector(package.value)
 
             elif package.command == "stop":
-                res = program.profile_stop(package.value)
+                res = self.program.profile_stop()
 
             else:
                 logger.warning("camera: no suitable task found for 'task'")
                 return
 
-        except Exception as e:
+        except Exception:
             logger.error('camera: Error during task execution')
-            print(e)
-            logger.debug(e)
             return
 
         response = Response(package, res)
 
-        logger.info("camera: send message \'%s\'", response)
+        logger.debug("camera: send message \'%s\'", response)
 
         total_sent = 0
         while total_sent < len(str(response).encode('utf-8')):
@@ -102,6 +104,6 @@ class CameraServer:
             total_sent += sent
 
         connection.close()
-        logger.debug("camera: disconnected")
+        logger.info("camera: disconnected")
 
         return

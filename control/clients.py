@@ -15,7 +15,7 @@ class XPSClient:
         self.socket_id = -1
 
         try:
-            logger.debug("client: connect to xps %s:%s", Config.get("XPS_HOST"), Config.get("XPS_PORT"))
+            logger.info("client: connect to xps %s:%s", Config.get("XPS_HOST"), Config.get("XPS_PORT"))
             self.socket_id = self.xps.TCP_ConnectToServer(Config.get("XPS_HOST"), Config.get("XPS_PORT"), 10)
             logger.debug("client: xps socket id: %s", self.socket_id)
 
@@ -26,14 +26,14 @@ class XPSClient:
         self.__homing()
 
     def __del__(self):
-        logger.debug("client: disconnect from XPS")
+        logger.info("client: disconnect from XPS")
 
         self.xps.TCP_CloseSocket(self.socket_id)
 
     def __homing(self):
         try:
             # homing
-            logger.debug('client: xps homing')
+            logger.info('client: xps homing')
 
             for group in [Config.get("CAM_X_GROUP"), Config.get("CAM_Y_GROUP"), Config.get("CAM_Z_GROUP"), Config.get("FP_GROUP")]:
                 logger.debug('client: init xps %s', group)
@@ -50,7 +50,7 @@ class XPSClient:
         try:
             # acceleration + velocity
             if not vel is None:
-                logger.debug("client: change velocity to %s", vel)
+                logger.info("client: change velocity to %s", vel)
                 self.xps.PositionerSGammaParametersSet(self.socket_id,
                                                        Config.get("FP_GROUP") + '.' + Config.get("FP_GROUP_NAME"),
                                                        vel, Config.get("FP_ACCELERATION"), Config.get("FP_JERKTIME")[0],
@@ -58,7 +58,7 @@ class XPSClient:
 
             # position for every axis
             if len(pos) > 0:
-                logger.debug("client: change positions to %s", pos)
+                logger.info("client: change positions to %s", pos)
                 for group, position in pos:
                     self.xps.GroupMoveAbsolute(self.socket_id, group, position)
 
@@ -69,7 +69,7 @@ class XPSClient:
         return True
 
     def init_event(self):
-        logger.debug('client: init xps events')
+        logger.info('client: init xps events')
 
         types = []
         for type in Config.get("XPS_DATA_TYPES"):
@@ -85,7 +85,7 @@ class XPSClient:
         logger.debug("client: set xps event action")
 
     def move_and_gather(self):
-        logger.debug("client: move fp %s times from %s to %s", Config.get("ITERATIONS"), Config.get("FP_START"), Config.get("FP_END"))
+        logger.info("client: move fp %s times from %s to %s", Config.get("ITERATIONS"), Config.get("FP_START"), Config.get("FP_END"))
 
         self.init_event()
 
@@ -136,12 +136,14 @@ class XPSClient:
             logger.error('client: cannot save gathering file %s')
             raise RuntimeError(e)
 
-        logger.debug("client: gathering data saved to %s", file)
+        logger.info("client: gathering data saved to %s", file)
+
+        return
 
 class CameraClient:
 
     def __connect(self):
-        logger.debug("client: connect to camera")
+        logger.info("client: connect to camera")
 
         try:
             connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -154,14 +156,14 @@ class CameraClient:
         return connection
 
     def __disconnect(self, connection):
-        logger.debug("client: disconnect from camera")
+        logger.info("client: disconnect from camera")
         try:
             connection.close()
         except:
             pass
 
     def __read_response(self, connection):
-        logger.debug("client: ready to receive")
+        logger.info("client: ready to receive")
 
         try:
             msg_len = int(connection.recv(Response.MSG_LENGTH))
@@ -193,7 +195,7 @@ class CameraClient:
             logger.error("client: no response received")
             raise RuntimeError("no response")
 
-        return
+        return data
 
     def set_frequency(self, freq):
         self.__send_command("freq", freq)
@@ -201,8 +203,11 @@ class CameraClient:
     def profile_start(self):
         self.__send_command("start")
 
-    def profile_stop(self, filename):
-        self.__send_command("stop", filename)
+    def profile_stop(self):
+        self.__send_command("stop")
+
+    def stop_store_sector(self, filename):
+        self.__send_command("save", filename)
 
     def __send_command(self, command, value=""):
 
