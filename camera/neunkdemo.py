@@ -1,10 +1,10 @@
-import os, time
+import os
 from datetime import datetime
-from pywinauto.application import Application
-from pywinauto.timings import TimeoutError, Timings
 
 from common.config import Config
 from common.logger import Logger
+from pywinauto.application import Application
+from pywinauto.timings import TimeoutError, Timings
 
 logger = Logger.get_logger()
 
@@ -126,3 +126,13 @@ class Neunkdemo:
         logger.info("9kdemo: profiling stopped")
 
         return True
+
+    def test(self):
+        try:
+            if self.app.Test9k.is_visible():
+                return True
+
+        except Exception:
+            pass
+
+        return False

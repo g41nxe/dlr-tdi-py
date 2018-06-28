@@ -1,5 +1,6 @@
-import msvcrt
+import signal
 import socket
+import sys
 import time
 from threading import Thread
 
@@ -9,6 +10,11 @@ from common.logger import Logger
 from common.package import Command, Response
 
 logger = Logger.get_logger()
+
+
+def exit_handler(signal, frame):
+    logger.info("camera: closed by user")
+    sys.exit(0)
 
 class CameraServer:
 
@@ -30,11 +36,9 @@ class CameraServer:
             pass
 
     def start(self):
-        while True:
-            if msvcrt.kbhit() and msvcrt.getch() == chr(27).encode():
-                logger.debug('camera: aborted by user')
-                break
+        signal.signal(signal.SIGINT, exit_handler)
 
+        while True:
             conn, addr = self.socket.accept()
             logger.debug("camera: connected by %s", addr)
 
@@ -83,6 +87,9 @@ class CameraServer:
 
             elif package.command == "stop":
                 res = self.program.profile_stop()
+
+            elif package.command == "test":
+                res = self.program.test()
 
             else:
                 logger.warning("camera: no suitable task found for 'task'")

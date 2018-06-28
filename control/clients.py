@@ -204,6 +204,9 @@ class CameraClient:
 
         return data
 
+    def test(self):
+        return self.__send_command("test")
+
     def set_frequency(self, freq):
         return self.__send_command("freq", freq)
 

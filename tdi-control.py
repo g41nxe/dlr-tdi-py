@@ -13,6 +13,15 @@ OPTIONS:
     --name=NAME
         The (folder-)name of the current run
 
+    --show-config
+        Prints variables and values in the config file
+
+    --test
+        Test Run
+
+    --reboot
+        Reboots the XPS
+
 """
 
 import getopt
@@ -31,7 +40,7 @@ def usage():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "name=", "task=", "show-config", "reboot"])
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "name=", "task=", "show-config", "reboot", "test"])
 
     except getopt.GetoptError as err:
         print("Error: ", err)
@@ -45,8 +54,17 @@ def main():
             Control.rebootXPS()
             sys.exit()
 
-        if o in "--name":
+        elif o in "--name":
             name = a
+
+        elif o in "--test":
+            task = os.path.dirname(os.path.abspath(__file__)) + "\\tasks\\" + "test.json"
+            name = "test"
+
+            if os.path.exists(task):
+                tasks.append(task)
+            else:
+                logger.error("Task test task does'nt exist!")
 
         elif o in "--task":
 
@@ -68,7 +86,6 @@ def main():
             sys.exit(2)
 
     if len(tasks) < 1:
-        print("No task!")
         usage()
         sys.exit()
 

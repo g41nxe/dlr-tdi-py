@@ -25,6 +25,11 @@ class Control:
         logger.info("cli: run %s\\%s with config %s", subdir, cfg.id, run_file)
 
         runs = cfg.getRuns()
+        cam = CameraClient()
+
+        if not cam.test():
+            logger.error("cli: camera offline")
+            return
 
         for idx,r in enumerate(runs):
             logger.info("cli: %s/%s", idx + 1, len(runs))
@@ -35,8 +40,6 @@ class Control:
 
             for (key, value) in r.cfg:
                 Config.set(key, value)
-
-            cam = CameraClient()
 
             xps.run_id = r.id
 
@@ -133,8 +136,11 @@ def check_files(subdir, id):
         success = False
 
     if not success:
-        os.remove(spot)
-        os.remove(gather)
+        if os.path.exists(spot):
+            os.remove(spot)
+
+        if os.path.exists(gather):
+            os.remove(gather)
 
     return success
 
