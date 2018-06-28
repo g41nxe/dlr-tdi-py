@@ -1,12 +1,15 @@
-from datetime import datetime
-from common.config import Config
-from common.logger import Logger
-from control.run import Run, RunConfig
+import io
+import os
+import re
 from abc import ABCMeta, abstractmethod
+from datetime import datetime
 
 import bottleneck as bn
-import re, io, os
 import numpy as np
+from common.config import Config
+from common.logger import Logger
+from control.run import RunConfig
+
 
 def loadSpotFile(spot_file):
     header = dict()
@@ -40,7 +43,7 @@ def loadSpotFile(spot_file):
     return header, z
 
 def loadGatheringFile(gathering_file):
-    data = np.loadtxt(gathering_file, skiprows=2)
+    data = np.genfromtxt(gathering_file, skip_header=2)
 
     if len(data) < 1:
         Logger.get_logger().warning("spot file " + gathering_file + " is empty")

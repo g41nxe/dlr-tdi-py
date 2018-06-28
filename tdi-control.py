@@ -15,11 +15,13 @@ OPTIONS:
 
 """
 
+import getopt
+import os
+import sys
+
 from common.logger import Logger
 from control.clients import *
 from control.control import Control
-
-import getopt, sys, os
 
 logger = Logger.get_logger()
 
@@ -29,7 +31,7 @@ def usage():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "name=", "task=", "show-config"])
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "name=", "task=", "show-config", "reboot"])
 
     except getopt.GetoptError as err:
         print("Error: ", err)
@@ -39,6 +41,9 @@ def main():
     tasks = []
 
     for o, a in opts:
+        if o in "--reboot":
+            Control.rebootXPS()
+            sys.exit()
 
         if o in "--name":
             name = a
@@ -52,8 +57,8 @@ def main():
                 t = i + '.json'
                 if os.path.exists(t):
                     tasks.append(t)
-            else:
-                print("Task file %s does'nt exist!", a)
+                else:
+                    logger.error("Task file %s does'nt exist!", a)
 
         elif o in "--show-config":
             print(vars(Config))

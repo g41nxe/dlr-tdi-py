@@ -1,4 +1,6 @@
-import socket, time, msvcrt
+import msvcrt
+import socket
+import time
 from threading import Thread
 
 from camera.neunkdemo import Neunkdemo
@@ -11,7 +13,7 @@ logger = Logger.get_logger()
 class CameraServer:
 
     def __init__(self):
-        logger.info("camera: started")
+        logger.debug("camera: started")
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((Config.get("CAM_HOST"), Config.get("CAM_PORT")))
@@ -20,7 +22,7 @@ class CameraServer:
         self.program = Neunkdemo()
 
     def __del__(self):
-        logger.info('camera: closed')
+        logger.debug('camera: closed')
 
         try:
             self.socket.close()
@@ -87,8 +89,8 @@ class CameraServer:
                 return
 
         except Exception:
+            res = False
             logger.error('camera: Error during task execution')
-            return
 
         response = Response(package, res)
 
@@ -104,6 +106,6 @@ class CameraServer:
             total_sent += sent
 
         connection.close()
-        logger.info("camera: disconnected")
+        logger.debug("camera: disconnected")
 
         return

@@ -1,11 +1,15 @@
-from common.util import *
-from common.config import Config
-from common.logger import Logger
-from common.data import *
-import os, getopt, sys, re
-import numpy as np
-
+import getopt
 import json
+import os
+import re
+import sys
+
+import numpy as np
+from common.config import Config
+from common.data import *
+from common.logger import Logger
+from common.util import *
+
 
 def json_repair(folder):
     spot_size = 6000 * 1024 # KB
@@ -27,8 +31,7 @@ def json_repair(folder):
 
             if (file.endswith('.spot')   and os.path.getsize(folder+'/'+file) < spot_size) or \
                (file.endswith('.gather') and os.path.getsize(folder+'/'+file) < gather_size):
-
-                    Logger.get_logger().info('File to small: ' + file)
+                Logger.get_logger().debug('File to small: ' + file)
 
                     name, ext = os.path.splitext(file)
                     pattern = r"(\d*)_([\d\w-]*)_(\d*)"
@@ -99,7 +102,7 @@ def json_speedratio(f):
         ('CAM_Z_GROUP', [101.615])
     ]
 
-    steps   = 50
+    steps = 3
     start   = round(get_vel_from_freq(f) * 0.6, 4)
     stop    = round(get_vel_from_freq(f) * 1.4, 4)
     iterations = 30
