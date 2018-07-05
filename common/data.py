@@ -37,8 +37,6 @@ def loadSpotFile(spot_file):
     z = np.reshape(np.fromfile(spot_file, dtype=np.ushort)[:-8 * header['PixelCount']],
                    (header['LineCount'], header['PixelCount']))
 
-    z = np.rot90(z)
-
     if (len(z) < 1):
         Logger.get_logger().warning("spot file " + spot_file + " is empty")
 

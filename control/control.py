@@ -85,7 +85,7 @@ class Control:
         if repeat < 10:
             logger.debug("cli: finished")
         else:
-            logger.error("cli: error")
+            logger.error("cli: error, too many retries")
 
     @staticmethod
     def rebootXPS():
@@ -108,7 +108,7 @@ def check_files(subdir, id):
 
         logger.debug("cli: spot file: %s KB", fsize / 1024)
 
-        if fsize < 10000000:  # 10 MB
+        if fsize < 8000000:  # 10 MB
             success = False
             logger.error("cli: spot file too small")
 

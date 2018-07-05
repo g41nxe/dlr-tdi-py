@@ -1,0 +1,30 @@
+{
+  "desc": "Test-Messung",
+  "runs": [
+    {
+      "velocity": 81,
+      "frequency": 9615,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ]
+    }
+  ],
+  "id": "test"
+}

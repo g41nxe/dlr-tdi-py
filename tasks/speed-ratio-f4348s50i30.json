@@ -1,0 +1,1506 @@
+{
+  "desc": "Speed-Ratio Messung mit fester Frequenz von 4348hz und dynamischer Geschwindigkeit zwischen [ 22.827, 53.263 ]",
+  "id": "speed-ratio-f4348s50i30",
+  "runs": [
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 22.827
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 23.4481
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 24.0693
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 24.6904
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 25.3116
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 25.9327
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 26.5539
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 27.175
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 27.7961
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 28.4173
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 29.0384
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 29.6596
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 30.2807
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 30.9019
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 31.523
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 32.1441
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 32.7653
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 33.3864
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 34.0076
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 34.6287
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 35.2499
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 35.871
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 36.4921
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 37.1133
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 37.7344
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 38.3556
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 38.9767
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 39.5979
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 40.219
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 40.8401
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 41.4613
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 42.0824
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 42.7036
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 43.3247
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 43.9459
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 44.567
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 45.1881
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 45.8093
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 46.4304
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 47.0516
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 47.6727
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 48.2939
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 48.915
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 49.5361
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 50.1573
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 50.7784
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 51.3996
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 52.0207
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 52.6419
+    },
+    {
+      "config": [
+        [
+          "ITERATIONS",
+          30
+        ]
+      ],
+      "frequency": 4348,
+      "position": [
+        [
+          "CAM_X_GROUP",
+          [
+            259.849
+          ]
+        ],
+        [
+          "CAM_Y_GROUP",
+          [
+            7.1
+          ]
+        ],
+        [
+          "CAM_Z_GROUP",
+          [
+            101.615
+          ]
+        ]
+      ],
+      "velocity": 53.263
+    }
+  ]
+}

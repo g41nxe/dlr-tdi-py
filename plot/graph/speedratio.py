@@ -1,16 +1,15 @@
-import math
 import matplotlib.pyplot as plt
 
 from common.data import *
 from common.gauss import gaussfit
-from common.util import get_vel_from_freq as vel, fwhm
+from common.util import get_vel_from_freq as vel
 from plot.graph.plotinterface import PlotInterface
 
 class SpeedRatioLoader(NPYLoader):
 
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
-        ydatas = extractBrightestSpots(header, spot, gather, 10)
+        ydatas = extractBrightestSpots(header, spot, gather, 30)
         f = header['LineFreq']
 
         deltax = []

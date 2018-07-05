@@ -63,7 +63,6 @@ def json_repair(folder):
 
     return runs
 
-
 def json_mtf():
     p = [
         ('CAM_X_GROUP', [259.849]),
@@ -100,7 +99,7 @@ def json_speedratio(f):
         ('CAM_Z_GROUP', [101.615])
     ]
 
-    steps = 3
+    steps = 50
     start = round(get_vel_from_freq(f) * 0.6, 4)
     stop = round(get_vel_from_freq(f) * 1.4, 4)
     iterations = 30
@@ -154,7 +153,6 @@ def json_focus():
 
     return runs
 
-
 def json_test():
     p = [
         ('CAM_X_GROUP', [259.849]),
@@ -198,7 +196,9 @@ def main():
             data.append(json_focus())
 
         elif o in ("--speed-ratio"):
-            for f in [9259, 6211, 2817]:
+            ff = get_freq_range_mm(0, int(255 / 2))
+            for i in np.linspace(0, len(ff) - 1, 3):
+                f = ff[int(i)]
                 data.append(json_speedratio(f))
 
         elif o in ("--equal"):

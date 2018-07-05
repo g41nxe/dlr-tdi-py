@@ -1,15 +1,12 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.colors as colors
-import collections
-
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from matplotlib.animation import FuncAnimation
-
+import matplotlib.pyplot as plt
+import numpy as np
 from common.data import *
-from common.gauss import gaussfit
 from common.data import NPYLoader
+from common.gauss import gaussfit
+from matplotlib.animation import FuncAnimation
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from plot.animation.animationinterface import AnimationInterface
 
 framedata = []    # data values to plot for the current frame
@@ -22,7 +19,7 @@ class SpotVideoLoader(NPYLoader):
 
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
-        ydata = extractBrightestSpot(header, spot, gather)
+        ydata = extractBrightestSpots(header, spot, gather, 5)[4]
         popt = gaussfit(ydata)
 
         if id not in data.keys():
@@ -129,7 +126,7 @@ class SpotVideoPlot(AnimationInterface):
         global cb, ymin, ymax, ax
 
         norm = colors.Normalize(vmin=ymin, vmax=ymax)
-        p = ax.imshow(np.rot90(ydata), cmap=cm.gray, origin="bottom", norm=norm)
+        p = ax.imshow(ydata, cmap=cm.gray, origin="bottom", norm=norm)
 
         if not cb is None:
             cb.remove()
