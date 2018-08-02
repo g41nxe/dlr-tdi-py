@@ -27,14 +27,14 @@ class Config:
         "FP_VELOCITY":      81,             # mm/s
         "FP_ACCELERATION":  1500,           # mm/s^2,
         "FP_JERKTIME":      [0.02, 0.02],   # min, max:
-        "LOG_LEVEL":        logging.INFO,
+        "LOG_LEVEL":        logging.INFO,   # DEBUG | INFO | WARNING | ERROR 
 
         "ITERATIONS":       30,
 
         "CLAMP_MAX_INTENSITY": 2500,  # intensities > value are outliers
-        "CLAMP_MIN_INTENSITY": 0,  # intensities < value are noise
+        "CLAMP_MIN_INTENSITY": 0,     # intensities < value are noise
 
-        "PLOT_DATA_FOLDER":     "E:\\Projects\\Repositories\\dlr-tdi-py\\data\\",
+        "PLOT_DATA_FOLDER":     "D:\\Daten\\data\\280618\\",
         "PLOT_DEFAULT_FILE":    "010218\\speed-55\\152841_speed-55_40",
     }
 

@@ -1,14 +1,16 @@
 import io
 import os
 import re
+
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 
-import bottleneck as bn
 import numpy as np
+
+from common.peaks  import detect_peaks
 from common.config import Config
 from common.logger import Logger
-from control.run import RunConfig
+from control.run   import RunConfig
 
 
 def loadSpotFile(spot_file):
@@ -51,17 +53,15 @@ def loadGatheringFile(gathering_file):
     return data
 
 
-def extractBrightestSpots(header, spot, gather, n):
+def extractBrightestSpots(header, spot, gather):
     x, y = buildCorrectedData(header, spot, gather)
 
+    line, col = np.unravel_index(y.argmax(), y.shape)
+    tops = detect_peaks(y[:, col], mph=y[:,col].max() * 0.75, mpd=200, edge='rising')
     pixelCount = header["PixelCount"]
 
-    idx   = bn.argpartition(y, y.size - n, axis=None)[-n:]
-    width = y.shape[1]
-    tops  = [divmod(i, width) for i in idx]
-
     ydata = []
-    for (line, col) in tops:
+    for line in tops:
         start_row = np.maximum(line - int(round(pixelCount / 2)), 0)
         end_row = np.minimum(line + int(round(pixelCount / 2)), (len(y) - 1))
 

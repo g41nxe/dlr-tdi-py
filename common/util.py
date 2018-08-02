@@ -1,5 +1,7 @@
 import math
+
 import numpy as np
+
 
 # steps in [0, 255]
 def get_freq_range(steps):
@@ -45,8 +47,9 @@ def get_freq_range_mm(min, max):
 def get_vel_from_freq(f):
     return f * 0.00875
 
-def fwhm(x):
-    return 2 * math.sqrt(2 * np.log(2)) * abs(x)
+
+def fwhm(delta):
+    return 2 * math.sqrt(2 * np.log(2)) * abs(delta)
 
 def bit2freq(bit):
     # hard coded values from 9kdemo cam software
