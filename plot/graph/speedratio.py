@@ -59,27 +59,22 @@ class SpeedRatioPlot(PlotInterface):
             loader.saveNPY()
             data = loader.loadNPY()
 
-        f, ax = plt.subplots(2, sharex=True)
+        f, ax = plt.subplots(len(data), sharex=True)
         plt.suptitle(r'Development of $\sigma_x$ and $\sigma_y$ of 2D-Gauss-Fit with changing speed-ratio')
 
+        i = 0
         for id in data:
+
             values = data[id].tolist()
             label = str(int(values['freq'][0])) + " Hz"
 
-            ax[0].scatter(values['speed-ratio'], values['delta_x'], label=label, alpha=.75, s=10)
-            ax[0].legend(numpoints=1, loc='upper left')
-            ax[0].grid()
-            ax[0].set_ylim([1, 10])
-            ax[0].set_ylabel("$\sigma_x$")
-            ax[0].errorbar(values['speed-ratio'], values['delta_x'], yerr=values['error_x'], linestyle="None")
+            ax[i].scatter(values['speed-ratio'], values['delta_x'], label=label, alpha=.75, s=10)
+            ax[i].legend(numpoints=1, loc='upper left')
+            ax[i].grid()
+            ax[i].set_ylim([1,10])
+            ax[i].set_ylabel("$\sigma_x$")
+            ax[i].errorbar(values['speed-ratio'], values['delta_x'], yerr=values['error_x'], linestyle="None")
 
-            ax[1].scatter(values['speed-ratio'], values['delta_y'], label=label, alpha=.75, s=10)
-            ax[1].legend(numpoints=1, loc='upper left')
-            ax[1].grid()
-            ax[1].set_ylim([1,10])
-            ax[1].set_ylabel("$\sigma_y$")
-            ax[1].errorbar(values['speed-ratio'], values['delta_y'], yerr=values['error_y'], linestyle="None")
-
-            ax[1].set_xlabel("Speed ratio $f_{fps} \;/\; f_{tdi}$")
+            i += 1
 
         plt.show()
