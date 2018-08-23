@@ -1,13 +1,15 @@
+import os, shutil
 import matplotlib.cm as cm
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
-import numpy as np
+from matplotlib.animation import FuncAnimation
+
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from plot.animation.animationinterface import AnimationInterface
+
 from common.data import *
 from common.data import NPYLoader
 from common.gauss import gaussfit
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from plot.animation.animationinterface import AnimationInterface
 
 framedata = []    # data values to plot for the current frame
 ax        = None  # axis object
@@ -65,8 +67,18 @@ class SpotVideoPlot(AnimationInterface):
 
             f, ax = SpotVideoPlot.style(pixelCount)
 
-            anim = FuncAnimation(f, SpotVideoPlot.frame, frames=np.arange(0, len(framedata)), interval=200)
-            anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
+            #anim = FuncAnimation(f, SpotVideoPlot.frame, frames=np.arange(0, len(framedata)), interval=200)
+
+            if os.path.exists(subdirectory + "\\video-" + id):
+                shutil.rmtree(subdirectory + "\\video-" + id)
+
+            os.makedirs(subdirectory + "\\video-" + id)
+
+            for i, val in enumerate(framedata):
+                SpotVideoPlot.frame(i)
+                f.savefig(subdirectory + "\\video-" + id + "\\speed-ratio-" + str(i) + ".jpg", bbox_inches='tight')
+
+            #anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
 
     @staticmethod
     def style(pixelCount):
@@ -96,7 +108,7 @@ class SpotVideoPlot(AnimationInterface):
         axis.set_xlim(-0.5, pixelCount - 0.5)
         axis.set_ylim(-0.5, pixelCount - 0.5)
 
-        plt.suptitle('Spot-Image with 2D-Gaussian Fit')
+        #plt.suptitle('Spot-Image with 2D-Gaussian Fit')
 
         return f, axis
 
@@ -111,7 +123,7 @@ class SpotVideoPlot(AnimationInterface):
 
         cxtick = plt.getp(c.ax.axes, 'yticklabels')
         cytick = plt.getp(c.ax.axes, 'xticklabels')
-        plt.setp([cxtick, cytick], color='#cccccc')
+        plt.setp([cxtick, cytick], color='#cccccc', fontsize=0)
 
         return c
 
@@ -133,5 +145,5 @@ class SpotVideoPlot(AnimationInterface):
 
         cb = SpotVideoPlot.colorbar(ax, p)
 
-        ax.set_title("Run " + str(id), loc='right', fontsize=9)
+        ax.set_title("Run " + str(id), loc='center', fontsize=20)
         return

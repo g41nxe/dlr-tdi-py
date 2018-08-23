@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from common.data import *
 from common.gauss import gaussfit, gauss2d
 
@@ -58,6 +61,11 @@ class GaussPlot(PlotInterface):
 
         ax3.set_xticks(np.arange(0.5, pixelCount, 1))
         ax2.set_yticks(np.arange(0.5, pixelCount, 1))
+
+        ax1.set_xlabel("Pixel [u.a.]", fontsize=8)
+        ax1.set_ylabel("Pixel [u.a.]", fontsize=8)
+        ax2.set_xlabel(u"Intensität [DN]", fontsize=8)
+        ax3.set_ylabel(u"Intensität [DN]", fontsize=8)
 
         ax3.set_xticklabels(np.arange(0, pixelCount, 1), minor=True)
         ax2.set_yticklabels(np.arange(0, pixelCount, 1), minor=True)

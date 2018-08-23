@@ -16,12 +16,13 @@ class GatheringPlot(PlotInterface):
         f, (ax1, ax2) = plt.subplots(2, sharex=True)
 
         ax1.scatter(x, position, s=s)
-        ax1.set_ylabel('Line')
-        ax1.set_ylabel('Position (mm)')
-        ax1.set_title('Position and Velocity')
+
+        ax1.set_ylabel('Position [mm]')
+        #ax1.set_title('Position and Geschwindigkeit')
 
         ax2.scatter(x, speed, s=s)
-        ax2.set_ylabel('Velocity (mm/s)')
+        ax2.set_ylabel('Geschwindigkeit [mm/s]')
+        ax2.set_xlabel('Messwert [u.a.]')
 
         plt.setp(ax2.get_xticklabels(), fontsize=6)
         plt.setp(ax1.get_xticklabels(), visible=False)

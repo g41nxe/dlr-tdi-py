@@ -35,7 +35,6 @@ class SpeedRatioLoader(NPYLoader):
             }
 
         data[id]['delta_x'].append(np.mean(deltax))
-        data[id]['delta_x'].append(np.mean(deltax))
         data[id]['error_x'].append(np.std(deltax))
 
         data[id]['delta_y'].append(np.mean(deltay))
@@ -81,9 +80,7 @@ class SpeedRatioPlot(PlotInterface):
             data = loader.loadNPY()
 
         f, ax = plt.subplots(2, sharex=True)
-        plt.suptitle(r'Development of $\sigma_x$ and $\sigma_y$ of 2D-Gauss-Fit with changing speed-ratio')
-
-        # data = data.items().sort(key=lambda x: x.tolist()['freq'][0])
+        #plt.suptitle(r'Development of $\sigma_x$ and $\sigma_y$ of 2D-Gauss-Fit with changing speed-ratio')
 
         frequencies = {}
         for id, array in data.items():
@@ -96,16 +93,18 @@ class SpeedRatioPlot(PlotInterface):
 
             label = str(int(values['freq'][0])) + " Hz"
 
+            print(len(values['speed-ratio']))
+            print(len(values['delta_x']))
             ax[0].errorbar(values['speed-ratio'], values['delta_x'], yerr=values['error_x'],
                            c=SpeedRatioPlot.colors[c_id], linestyle="None", alpha=.75)
 
             ax[0].plot(values['speed-ratio'], values['delta_x'], SpeedRatioPlot.marker[c_id] + '-',
                        label=label, markersize=4, alpha=.75, linewidth=1, c=SpeedRatioPlot.colors[c_id])
 
-            ax[0].legend(numpoints=1, loc='upper left')
+            ax[0].legend(numpoints=1, loc='upper right')
             ax[0].grid()
             ax[0].set_ylim([1, 16])
-            ax[0].set_ylabel("$\sigma_x$")
+            ax[0].set_ylabel("$\sigma_x$ [u.a.]")
 
             ax[1].errorbar(values['speed-ratio'], values['delta_y'], yerr=values['error_y'],
                            c=SpeedRatioPlot.colors[c_id], linestyle="None", alpha=.75)
@@ -113,12 +112,12 @@ class SpeedRatioPlot(PlotInterface):
             ax[1].plot(values['speed-ratio'], values['delta_y'], SpeedRatioPlot.marker[c_id] + '-',
                        label=label, markersize=4, alpha=.75, linewidth=1, c=SpeedRatioPlot.colors[c_id])
 
-            ax[1].legend(numpoints=1, loc='lower left')
+            ax[1].legend(numpoints=1, loc='upper right')
             ax[1].grid()
             ax[1].set_ylim([1, 16])
-            ax[1].set_ylabel("$\sigma_y$")
+            ax[1].set_ylabel("$\sigma_y$ [u.a.]")
 
-            ax[1].set_xlabel("Speed ratio $f_{fps} \;/\; f_{tdi}$")
+            ax[1].set_xlabel("Speed-Ratio $v_{fps} \;/\; v_{tdi}$ [u.a.]")
 
             c_id += 1
 
