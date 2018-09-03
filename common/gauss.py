@@ -3,21 +3,22 @@ import numpy as np
 
 from scipy.optimize import curve_fit
 
+
 def gauss2d(xy, A, x0, y0, sigma_x, sigma_y, theta):
     (x, y) = xy
 
-    a =  math.cos(  theta)**2 / (2 * sigma_x ** 2) + math.sin(  theta)**2 / (2*sigma_y**2)
-    b = -math.sin(2*theta)    / (4 * sigma_x ** 2) + math.sin(2*theta)    / (4*sigma_y**2)
-    c =  math.sin(  theta)**2 / (2 * sigma_x ** 2) + math.cos(  theta)**2 / (2*sigma_y**2)
+    a = math.cos(theta) ** 2 / (2 * sigma_x ** 2) + math.sin(theta) ** 2 / (2 * sigma_y ** 2)
+    b = -math.sin(2 * theta) / (4 * sigma_x ** 2) + math.sin(2 * theta) / (4 * sigma_y ** 2)
+    c = math.sin(theta) ** 2 / (2 * sigma_x ** 2) + math.cos(theta) ** 2 / (2 * sigma_y ** 2)
 
-    g =  A * np.exp( - (a*(x-x0)**2 + 2*b*(x-x0)*(y-y0) + c*(y-y0)**2))
+    g = A * np.exp(- (a * (x - x0) ** 2 + 2 * b * (x - x0) * (y - y0) + c * (y - y0) ** 2))
 
     return g.ravel()
 
-def initial(data):
 
-    cx, cy  = np.unravel_index(data.argmax(), data.shape)
-    A       = data[cx, cy]
+def initial(data):
+    cx, cy = np.unravel_index(data.argmax(), data.shape)
+    A = data[cx, cy]
     sigma_x = np.sqrt(data[cx, :].std())
     sigma_y = np.sqrt(data[:, cy].std())
 
@@ -33,10 +34,21 @@ def initial(data):
 
     return A, cx, cy, sigma_x, sigma_y, rot
 
+
+def gauss(x, I, sigma):
+    # MW = 0
+    return I * np.exp(-np.multiply(x, x) / (2 * sigma ** 2))
+
+def gaussfit2(ydata, xdata):
+    popt, pcov = curve_fit(gauss, xdata, ydata)
+
+    return popt
+
+
 def gaussfit(ydata):
     pixelCount = ydata.shape[0]
 
-    x, y  = np.meshgrid(np.linspace(1, pixelCount, pixelCount), np.linspace(1, pixelCount, pixelCount))
+    x, y = np.meshgrid(np.linspace(1, pixelCount, pixelCount), np.linspace(1, pixelCount, pixelCount))
 
     popt, pcov = curve_fit(gauss2d, (x, y), ydata.ravel(),
                            p0=initial(ydata),

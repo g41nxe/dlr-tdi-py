@@ -11,8 +11,9 @@ from plot.graph.plotinterface import PlotInterface
 class SpeedRatioLoader(NPYLoader):
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
-        ydatas = extractBrightestSpots(header, spot, gather)
+        ydatas, px = extractBrightestSpots(header, spot, gather)
         f = header['LineFreq']
+        p = header['FirstPixel'] + px
 
         deltax = []
         deltay = []
@@ -44,6 +45,7 @@ class SpeedRatioLoader(NPYLoader):
         data[id]['vel'].append(run.vel)
         data[id]['speed-diff'].append(run.vel - vel(f))
         data[id]['speed-ratio'].append(round(run.vel / vel(f), 4))
+        data[id]['Pixel'] = p
 
         return data
 
@@ -93,8 +95,6 @@ class SpeedRatioPlot(PlotInterface):
 
             label = str(int(values['freq'][0])) + " Hz"
 
-            print(len(values['speed-ratio']))
-            print(len(values['delta_x']))
             ax[0].errorbar(values['speed-ratio'], values['delta_x'], yerr=values['error_x'],
                            c=SpeedRatioPlot.colors[c_id], linestyle="None", alpha=.75)
 
@@ -120,5 +120,7 @@ class SpeedRatioPlot(PlotInterface):
             ax[1].set_xlabel("Speed-Ratio $v_{fps} \;/\; v_{tdi}$ [u.a.]")
 
             c_id += 1
+
+        ax[0].text(1, 1.1, 'Pixel: ' + str(values['Pixel']), transform=ax[0].transAxes, fontsize=8, horizontalalignment='right', verticalalignment='top')
 
         plt.show()

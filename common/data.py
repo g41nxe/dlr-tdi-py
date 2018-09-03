@@ -67,7 +67,7 @@ def extractBrightestSpots(header, spot, gather):
 
         ydata.append(y[start_row:end_row, :])
 
-    return ydata
+    return ydata, col
 
 def extractBrightestSpot(header, spot, gather):
     x, y = buildCorrectedData(header, spot, gather)
