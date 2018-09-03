@@ -1,14 +1,12 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 from common.data import *
 from common.gauss import gaussfit
 from common.util import get_vel_from_freq as vel
-
 from plot.graph.plotinterface import PlotInterface
 
-
 class SpeedRatioLoader(NPYLoader):
+
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
         ydatas, px = extractBrightestSpots(header, spot, gather)

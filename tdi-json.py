@@ -199,7 +199,8 @@ def main():
             ff = get_freq_range_mm(0, int(255 / 2))
             for i in np.linspace(0, len(ff) - 1, 3):
                 f = ff[int(i)]
-                data.append(json_speedratio(f))
+                print(f)
+                #data.append(json_speedratio(f))
 
         elif o in ("--equal"):
             data.append(json_mtf())
