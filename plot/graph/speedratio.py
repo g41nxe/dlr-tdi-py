@@ -1,5 +1,9 @@
+import csv
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 
+from common.config import Config
 from common.data import *
 from common.gauss import gaussfit
 from common.util import get_vel_from_freq as vel
@@ -10,8 +14,8 @@ class SpeedRatioLoader(NPYLoader):
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
         ydatas, px = extractBrightestSpots(header, spot, gather)
-        f = header['LineFreq']
-        p = header['FirstPixel'] + px
+        freq = header['LineFreq']
+        pix  = header['FirstPixel'] + px
 
         deltax = []
         deltay = []
@@ -30,7 +34,8 @@ class SpeedRatioLoader(NPYLoader):
                 'speed-diff': [],
                 'speed-ratio': [],
                 'error_x': [],
-                'error_y': []
+                'error_y': [],
+                'pixel': []
             }
 
         data[id]['delta_x'].append(np.mean(deltax))
@@ -39,11 +44,11 @@ class SpeedRatioLoader(NPYLoader):
         data[id]['delta_y'].append(np.mean(deltay))
         data[id]['error_y'].append(np.std(deltay))
 
-        data[id]['freq'].append(f)
+        data[id]['freq'].append(freq)
         data[id]['vel'].append(run.vel)
-        data[id]['speed-diff'].append(run.vel - vel(f))
-        data[id]['speed-ratio'].append(round(run.vel / vel(f), 4))
-        data[id]['Pixel'] = p
+        data[id]['speed-diff'].append(run.vel - vel(freq))
+        data[id]['speed-ratio'].append(round(run.vel / vel(freq), 4))
+        data[id]['pixel'].append(pix)
 
         return data
 
@@ -119,6 +124,43 @@ class SpeedRatioPlot(PlotInterface):
 
             c_id += 1
 
-        ax[0].text(1, 1.1, 'Pixel: ' + str(values['Pixel']), transform=ax[0].transAxes, fontsize=8, horizontalalignment='right', verticalalignment='top')
+        ax[0].text(1, 1.1, 'Pixel: ' + str(values['pixel'][0]), transform=ax[0].transAxes, fontsize=8, horizontalalignment='right', verticalalignment='top')
 
         plt.show()
+        SpeedRatioPlot.generateCSVs(data)
+
+    @staticmethod
+    def generateCSVs(data):
+        list_len = len(data)
+        if not list_len:
+            raise ValueError()
+
+        csv_folder = Path(Config.get('PLOT_DATA_FOLDER')) / 'csv'
+        if not csv_folder.exists():
+            csv_folder.mkdir()
+
+        for id, array in data.items():
+            SpeedRatioPlot.writeCSV(array.tolist(), csv_folder / f'{id}.csv')
+            
+    @staticmethod
+    def writeCSV(data, csv_file):
+        types = list(set(data.keys()).difference(('pixel',)))
+        data_len = len(data[types[0]])
+        print(csv_file)
+        with open(csv_file, 'w') as fh:
+            f = csv.writer(fh)
+            f.writerow(types)
+
+            for data_pos in range(data_len):
+                data_row = []
+                for type_ in types:
+                    data_row.append(round(data[type_][data_pos], 6))
+                f.writerow(data_row)
+
+
+
+                    
+
+
+
+

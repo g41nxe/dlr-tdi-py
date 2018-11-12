@@ -13,6 +13,7 @@ OPTIONS:
         - psf
         - gauss
         - movie
+        - speedratio
 
     --file=FILENAME
         .spot and .gathering file must have the same name; exclude file-extension
