@@ -172,7 +172,7 @@ class NPYLoader():
                 continue
 
             name, ext = os.path.splitext(item)
-            data[name] = np.load(os.path.join(self.subdirectory, item))
+            data[name] = np.load(os.path.join(self.subdirectory, item), encoding='latin1')
 
         return data
 
@@ -238,7 +238,8 @@ class NPYLoader():
     def writeCSV(data, csv_file):
         types = list(set(data.keys()).difference(('pixel',)))
         data_len = len(data[types[0]])
-        print(csv_file)
+        Logger.get_logger().info("Writing csv file " + csv_file)
+        
         with open(csv_file, 'w') as fh:
             f = csv.writer(fh)
             f.writerow(types)

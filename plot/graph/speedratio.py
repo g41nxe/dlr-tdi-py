@@ -94,8 +94,7 @@ class SpeedRatioPlot(PlotInterface):
         c_id = 0
         for f in sorted(frequencies):
             values = data[frequencies[f]].tolist()
-
-            label = str(int(values['Frequenz'][0])) + " Hz"
+            label  = str(int(values['Frequenz'][0])) + " Hz"
 
             ax[0].errorbar(values['Speed-Ratio'], values['sigma_x'], yerr=values['std(sigma_x)'],
                            c=SpeedRatioPlot.colors[c_id], linestyle="None", alpha=.75)
@@ -126,7 +125,9 @@ class SpeedRatioPlot(PlotInterface):
         ax[0].text(1, 1.1, 'Pixel: ' + str(values['Pixel'][0]), transform=ax[0].transAxes, fontsize=8, horizontalalignment='right', verticalalignment='top')
 
         plt.show()
-        SpeedRatioPlot.generateCSVs(data)
+        
+        if save:
+            NPYLoader.generateCSVs(data)
 
 
 
