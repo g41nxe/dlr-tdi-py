@@ -1,7 +1,9 @@
 import io
 import os
 import re
+import csv
 
+from pathlib import Path
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 
@@ -218,3 +220,31 @@ class NPYLoader():
             np.save(f, data[id])
 
         return data
+
+    @staticmethod
+    def generateCSVs(data):
+        list_len = len(data)
+        if not list_len:
+            raise ValueError()
+
+        csv_folder = Path(Config.get('PLOT_DATA_FOLDER')) / 'csv'
+        if not csv_folder.exists():
+            csv_folder.mkdir()
+
+        for id, array in data.items():
+            NPYLoader.writeCSV(array.tolist(), csv_folder / f'{id}.csv')
+
+    @staticmethod
+    def writeCSV(data, csv_file):
+        types = list(set(data.keys()).difference(('pixel',)))
+        data_len = len(data[types[0]])
+        print(csv_file)
+        with open(csv_file, 'w') as fh:
+            f = csv.writer(fh)
+            f.writerow(types)
+
+            for data_pos in range(data_len):
+                data_row = []
+                for type_ in types:
+                    data_row.append(round(data[type_][data_pos], 6))
+                f.writerow(data_row)
