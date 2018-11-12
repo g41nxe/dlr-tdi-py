@@ -10,6 +10,7 @@ class SpeedRatioLoader(NPYLoader):
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
         ydatas, px = extractBrightestSpots(header, spot, gather)
+
         f = header['LineFreq']
         p = header['FirstPixel'] + px
 
@@ -23,27 +24,30 @@ class SpeedRatioLoader(NPYLoader):
 
         if id not in data:
             data[id] = {
-                'vel': [],
-                'delta_x': [],
-                'delta_y': [],
-                'freq': [],
-                'speed-diff': [],
-                'speed-ratio': [],
-                'error_x': [],
-                'error_y': []
+                'Pixel': [],
+                'Frequenz': [],
+                'Geschwindigkeit': [],
+                'Speed-Ratio': [],
+                'sigma_x': [],
+                'std(sigma_x)': [],
+                'var(sigma_x)': [],
+                'sigma_y': [],
+                'std(sigma_y)': [],
+                'var(sigma_y)': [],
             }
 
-        data[id]['delta_x'].append(np.mean(deltax))
-        data[id]['error_x'].append(np.std(deltax))
+        data[id]['sigma_x'].append(np.mean(deltax))
+        data[id]['std(sigma_x)'].append(np.std(deltax))
+        data[id]['var(sigma_x)'].append(np.var(deltax))
 
-        data[id]['delta_y'].append(np.mean(deltay))
-        data[id]['error_y'].append(np.std(deltay))
+        data[id]['sigma_y'].append(np.mean(deltay))
+        data[id]['std(sigma_y)'].append(np.std(deltay))
+        data[id]['var(sigma_y)'].append(np.var(deltay))
 
-        data[id]['freq'].append(f)
-        data[id]['vel'].append(run.vel)
-        data[id]['speed-diff'].append(run.vel - vel(f))
-        data[id]['speed-ratio'].append(round(run.vel / vel(f), 4))
-        data[id]['Pixel'] = p
+        data[id]['Frequenz'].append(f)
+        data[id]['Geschwindigkeit'].append(run.vel)
+        data[id]['Speed-Ratio'].append(round(run.vel / vel(f), 4))
+        data[id]['Pixel'].append(p)
 
         return data
 
@@ -84,30 +88,33 @@ class SpeedRatioPlot(PlotInterface):
 
         frequencies = {}
         for id, array in data.items():
-            freq = array.tolist()['freq'][0]
+            freq = array.tolist()['Frequenz'][0]
             frequencies[freq] = id
 
         c_id = 0
+
+
+
         for f in sorted(frequencies):
             values = data[frequencies[f]].tolist()
 
-            label = str(int(values['freq'][0])) + " Hz"
+            label = str(int(values['Frequenz'][0])) + " Hz"
 
-            ax[0].errorbar(values['speed-ratio'], values['delta_x'], yerr=values['error_x'],
+            ax[0].errorbar(values['Speed-Ratio'], values['sigma_x'], yerr=values['std(sigma_x)'],
                            c=SpeedRatioPlot.colors[c_id], linestyle="None", alpha=.75)
 
-            ax[0].plot(values['speed-ratio'], values['delta_x'], SpeedRatioPlot.marker[c_id] + '-',
+            ax[0].plot(values['Speed-Ratio'], values['sigma_x'], SpeedRatioPlot.marker[c_id] + '-',
                        label=label, markersize=4, alpha=.75, linewidth=1, c=SpeedRatioPlot.colors[c_id])
 
             ax[0].legend(numpoints=1, loc='upper right')
             ax[0].grid()
             ax[0].set_ylim([1, 16])
-            ax[0].set_ylabel("$\sigma_x$ [u.a.]")
+            ax[0].set_ylabel("$\sigma_x$ [u.a.]")gi
 
-            ax[1].errorbar(values['speed-ratio'], values['delta_y'], yerr=values['error_y'],
+            ax[1].errorbar(values['Speed-Ratio'], values['sigma_y'], yerr=values['std(sigma_y)'],
                            c=SpeedRatioPlot.colors[c_id], linestyle="None", alpha=.75)
 
-            ax[1].plot(values['speed-ratio'], values['delta_y'], SpeedRatioPlot.marker[c_id] + '-',
+            ax[1].plot(values['Speed-Ratio'], values['sigma_y'], SpeedRatioPlot.marker[c_id] + '-',
                        label=label, markersize=4, alpha=.75, linewidth=1, c=SpeedRatioPlot.colors[c_id])
 
             ax[1].legend(numpoints=1, loc='upper right')
@@ -119,6 +126,6 @@ class SpeedRatioPlot(PlotInterface):
 
             c_id += 1
 
-        ax[0].text(1, 1.1, 'Pixel: ' + str(values['Pixel']), transform=ax[0].transAxes, fontsize=8, horizontalalignment='right', verticalalignment='top')
+        ax[0].text(1, 1.1, 'Pixel: ' + str(values['Pixel'][0]), transform=ax[0].transAxes, fontsize=8, horizontalalignment='right', verticalalignment='top')
 
         plt.show()
