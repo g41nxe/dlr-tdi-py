@@ -21,7 +21,9 @@ class SpotVideoLoader(NPYLoader):
 
     @staticmethod
     def buildAndAppendData(id, header, spot, gather, run, data):
-        ydata = extractBrightestSpots(header, spot, gather, 5)[4]
+        ydatas, px = extractBrightestSpots(header, spot, gather)
+        ydata = ydatas[len(ydatas)-1]
+
         popt = gaussfit(ydata)
 
         if id not in data.keys():
@@ -67,7 +69,7 @@ class SpotVideoPlot(AnimationInterface):
 
             f, ax = SpotVideoPlot.style(pixelCount)
 
-            #anim = FuncAnimation(f, SpotVideoPlot.frame, frames=np.arange(0, len(framedata)), interval=200)
+            anim = FuncAnimation(f, SpotVideoPlot.frame, frames=np.arange(0, len(framedata)), interval=200)
 
             if os.path.exists(subdirectory + "\\video-" + id):
                 shutil.rmtree(subdirectory + "\\video-" + id)
@@ -76,9 +78,9 @@ class SpotVideoPlot(AnimationInterface):
 
             for i, val in enumerate(framedata):
                 SpotVideoPlot.frame(i)
-                f.savefig(subdirectory + "\\video-" + id + "\\speed-ratio-" + str(i) + ".jpg", bbox_inches='tight')
+                #f.savefig(subdirectory + "\\video-" + id + "\\speed-ratio-" + str(i) + ".jpg", bbox_inches='tight')
 
-            #anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
+            anim.save(filename=subdirectory + "\\" + id + ".mp4", dpi=80, writer='ffmpeg')
 
     @staticmethod
     def style(pixelCount):
